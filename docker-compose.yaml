@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: daphne cmp_api_python.asgi:application --bind 0.0.0.0 --port 8000
+    volumes:
+      - ./:/cmp_api_python/
+      - static_volume:/cmp_api_python/static
+      - media_volume:/cmp_api_python/media
+    ports:
+      - 8000:8000
+    env_file:
+      - ./env
+
+  db:
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+
+  nginx:
+    image: nginx:1.21.6-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - static_volume:/cmp_api_python/static
+      - media_volume:/cmp_api_python/media
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
