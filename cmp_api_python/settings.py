@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'announcement.apps.AnnouncementConfig',
     'banner.apps.BannerConfig',
     'config.apps.ConfigConfig',
+    'invest.apps.InvestConfig',
+    'package.apps.PackageConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
