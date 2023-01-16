@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'announcement.apps.AnnouncementConfig',
     'banner.apps.BannerConfig',
+    'config.apps.ConfigConfig',
 ]
 
 MIDDLEWARE = [
