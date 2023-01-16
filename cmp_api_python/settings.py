@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'invest.apps.InvestConfig',
     'package.apps.PackageConfig',
     'users.apps.UsersConfig',
+    'wallet.apps.WalletConfig',
 ]
 
 MIDDLEWARE = [

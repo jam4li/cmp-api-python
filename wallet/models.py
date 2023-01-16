@@ -1,3 +1,41 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
+
+class Wallets(models.Model):
+    DEPOSIT = "rejected"
+    COMMISION = "accepted"
+    PROFIT = "pending"
+    CMP = "cmp"
+    VOUCHER = "voucher"
+    TYPE_CHOICES = (
+        (DEPOSIT, _("Deposit")),
+        (COMMISION, _("Commision")),
+        (PROFIT, _("Profit")),
+        (CMP, _("Cmp")),
+        (VOUCHER, _("Voucher")),
+    )
+
+    USER = "user"
+    COMPANY = "company"
+    ACCOUNTING = "accounting"
+    ACCESS_TYPE_CHOICES = (
+        (COMMISION, _("Commision")),
+        (PROFIT, _("Profit")),
+    )
+
+    title = models.CharField(max_length=255, verbose_name=_('Title'))
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name=_('type'))
+    access_type = models.CharField(max_length=10, choices=ACCESS_TYPE_CHOICES, verbose_name=_('Access type'))
+    balance = models.DecimalField(default=0.000, max_digits=30, decimal_places=3, verbose_name=_('Balance'))
+    blocked_amount = models.DecimalField(default=0.000, max_digits=30, decimal_places=3, verbose_name=_('Blocked amount'))
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        verbose_name = _('Wallet')
+        verbose_name_plural = _('Wallets')
+
+    def __str__(self):
+        return self.title
