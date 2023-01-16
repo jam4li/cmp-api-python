@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'announcement.apps.AnnouncementConfig',
+    'banner.apps.BannerConfig',
 ]
 
 MIDDLEWARE = [
