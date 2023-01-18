@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'announcement.apps.AnnouncementConfig',
     'banner.apps.BannerConfig',
     'config.apps.ConfigConfig',
+    'exchange.apps.ExchangeConfig',
     'invest.apps.InvestConfig',
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
