@@ -13,3 +13,4 @@ env
 .env
 htmlcov
 .vscode
+data/certs/

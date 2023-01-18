@@ -32,8 +32,10 @@ services:
     image: nginx:1.21.6-alpine
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certs:/etc/nginx/certs:ro
       - static_volume:/cmp_api_python/static
       - media_volume:/cmp_api_python/media
 
