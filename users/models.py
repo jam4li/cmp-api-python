@@ -36,3 +36,29 @@ class Users(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class Admins(models.Model):
+    ADMIN = "admin"
+    ACCOUNTING = "accounting"
+    SUPPORT = "support"
+    ROLE_CHOICES = (
+        (ADMIN, _("Admin")),
+        (ACCOUNTING, _("Accounting")),
+        (SUPPORT, _("Support")),
+    )
+
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Name'))
+    email = models.CharField(max_length=255, verbose_name=_('Email'))
+    enable_google_2fa_verification = models.BooleanField(verbose_name=_('Enable google 2fa verification'))
+    google_2fa_s = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Google 2fa'))
+    role = models.CharField(max_length=15, choices=ROLE_CHOICES, verbose_name=_('Role'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
+
+    class Meta:
+        verbose_name = _('Admin')
+        verbose_name_plural = _('Admins')
+
+    def __str__(self):
+        return self.email
