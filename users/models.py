@@ -27,8 +27,8 @@ class Users(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, verbose_name=_('Role'))
     trc20_withdraw_wallet = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('TRC20 withdraw wallet'))
     weekly_withdraw_amount = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True, verbose_name=_('Weekly withdraw amount'))
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('User')

@@ -13,8 +13,8 @@ class Packages(models.Model):
     daily_profit = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name=_('Daily profit'))
     daily_profit_percent = models.CharField(max_length=50, blank=True, null=True, verbose_name=_('Daily profit percent'))
     profit_limit = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name=_('Profit limit'))
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('Package')

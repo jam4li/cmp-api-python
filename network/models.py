@@ -18,8 +18,8 @@ class Networks(models.Model):
     network_profit = models.DecimalField(max_digits=20, decimal_places=3, default=0.000, verbose_name=_('Network profit'))
     # TODO: referrer
     network_calculate_date = models.DateTimeField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('Network')

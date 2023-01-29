@@ -18,8 +18,8 @@ class Announcements(models.Model):
     summery = models.TextField(max_length=500, verbose_name=_('Summery'))
     text = models.TextField(max_length=1000, verbose_name=_('Text'))
     publish_date = models.DateTimeField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('Announcement')

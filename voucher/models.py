@@ -22,9 +22,9 @@ class Vouchers(models.Model):
     wallet_type=models.CharField(max_length=10, choices=WALLET_TYPE_CHOICES, blank=True, null=True, verbose_name=_('Wallet type'))
     cashed = models.BooleanField(default=False, verbose_name=_('Cashed'))
     cashed_at = models.DateTimeField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
+
     class Meta:
         verbose_name = _('Voucher')
         verbose_name_plural = _('Vouchers')

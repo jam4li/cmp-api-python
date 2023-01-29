@@ -30,8 +30,8 @@ class Wallets(models.Model):
     access_type = models.CharField(max_length=10, choices=ACCESS_TYPE_CHOICES, verbose_name=_('Access type'))
     balance = models.DecimalField(default=0.000, max_digits=30, decimal_places=3, verbose_name=_('Balance'))
     blocked_amount = models.DecimalField(default=0.000, max_digits=30, decimal_places=3, verbose_name=_('Blocked amount'))
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('Wallet')

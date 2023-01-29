@@ -17,8 +17,8 @@ class Invests(models.Model):
     finished = models.BooleanField(verbose_name=_('Finished'))
     # TODO: calculated_at default = now()
     calculated_at = models.DateTimeField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     deleted_at = models.DateTimeField()
 
     class Meta:

@@ -29,8 +29,8 @@ class Withdraws(models.Model):
     transaction_hash = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Transaction hash'))
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, verbose_name=_('Status'))
     wallet_type = models.CharField(max_length=10, choices=WALLET_TYPE_CHOICES, verbose_name=_('Wallet type'))
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
         verbose_name = _('Withdraw')
