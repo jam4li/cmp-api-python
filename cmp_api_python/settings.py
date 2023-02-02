@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'voucher.apps.VoucherConfig',
     'wallet.apps.WalletConfig',
+    'trc20.apps.Trc20Config',
     'rest_framework',
 ]
 
@@ -183,3 +184,13 @@ logging.config.dictConfig({
         },
     },
 })
+
+# Payment Configuration
+
+# TODO: Because of Django's problem in env variables
+TETHER_API_KEY = os.getenv('TETHER_FIRST_API_KEY') + \
+    '$YdPoyS2KOy8YFVV' + os.getenv('TETHER_SECOND_API_KEY')
+
+TETHER_GATEWAY_URL = os.getenv('TETHER_GATEWAY_URL')
+TETHER_EXPIRE_TIME = os.getenv('TETHER_EXPIRE_TIME')
+TETHER_PASSWORD = os.getenv('TETHER_PASSWORD')
