@@ -1,3 +1,4 @@
+import requests
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -27,9 +28,16 @@ class Trc20CreateGatewayAPIView(views.APIView):
 
             serializer.save(
                 invoice_id=invoice['data']['invoice_id'],
-            )           
+            )
 
-            return Response(invoice)
+            data = {
+                'success': True,
+                'data': {
+                    'address': invoice['data']['url'],
+                }
+            }
+
+            return Response(data)
 
         else:
             content['statusCode'] = 400
@@ -37,3 +45,27 @@ class Trc20CreateGatewayAPIView(views.APIView):
             content['message'] = gettext('Not valid')
 
             return Response(content)
+
+
+class Trc20NotifyGatewayAPIView(views.APIView):
+    def post(self, request, format=None):
+        invoice_id = self.request.data['invoice_id']
+        payment_history = dict(self.request.data['payment_history'][0])
+        amount = payment_history['amount']
+        hash = payment_history['txid']
+        symbol = 'USDT'
+
+        payment = Trc20.objects.get(invoice_id=invoice_id)
+
+        body = {
+            'payment_code': payment.payment_code,
+            'hash': hash,
+            'transaction_hash': hash,
+            'user_id': payment.user_id,
+            'amount': amount,
+            'symbol': symbol,
+        }
+
+        requests.post(payment.callback_url, data=body)
+
+        return Response(body)
