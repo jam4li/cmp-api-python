@@ -2,6 +2,7 @@ import requests
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.status import HTTP_200_OK
 from django.utils.translation import gettext
 
 from .serializers import Trc20CreateGatewaySerializer
@@ -49,23 +50,33 @@ class Trc20CreateGatewayAPIView(views.APIView):
 
 class Trc20NotifyGatewayAPIView(views.APIView):
     def post(self, request, format=None):
-        invoice_id = self.request.data['invoice_id']
-        payment_history = dict(self.request.data['payment_history'][0])
-        amount = payment_history['amount']
-        hash = payment_history['txid']
-        symbol = 'USDT'
-
-        payment = Trc20.objects.get(invoice_id=invoice_id)
-
-        body = {
-            'payment_code': payment.payment_code,
-            'hash': hash,
-            'transaction_hash': hash,
-            'user_id': payment.user_id,
-            'amount': amount,
-            'symbol': symbol,
+        content = {
+            'error': '',
         }
 
-        requests.post(payment.callback_url, data=body)
+        try:
+            invoice_id = self.request.data['invoice_id']
+            payment_history = dict(self.request.data['payment_history'][0])
+            amount = payment_history['amount']
+            hash = payment_history['txid']
+            symbol = 'USDT'
 
-        return Response(body)
+            payment = Trc20.objects.get(invoice_id=invoice_id)
+
+            body = {
+                'payment_code': payment.payment_code,
+                'hash': hash,
+                'transaction_hash': hash,
+                'user_id': payment.user_id,
+                'amount': amount,
+                'symbol': symbol,
+            }
+
+            requests.post(payment.callback_url, data=body)
+
+            return Response(body, status=HTTP_200_OK)
+
+        except Exception as e:
+            content['error'] = str(e)
+
+            return Response(content, status=HTTP_200_OK)
