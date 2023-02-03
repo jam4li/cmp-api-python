@@ -55,26 +55,32 @@ class Trc20NotifyGatewayAPIView(views.APIView):
         }
 
         try:
-            invoice_id = self.request.data['invoice_id']
-            payment_history = dict(self.request.data['payment_history'][0])
-            amount = payment_history['amount']
-            hash = payment_history['txid']
-            symbol = 'USDT'
+            status = self.request.data['status']
 
-            payment = Trc20.objects.get(invoice_id=invoice_id)
+            if status == "Paid":
+                invoice_id = self.request.data['invoice_id']
+                payment_history = dict(self.request.data['payment_history'][0])
+                amount = payment_history['amount']
+                hash = payment_history['txid']
+                symbol = 'USDT'
 
-            body = {
-                'payment_code': payment.payment_code,
-                'hash': hash,
-                'transaction_hash': hash,
-                'user_id': payment.user_id,
-                'amount': amount,
-                'symbol': symbol,
-            }
+                payment = Trc20.objects.get(invoice_id=invoice_id)
 
-            requests.post(payment.callback_url, data=body)
+                body = {
+                    'payment_code': payment.payment_code,
+                    'hash': hash,
+                    'transaction_hash': hash,
+                    'user_id': payment.user_id,
+                    'amount': amount,
+                    'symbol': symbol,
+                }
 
-            return Response(body, status=HTTP_200_OK)
+                requests.post(payment.callback_url, data=body)
+
+                return Response(body, status=HTTP_200_OK)
+
+            else:
+                return Response({}, status=HTTP_200_OK)
 
         except Exception as e:
             content['error'] = str(e)
