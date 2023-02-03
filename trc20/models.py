@@ -14,7 +14,7 @@ class Trc20(models.Model):
     )
 
     invoice_id = models.CharField(max_length=20, verbose_name=_('Invoice id'))
-    amount = models.IntegerField(verbose_name=_('Amount'))
+    amount = models.FloatField(verbose_name=_('Amount'))
     payment_code = models.CharField(max_length=50, verbose_name=_('Payment code'))
     user_id = models.CharField(max_length=20, verbose_name=_('User id'))
     symbol = models.CharField(max_length=20, verbose_name=_('Symbol'))
