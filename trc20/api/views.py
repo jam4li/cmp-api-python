@@ -1,4 +1,5 @@
 import requests
+import hashlib
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -61,15 +62,19 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 invoice_id = self.request.data['invoice_id']
                 payment_history = dict(self.request.data['payment_history'][0])
                 amount = payment_history['amount']
-                hash = payment_history['txid']
+                transaction_hash = payment_history['txid']
                 symbol = 'USDT'
 
                 payment = Trc20.objects.get(invoice_id=invoice_id)
+                payment_code = payment.payment_code
+
+                hash = str(payment_code) + str(transaction_hash) + "e178afd646065c77b36a5911448f7b41" + str(payment.user_id);
+                hash = str(hashlib.sha1(hash))
 
                 body = {
-                    'payment_code': payment.payment_code,
+                    'payment_code': payment_code,
                     'hash': hash,
-                    'transaction_hash': hash,
+                    'transaction_hash': transaction_hash,
                     'user_id': payment.user_id,
                     'amount': amount,
                     'symbol': symbol,
