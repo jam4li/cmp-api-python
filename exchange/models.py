@@ -14,9 +14,19 @@ class ExchangeParent(models.Model):
         (PENDING, _("Pending")),
     )
 
-    user_email = models.CharField(max_length=50, verbose_name=_('User'))
-    parent = models.CharField(max_length=50, verbose_name=_('Parent'))
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, verbose_name=_('Status'))
+    user_email = models.CharField(
+        max_length=50,
+        verbose_name=_('User'),
+    )
+    parent = models.CharField(
+        max_length=50,
+        verbose_name=_('Parent'),
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        verbose_name=_('Status'),
+    )
 
     class Meta:
         verbose_name = _('Exchange parent')
