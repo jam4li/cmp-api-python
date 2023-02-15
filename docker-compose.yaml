@@ -26,7 +26,6 @@ services:
 
     volumes:
       - db_data:/var/lib/mysql:rw
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   nginx:
     image: nginx:1.21.6-alpine
