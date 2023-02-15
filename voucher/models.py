@@ -53,6 +53,7 @@ class Vouchers(models.Model):
     )
 
     class Meta:
+        db_table = 'vouchers'
         verbose_name = _('Voucher')
         verbose_name_plural = _('Vouchers')
 

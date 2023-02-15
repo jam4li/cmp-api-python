@@ -67,6 +67,7 @@ class Packages(models.Model):
     )
 
     class Meta:
+        db_table = 'packages'
         verbose_name = _('Package')
         verbose_name_plural = _('Packages')
 

@@ -10,6 +10,7 @@ class Configs(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     class Meta:
+        db_table = 'configs'
         verbose_name = _('Config')
         verbose_name_plural = _('Configs')
 

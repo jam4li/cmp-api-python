@@ -48,6 +48,7 @@ class Announcements(models.Model):
     )
 
     class Meta:
+        db_table = 'announcements'
         verbose_name = _('Announcement')
         verbose_name_plural = _('Announcements')
 

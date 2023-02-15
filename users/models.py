@@ -94,6 +94,7 @@ class Users(models.Model):
     )
 
     class Meta:
+        db_table = 'users'
         verbose_name = _('User')
         verbose_name_plural = _('Users')
 
@@ -145,6 +146,7 @@ class Admins(models.Model):
     )
 
     class Meta:
+        db_table = 'admins'
         verbose_name = _('Admin')
         verbose_name_plural = _('Admins')
 

@@ -34,6 +34,7 @@ class Banners(models.Model):
     )
 
     class Meta:
+        db_table = 'banners'
         verbose_name = _('Banner')
         verbose_name_plural = _('Banners')
 

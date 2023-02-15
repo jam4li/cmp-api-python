@@ -62,6 +62,7 @@ class Wallets(models.Model):
     )
 
     class Meta:
+        db_table = 'wallets'
         verbose_name = _('Wallet')
         verbose_name_plural = _('Wallets')
 

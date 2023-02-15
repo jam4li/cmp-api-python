@@ -57,6 +57,7 @@ class Invests(models.Model):
     deleted_at = models.DateTimeField()
 
     class Meta:
+        db_table = 'invests'
         verbose_name = _('Invest')
         verbose_name_plural = _('Invests')
 

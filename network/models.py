@@ -72,6 +72,7 @@ class Networks(models.Model):
     )
 
     class Meta:
+        db_table = 'networks'
         verbose_name = _('Network')
         verbose_name_plural = _('Networks')
 
