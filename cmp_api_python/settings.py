@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'banner.apps.BannerConfig',
     'config.apps.ConfigConfig',
     'exchange.apps.ExchangeConfig',
+    'home.apps.HomeConfig',
     'invest.apps.InvestConfig',
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
@@ -68,7 +69,7 @@ ROOT_URLCONF = 'cmp_api_python.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
