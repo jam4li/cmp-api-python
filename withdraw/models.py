@@ -6,7 +6,7 @@ from users.models import Users
 # Create your models here.
 
 
-class Withdraws(models.Model):
+class Withdraw(models.Model):
     REJECTED = "rejected"
     ACCEPTED = "accepted"
     PENDING = "pending"

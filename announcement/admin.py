@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from .models import Announcements
+from .models import Announcement
 
 # Register your models here.
 
 
-class AnnouncementsAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Announcements._meta.get_fields()]
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Announcement._meta.get_fields()]
 
 
-admin.site.register(Announcements, AnnouncementsAdmin)
+admin.site.register(Announcement, AnnouncementAdmin)

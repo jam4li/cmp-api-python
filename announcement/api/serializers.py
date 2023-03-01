@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from announcement.models import Announcements
+from announcement.models import Announcement
 
 class AnnouncementListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Announcements
+        model = Announcement
         fields = [
             'title',
             'author',

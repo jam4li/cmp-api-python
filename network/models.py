@@ -6,7 +6,7 @@ from users.models import Users
 # Create your models here.
 
 
-class Networks(models.Model):
+class Network(models.Model):
     user = models.ForeignKey(
         Users,
         on_delete=models.CASCADE,
