@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from .models import Wallets
+from .models import Wallet
 
 # Register your models here.
 
 
-class WalletsAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Wallets._meta.get_fields()]
+class WalletAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Wallet._meta.get_fields()]
 
 
-admin.site.register(Wallets, WalletsAdmin)
+admin.site.register(Wallet, WalletAdmin)

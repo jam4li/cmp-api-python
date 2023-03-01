@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from package.models import Packages
+from package.models import Package
 
 # Create your models here.
 
@@ -15,7 +15,7 @@ class Users(models.Model):
     )
 
     package = models.ForeignKey(
-        Packages,
+        Package,
         on_delete=models.CASCADE,
         blank=True,
         null=True,

@@ -1,13 +1,13 @@
 from rest_framework import views
 from rest_framework.response import Response
 
-from announcement.models import Announcements
+from announcement.models import Announcement
 from .serializers import AnnouncementListSerializer
 
 
 class AnnouncementListAPIView(views.APIView):
     def get(self, request, format=None):
-        announcements = Announcements.objects.filter(
+        announcements = Announcement.objects.filter(
             status="publish",
         ).order_by(
             'publish_date',

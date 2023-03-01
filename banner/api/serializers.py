@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from banner.models import Banners
+from banner.models import Banner
 
 class BannerListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Banners
+        model = Banner
         fields = [
             'big_title',
             'small_title',

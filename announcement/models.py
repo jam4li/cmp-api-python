@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     PUBLISH = "publish"
     DRAFT = "draft"
     STATUS_CHOICES = (

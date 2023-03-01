@@ -6,7 +6,7 @@ from users.models import Users
 # Create your models here.
 
 
-class Vouchers(models.Model):
+class Voucher(models.Model):
     COMMISION = "commision"
     PROFIT = "profit"
     VOUCHER = "voucher"

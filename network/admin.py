@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from .models import Networks
+from .models import Network
 
 # Register your models here.
 
 
-class NetworksAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Networks._meta.get_fields()]
+class NetworkAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Network._meta.get_fields()]
 
 
-admin.site.register(Networks, NetworksAdmin)
+admin.site.register(Network, NetworkAdmin)
