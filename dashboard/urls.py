@@ -1,8 +1,8 @@
 from django.urls import path
 
-from home.views import UpdatingTemplateView
+from dashboard.views import UpdatingTemplateView
 
-app_name = 'home'
+app_name = 'dashboard'
 urlpatterns = [
     path('', UpdatingTemplateView.as_view(), name='updating'),
 ]
