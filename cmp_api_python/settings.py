@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'banner.apps.BannerConfig',
     'config.apps.ConfigConfig',
     'exchange.apps.ExchangeConfig',
-    'home.apps.HomeConfig',
+    'dashboard.apps.DashboardConfig',
     'invest.apps.InvestConfig',
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
