@@ -1,12 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser
 
 from package.models import Package
 
 # Create your models here.
 
 
-class Users(models.Model):
+class Users(AbstractUser):
     USER = "user"
     ADMIN = "admin"
     ROLE_CHOICES = (
@@ -29,12 +30,6 @@ class Users(models.Model):
     ex_email = models.CharField(
         max_length=255,
         verbose_name=_('Ex email'),
-    )
-    username = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Username'),
     )
     referrer_code = models.CharField(
         max_length=255,
