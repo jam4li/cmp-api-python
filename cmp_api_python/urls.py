@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/banner/', include('banner.api.urls', namespace='banner')),
     path('api/invest/', include('invest.api.urls', namespace='invest')),
     path('api/trc20/', include('trc20.api.urls', namespace='trc20-api')),
+    path('api/wallet/', include('wallet.api.urls', namespace='wallet-api')),
 ]

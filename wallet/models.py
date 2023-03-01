@@ -7,14 +7,14 @@ from users.models import Users
 
 
 class Wallet(models.Model):
-    DEPOSIT = "rejected"
-    COMMISION = "accepted"
-    PROFIT = "pending"
+    DEPOSIT = "deposit"
+    COMMISSION = "commission"
+    PROFIT = "profit"
     CMP = "cmp"
     VOUCHER = "voucher"
     TYPE_CHOICES = (
         (DEPOSIT, _("Deposit")),
-        (COMMISION, _("Commision")),
+        (COMMISSION, _("Commission")),
         (PROFIT, _("Profit")),
         (CMP, _("Cmp")),
         (VOUCHER, _("Voucher")),
@@ -24,10 +24,16 @@ class Wallet(models.Model):
     COMPANY = "company"
     ACCOUNTING = "accounting"
     ACCESS_TYPE_CHOICES = (
-        (COMMISION, _("Commision")),
-        (PROFIT, _("Profit")),
+        (USER, _("User")),
+        (COMPANY, _("Company")),
+        (ACCOUNTING, _("Accounting")),
     )
 
+    user = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+    )
     title = models.CharField(
         max_length=255,
         verbose_name=_('Title'),
@@ -70,24 +76,3 @@ class Wallet(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class UserWallet(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name=_('User'))
-    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, verbose_name=_('Wallet'))
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
-    )
-
-    class Meta:
-        db_table = 'user_wallet'
-        verbose_name = _('User wallet')
-        verbose_name_plural = _('User wallets')
-
-    def __str__(self):
-        return self.user
