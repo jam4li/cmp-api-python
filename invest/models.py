@@ -62,4 +62,4 @@ class Invest(models.Model):
         verbose_name_plural = _('Invests')
 
     def __str__(self):
-        return self.user
+        return str(self.user)

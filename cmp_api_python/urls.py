@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/announcement/', include('announcement.api.urls', namespace='announcement')),
     path('api/banner/', include('banner.api.urls', namespace='banner')),
+    path('api/invest/', include('invest.api.urls', namespace='invest')),
     path('api/trc20/', include('trc20.api.urls', namespace='trc20-api')),
 ]
