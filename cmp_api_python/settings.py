@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
     'payment.apps.PaymentConfig',
+    'referral.apps.ReferralConfig',
     'transaction.apps.TransactionConfig',
     'trc20.apps.Trc20Config',
     'users.apps.UsersConfig',
