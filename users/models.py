@@ -55,8 +55,8 @@ class User(AbstractUser):
         null=True,
         verbose_name=_('Name'),
     )
-    avatar = models.CharField(
-        max_length=255,
+    avatar = models.ImageField(
+        upload_to='user/',
         blank=True,
         null=True,
         verbose_name=_('Avatar'),

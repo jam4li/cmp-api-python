@@ -16,8 +16,8 @@ class Package(models.Model):
         decimal_places=2,
         verbose_name=_('Price'),
     )
-    image = models.CharField(
-        max_length=255,
+    image = models.ImageField(
+        upload_to='package/',
         blank=True,
         null=True,
         verbose_name=_('Image'),

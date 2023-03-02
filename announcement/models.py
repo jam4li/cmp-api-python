@@ -20,8 +20,8 @@ class Announcement(models.Model):
         max_length=255,
         verbose_name=_('Author'),
     )
-    image = models.CharField(
-        max_length=255,
+    image = models.ImageField(
+        upload_to='announcement',
         verbose_name=_('Image'),
     )
     status = models.CharField(
