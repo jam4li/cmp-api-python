@@ -5,6 +5,7 @@ from users.models import User
 from withdraw.models import Withdraw
 from voucher.models import Voucher
 from payment.models import Payment
+from cmp.models import CMPToken
 
 # Create your models here.
 
@@ -36,7 +37,12 @@ class Transaction(models.Model):
         blank=True,
         null=True,
     )
-    # TODO: Add cmp_token_id
+    cmp_token = models.ForeignKey(
+        CMPToken,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     amount = models.DecimalField(
         max_digits=20,
         decimal_places=3,
