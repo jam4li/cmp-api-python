@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from base.models import models, BaseModel
+
 from users.models import User
 from withdraw.models import Withdraw
 from voucher.models import Voucher
@@ -10,7 +12,7 @@ from cmp.models import CMPToken
 # Create your models here.
 
 
-class Transaction(models.Model):
+class Transaction(BaseModel):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -59,14 +61,6 @@ class Transaction(models.Model):
     description = models.TextField(
         max_length=1000,
         verbose_name=_('Description'),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
     )
 
     class Meta:

@@ -1,10 +1,11 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 # Create your models here.
 
 
-class Trc20(models.Model):
+class Trc20(BaseModel):
     PENDING = 0
     PAID = 1
     FAILED = 3

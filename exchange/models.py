@@ -1,10 +1,11 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 # Create your models here.
 
 
-class ExchangeParent(models.Model):
+class ExchangeParent(BaseModel):
     REJECTED = "rejected"
     ACCEPTED = "accepted"
     PENDING = "pending"

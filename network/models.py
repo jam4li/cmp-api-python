@@ -1,12 +1,13 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 from users.models import User
 
 # Create your models here.
 
 
-class Network(models.Model):
+class Network(BaseModel):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -62,14 +63,6 @@ class Network(models.Model):
     )
     # TODO: Add refferer field as a foreign key
     network_calculate_date = models.DateTimeField()
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
-    )
 
     class Meta:
         db_table = 'networks'

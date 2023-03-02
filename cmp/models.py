@@ -1,12 +1,13 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 from users.models import User
 
 # Create your models here.
 
 
-class CMPToken(models.Model):
+class CMPToken(BaseModel):
     PROFIT = "profit"
     COMMISSION = "commission"
     WALLET_TYPE_CHOICES = (
@@ -64,14 +65,6 @@ class CMPToken(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Wallet address'),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
     )
 
     class Meta:
