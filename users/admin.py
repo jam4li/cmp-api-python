@@ -5,7 +5,11 @@ from .models import User, Admin
 # Register your models here.
 
 
-admin.site.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in User._meta.get_fields()]
+
+
+admin.site.register(User, UserAdmin)
 
 
 class AdminsAdmin(admin.ModelAdmin):
