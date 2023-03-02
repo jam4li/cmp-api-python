@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'announcement.apps.AnnouncementConfig',
     'banner.apps.BannerConfig',
+    'base.apps.BaseConfig',
     'cmp.apps.CmpConfig',
     'config.apps.ConfigConfig',
     'exchange.apps.ExchangeConfig',
