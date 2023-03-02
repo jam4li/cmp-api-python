@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from invest.models import Invest
 from package.models import Package
-from users.models import Users
+from users.models import User
 
 
 class PackageInvestListSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class PackageInvestListSerializer(serializers.ModelSerializer):
 
 class UserInvestListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = User
         fields = [
             'id',
             'email',

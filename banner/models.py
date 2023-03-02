@@ -18,8 +18,8 @@ class Banner(models.Model):
         null=True,
         blank=True,
     )
-    image = models.CharField(
-        max_length=255,
+    image = models.ImageField(
+        upload_to='banner/',
         null=True,
         blank=True,
         verbose_name=_('Image'),

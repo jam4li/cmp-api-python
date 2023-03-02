@@ -13,6 +13,10 @@ class WalletListAPIView(views.APIView):
             user=user,
         )
 
-        serializer = WalletListSerializer(wallet, many=True)
+        serializer = WalletListSerializer(
+            wallet,
+            many=True,
+            context={"request": request},
+        )
 
         return Response(serializer.data)

@@ -10,7 +10,11 @@ class InvestListAPIView(views.APIView):
     def get(self, request, status=None, *args, **kwargs):
         if status == 'all' or status == 'finished' or status == 'active':
             invest_list = Invest.objects.all()
-            serializer = InvestListSerializer(invest_list, many=True)
+            serializer = InvestListSerializer(
+                invest_list,
+                many=True,
+                context={"request": request},
+            )
 
             personal_limit_percent = Config.objects.get(key='personal_limit_percent')
 
