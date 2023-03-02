@@ -11,6 +11,10 @@ class BannerListAPIView(views.APIView):
             'sort',
         )
 
-        serializer = BannerListSerializer(banners, many=True)
+        serializer = BannerListSerializer(
+            banners,
+            many=True,
+            context={"request": request},
+        )
 
         return Response(serializer.data)

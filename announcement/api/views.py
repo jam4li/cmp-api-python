@@ -13,6 +13,10 @@ class AnnouncementListAPIView(views.APIView):
             'publish_date',
         )
 
-        serializer = AnnouncementListSerializer(announcements, many=True)
+        serializer = AnnouncementListSerializer(
+            announcements,
+            many=True,
+            context={"request": request},
+        )
 
         return Response(serializer.data)
