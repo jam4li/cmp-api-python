@@ -7,7 +7,7 @@ from package.models import Package
 # Create your models here.
 
 
-class Users(AbstractUser):
+class User(AbstractUser):
     USER = "user"
     ADMIN = "admin"
     ROLE_CHOICES = (
@@ -97,7 +97,7 @@ class Users(AbstractUser):
         return self.email
 
 
-class Admins(models.Model):
+class Admin(models.Model):
     ADMIN = "admin"
     ACCOUNTING = "accounting"
     SUPPORT = "support"

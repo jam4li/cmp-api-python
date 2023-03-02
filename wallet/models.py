@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from users.models import Users
+from users.models import User
 
 # Create your models here.
 
@@ -30,7 +30,7 @@ class Wallet(models.Model):
     )
 
     user = models.ForeignKey(
-        Users,
+        User,
         on_delete=models.CASCADE,
         verbose_name=_('User'),
     )

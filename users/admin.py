@@ -1,15 +1,15 @@
 from django.contrib import admin
 
-from .models import Users, Admins
+from .models import User, Admin
 
 # Register your models here.
 
 
-admin.site.register(Users)
+admin.site.register(User)
 
 
 class AdminsAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Admins._meta.get_fields()]
+    list_display = [field.name for field in Admin._meta.get_fields()]
 
 
-admin.site.register(Admins, AdminsAdmin)
+admin.site.register(Admin, AdminsAdmin)
