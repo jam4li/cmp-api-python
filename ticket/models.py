@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from base.models import models, BaseModel
+
 from users.models import User
 
 
 # Create your models here.
 
-class TicketDepartment(models.Model):
+class TicketDepartment(BaseModel):
     name = models.CharField(
         max_length=50,
         verbose_name=_('Name'),
@@ -28,7 +30,7 @@ class TicketDepartment(models.Model):
         return self.name
 
 
-class Ticket(models.Model):
+class Ticket(BaseModel):
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
@@ -87,14 +89,6 @@ class Ticket(models.Model):
         default="open",
         verbose_name=_('Status'),
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
-    )
 
     class Meta:
         verbose_name = _('Ticket')
@@ -104,7 +98,7 @@ class Ticket(models.Model):
         return self.name
 
 
-class TicketReply(models.Model):
+class TicketReply(BaseModel):
     ticket = models.ForeignKey(
         Ticket,
         on_delete=models.CASCADE,

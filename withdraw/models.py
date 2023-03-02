@@ -1,12 +1,13 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 from users.models import User
 
 # Create your models here.
 
 
-class Withdraw(models.Model):
+class Withdraw(BaseModel):
     REJECTED = "rejected"
     ACCEPTED = "accepted"
     PENDING = "pending"
@@ -57,14 +58,6 @@ class Withdraw(models.Model):
         max_length=10,
         choices=WALLET_TYPE_CHOICES,
         verbose_name=_('Wallet type'),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
     )
 
     class Meta:

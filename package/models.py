@@ -1,10 +1,11 @@
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from base.models import models, BaseModel
 
 # Create your models here.
 
 
-class Package(models.Model):
+class Package(BaseModel):
     name = models.CharField(
         max_length=255,
         blank=True,
@@ -56,14 +57,6 @@ class Package(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Profit limit'),
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
     )
 
     class Meta:
