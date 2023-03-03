@@ -5,8 +5,4 @@ from .models import Payment
 # Register your models here.
 
 
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Payment._meta.get_fields()]
-
-
-admin.site.register(Payment, PaymentAdmin)
+admin.site.register(Payment)
