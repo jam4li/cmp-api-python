@@ -22,6 +22,23 @@ from rest_framework.authtoken.models import Token
 from users.models import User
 
 
+class Change2faStatus(views.APIView):
+    def post(self, request):
+        user = request.user
+        secret = request.data.get('secret')
+        status = request.data.get('status')
+
+        token = verify_2fa_secret(user.email, secret)
+
+        # if ($validate) {
+        #     return structuredError(400, $validate['message'], $validate['errors']);
+        # }
+        #     $userSecurityHelper = new UserSecurityHelper();
+        #     $userSecurityHelper->changeGoogle2FAStatus($user,$request->secret,$request->status);
+        #     return Response({"success": true});
+
+
+
 class GetGoogleUrl(views.APIView):
     def get(self, request):
         return Response({'result': f'https://accounts.google.com/o/oauth2/v2/auth?client_id={settings.GOOGLE_OAUTH_CLIENT_ID}&redirect_uri={settings.GOOGLE_OAUTH_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code'})
@@ -39,6 +56,7 @@ class GenerateTOTPSecret(views.APIView):
         google2fa_url = self._generate_qr_code_image(secret)
 
         return Response({
+            'success': True,
             'secret': secret,
             'google2fa_url': google2fa_url
         }, status=status.HTTP_201_CREATED)
@@ -51,11 +69,13 @@ class GenerateTOTPSecret(views.APIView):
         device = next(
             (dev for dev in devices if isinstance(dev, TOTPDevice)), None)
         if not device:
-            user.google_2fa_secret
             device = TOTPDevice.objects.create(
                 user=user, name='My Device')
 
         secret = device.config_url
+        user.google_2fa_secret = secret
+        user.google_2fa_secret.save()
+
         return secret
 
     def _generate_qr_code_image(self, secrete):
@@ -80,17 +100,34 @@ class ValidateTOTPToken(views.APIView):
         code = request.data.get('code')
         email = request.data.get('email')
         sec_code = request.data.get('sec_code')
+        token = verify_2fa_secret(email, code)
 
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if token:
+            return Response(
+                {
+                    'success': True,
+                    'access_Token': token
+                }
+            )
 
-        matched_devices = match_token(user, code)
-        if matched_devices:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'access_Token': token})
+        return Response(
+            {
+                'success': False,
+            }
+        )
 
+def verify_2fa_secret(email, code)
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    matched_devices = match_token(user, code)
+    if matched_devices:
+        token, _ = Token.objects.get_or_create(user=user)
+        return token.key
+
+    return False
 
 class GoogleLogin(APIView):
     permission_classes = [AllowAny, ]
@@ -135,6 +172,8 @@ class GoogleLogin(APIView):
 
         else:
             token, _ = Token.objects.get_or_create(user=user)
+            if not token.key:
+                return Response("Token is empty!", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response({
                 '2fa': False,
                 'auth': {'access_token': token.key},
