@@ -19,7 +19,8 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('dashboard.urls', namespace='dashboard')),
     path('admin/', admin.site.urls),
-    path('authentication/', include('authentication.urls', namespace='authentication')),
+    path('auth/', include('authentication.api.urls', namespace='auth')),
+    path('security/', include('authentication.api.urls', namespace='security')),
     path('api/announcement/', include('announcement.api.urls', namespace='announcement')),
     path('api/banner/', include('banner.api.urls', namespace='banner')),
     path('api/invest/', include('invest.api.urls', namespace='invest')),
