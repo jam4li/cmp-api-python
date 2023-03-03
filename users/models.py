@@ -11,7 +11,7 @@ from package.models import Package
 
 class User(AbstractUser):
     # Authentication
-    username = None
+    username=None
     email = models.CharField(
         unique=True,
         max_length=255,
@@ -83,6 +83,10 @@ class UserProfile(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_('User'),
     )
+    username = models.CharField(
+        max_length=255,
+        verbose_name=_('Username'),
+    )
     package = models.ForeignKey(
         Package,
         on_delete=models.CASCADE,
@@ -90,7 +94,13 @@ class UserProfile(models.Model):
         null=True,
         verbose_name=_('Package'),
     )
-    # TODO: Add referrer_id
+    referrer = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name=_('Referrer'),
+    )
     ex_email = models.CharField(
         max_length=255,
         blank=True,
@@ -128,6 +138,11 @@ class UserProfile(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Weekly withdraw amount'),
+    )
+    weekly_withdraw_date = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('Weekly withdraw date'),
     )
 
     class Meta:
