@@ -56,20 +56,21 @@ class Trc20NotifyGatewayAPIView(views.APIView):
         }
 
         try:
-            status = self.request.data['status']
+            status = self.request.data['status_code']
 
-            if status == "Paid":
+            if status == "1" or status == "2" or status == "3":
                 invoice_id = self.request.data['invoice_id']
-                payment_history = dict(self.request.data['payment_history'][0])
-                amount = payment_history['amount']
-                transaction_hash = payment_history['txid']
+                amount = self.request.data['payment_history[0][amount]']
+                transaction_hash = self.request.data['payment_history[0][txid]']
                 symbol = 'USDT'
 
                 payment = Trc20.objects.get(invoice_id=invoice_id)
                 payment_code = payment.payment_code
 
-                hash = str(payment_code) + str(transaction_hash) + "e178afd646065c77b36a5911448f7b41" + str(payment.user_id);
-                hash = str(hashlib.sha1(hash))
+                hash = str(payment_code) + str(transaction_hash) + "e178afd646065c77b36a5911448f7b41" + str(payment.user_id)
+                hash = hash.encode()
+                hash = hashlib.sha1(hash)
+                hash = hash.hexdigest()
 
                 body = {
                     'payment_code': payment_code,
@@ -80,7 +81,7 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                     'symbol': symbol,
                 }
 
-                requests.post(payment.callback_url, data=body)
+                response = requests.post(payment.callback_url, data=body)
 
                 return Response(body, status=HTTP_200_OK)
 
