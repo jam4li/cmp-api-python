@@ -6,7 +6,6 @@ import requests
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django_otp import devices_for_user, match_token
@@ -21,6 +20,11 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
 from users.models import User
+
+
+class GetGoogleUrl(views.APIView):
+    def get(self, request):
+        return Response({'result': f'https://accounts.google.com/o/oauth2/v2/auth?client_id={settings.GOOGLE_OAUTH_CLIENT_ID}&redirect_uri={settings.GOOGLE_OAUTH_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code'})
 
 
 class GenerateTOTPSecret(views.APIView):
@@ -69,6 +73,7 @@ class GenerateTOTPSecret(views.APIView):
         default_storage.save(filename, ContentFile(buffer.read()))
         return default_storage.url(filename)
 
+
 class ValidateTOTPToken(views.APIView):
     @method_decorator(otp_required)
     def post(self, request):
@@ -89,7 +94,6 @@ class ValidateTOTPToken(views.APIView):
 
 class GoogleLogin(APIView):
     permission_classes = [AllowAny, ]
-
 
     def get(self, request):
         code = request.GET.get('code')
@@ -133,6 +137,6 @@ class GoogleLogin(APIView):
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 '2fa': False,
-                'auth': {'access_token': token},
+                'auth': {'access_token': token.key},
                 'user': {'email': id_token_data['email']}
             })
