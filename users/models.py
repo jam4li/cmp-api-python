@@ -46,6 +46,22 @@ class User(AbstractUser):
         verbose_name=_('Updated at'),
     )
 
+    # Make first_name, last_name, date_joined nullable
+    first_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+    )
+    last_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+    )
+    date_joined = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')
