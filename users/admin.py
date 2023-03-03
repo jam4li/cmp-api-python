@@ -1,19 +1,29 @@
 from django.contrib import admin
 
-from .models import User, Admin
+from .models import User, UserProfile, AdminProfile
+from package.models import Package
 
 # Register your models here.
 
+class UserProfileInline(admin.TabularInline):
+    model = UserProfile
+    extra = 0
+
+class AdminProfileInline(admin.TabularInline):
+    model = AdminProfile
+    extra = 0
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in User._meta.get_fields()]
+    fields = (
+        'email',
+        'name',
+        'enable_google_2fa_verification',
+        'google_2fa_secret',
+    )
 
+    inlines = [
+        UserProfileInline,
+        AdminProfileInline,
+    ]
 
 admin.site.register(User, UserAdmin)
-
-
-class AdminsAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Admin._meta.get_fields()]
-
-
-admin.site.register(Admin, AdminsAdmin)
