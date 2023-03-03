@@ -2,12 +2,59 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
+from .managers import CustomUserManager
+
 from package.models import Package
 
 # Create your models here.
 
 
 class User(AbstractUser):
+    # Authentication
+    username = None
+    email = models.CharField(
+        unique=True,
+        max_length=255,
+        verbose_name=_('Email'),
+    )
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    objects = CustomUserManager()
+
+    name = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Name'),
+    )
+    enable_google_2fa_verification = models.BooleanField(
+        default=False,
+        verbose_name=_('Enable google 2fa verification'),
+    )
+    google_2fa_secret = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Google 2fa'),
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Created at'),
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Updated at'),
+    )
+
+    class Meta:
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
+
+    def __str__(self):
+        return self.email
+
+
+class UserProfile(models.Model):
     USER = "user"
     ADMIN = "admin"
     ROLE_CHOICES = (
@@ -15,6 +62,11 @@ class User(AbstractUser):
         (ADMIN, _("Admin")),
     )
 
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+    )
     package = models.ForeignKey(
         Package,
         on_delete=models.CASCADE,
@@ -23,12 +75,10 @@ class User(AbstractUser):
         verbose_name=_('Package'),
     )
     # TODO: Add referrer_id
-    email = models.CharField(
-        max_length=255,
-        verbose_name=_('Email'),
-    )
     ex_email = models.CharField(
         max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Ex email'),
     )
     referrer_code = models.CharField(
@@ -38,22 +88,6 @@ class User(AbstractUser):
     status = models.BooleanField(
         default=True,
         verbose_name=_('Status'),
-    )
-    enable_google_2fa_verification = models.BooleanField(
-        default=False,
-        verbose_name=_('Enable google 2fa'),
-    )
-    google_2fa_secret = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        verbose_name=_('Google 2fa secret'),
-    )
-    name = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Name'),
     )
     avatar = models.ImageField(
         upload_to='user/',
@@ -79,25 +113,16 @@ class User(AbstractUser):
         null=True,
         verbose_name=_('Weekly withdraw amount'),
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
-    )
 
     class Meta:
-        db_table = 'users'
         verbose_name = _('User')
         verbose_name_plural = _('Users')
 
     def __str__(self):
-        return self.email
+        return str(self.user)
 
 
-class Admin(models.Model):
+class AdminProfile(models.Model):
     ADMIN = "admin"
     ACCOUNTING = "accounting"
     SUPPORT = "support"
@@ -107,43 +132,20 @@ class Admin(models.Model):
         (SUPPORT, _("Support")),
     )
 
-    name = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Name'),
-    )
-    email = models.CharField(
-        max_length=255,
-        verbose_name=_('Email'),
-    )
-    enable_google_2fa_verification = models.BooleanField(
-        verbose_name=_('Enable google 2fa verification'),
-    )
-    google_2fa_s = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Google 2fa'),
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
     )
     role = models.CharField(
         max_length=15,
         choices=ROLE_CHOICES,
         verbose_name=_('Role'),
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created at'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated at'),
-    )
 
     class Meta:
-        db_table = 'admins'
         verbose_name = _('Admin')
         verbose_name_plural = _('Admins')
 
     def __str__(self):
-        return self.email
+        return (self.user)

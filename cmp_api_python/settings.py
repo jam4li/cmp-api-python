@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
     'payment.apps.PaymentConfig',
+    'referral.apps.ReferralConfig',
     'transaction.apps.TransactionConfig',
     'trc20.apps.Trc20Config',
     'users.apps.UsersConfig',
@@ -181,6 +182,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DATETIME_FORMAT': '%Y-%d-%m %H:%M:%S',
 }
 
 # Logging Configuration
