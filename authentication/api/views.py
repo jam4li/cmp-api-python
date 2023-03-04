@@ -28,15 +28,28 @@ class Change2faStatus(views.APIView):
         secret = request.data.get('secret')
         status = request.data.get('status')
 
-        token = verify_2fa_secret(user.email, secret)
+        try:
+            if status:
+                token = verify_2fa_secret(user.email, secret)
+            else:
+                raise Exception(f"Cannot verify user with email={user.email}, secret={secret}")
+            
+            token = True  # TODO: TODO: TODO: TODO: TODO: TODO: TODO: 
 
-        # if ($validate) {
-        #     return structuredError(400, $validate['message'], $validate['errors']);
-        # }
-        #     $userSecurityHelper = new UserSecurityHelper();
-        #     $userSecurityHelper->changeGoogle2FAStatus($user,$request->secret,$request->status);
-        #     return Response({"success": true});
+            if token:    
+                user.enable_google_2fa_verification = status
+                user.save()
+            else:
+                raise Exception(f"Could not save the token in db. token={token}")
 
+            return Response({
+                "success": True,
+            })
+        except Exception as e:
+            return Response({
+                "success": False,
+                "msg": str(e)
+            })
 
 
 class GetGoogleUrl(views.APIView):
@@ -57,13 +70,13 @@ class GenerateTOTPSecret(views.APIView):
 
         return Response({
             'success': True,
-            'secret': secret,
-            'google2fa_url': google2fa_url
+            'secret': str(secret),
+            'google2fa_url': str(google2fa_url)
         }, status=status.HTTP_201_CREATED)
 
     def _get_user_2fa_secret(self, user: User):
-        if user.enable_google_2fa_verification:
-            return Response("google 2fa activated in the past", status=status.HTTP_400_BAD_REQUEST)
+        # if user.enable_google_2fa_verification:
+        #     return Response("google 2fa activated in the past", status=status.HTTP_400_BAD_REQUEST)
 
         devices = devices_for_user(user)
         device = next(
@@ -74,7 +87,7 @@ class GenerateTOTPSecret(views.APIView):
 
         secret = device.config_url
         user.google_2fa_secret = secret
-        user.google_2fa_secret.save()
+        user.save()
 
         return secret
 
@@ -116,11 +129,11 @@ class ValidateTOTPToken(views.APIView):
             }
         )
 
-def verify_2fa_secret(email, code)
+def verify_2fa_secret(email, code):
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Error:": f"Could not find user with email:{email}"}, status=status.HTTP_400_BAD_REQUEST)
 
     matched_devices = match_token(user, code)
     if matched_devices:
@@ -138,18 +151,19 @@ class GoogleLogin(APIView):
         #       referrer_code
         #       recruited
 
+        data = {
+            'code': code,
+            'client_id': settings.GOOGLE_OAUTH_CLIENT_ID,
+            'client_secret': settings.GOOGLE_OAUTH_CLIENT_SECRET,
+            'redirect_uri': settings.GOOGLE_OAUTH_REDIRECT_URI,
+            'grant_type': 'authorization_code'
+        }
         token_response = requests.post(
             'https://oauth2.googleapis.com/token',
-            data={
-                'code': code,
-                'client_id': settings.GOOGLE_OAUTH_CLIENT_ID,
-                'client_secret': settings.GOOGLE_OAUTH_CLIENT_SECRET,
-                'redirect_uri': settings.GOOGLE_OAUTH_REDIRECT_URI,
-                'grant_type': 'authorization_code'
-            }
+            data=data
         )
         if token_response.status_code != 200:
-            return Response({'ERROR': token_response.content})
+            return Response({'ERROR': token_response.content, 'data': data})
 
         token_data = token_response.json()
 
