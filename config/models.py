@@ -16,3 +16,19 @@ class Config(BaseModel):
 
     def __str__(self):
         return self.key
+
+
+class DailyProfit(BaseModel):
+    daily_profit = models.DecimalField(
+        max_digits=11,
+        decimal_places=4,
+        verbose_name=_('Daily profit'),
+    )
+
+    class Meta:
+        db_table = 'daily_profits'
+        verbose_name = _('Daily profit')
+        verbose_name_plural = _('Daily profits')
+
+    def __str__(self):
+        return str(self.id)
