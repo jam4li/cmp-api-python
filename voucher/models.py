@@ -26,11 +26,19 @@ class Voucher(BaseModel):
         decimal_places=2,
         verbose_name=_('Amount'),
     )
-    # TODO: creator_id
+    creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('Creator'),
+        related_name='voucher_creator',
+    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
         verbose_name=_('User'),
+        related_name='voucer_user',
     )
     wallet_type = models.CharField(
         max_length=10,
@@ -43,7 +51,10 @@ class Voucher(BaseModel):
         default=False,
         verbose_name=_('Cashed'),
     )
-    cashed_at = models.DateTimeField()
+    cashed_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = 'vouchers'
