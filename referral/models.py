@@ -40,6 +40,10 @@ class Referral(BaseModel):
         choices=RECRUITED_CHOICES,
         verbose_name=_('Recruited')
     )
+    binary_place = models.CharField(
+        max_length=500,
+        verbose_name=_('Binary place'),
+    )
 
     class Meta:
         db_table = 'referrals'

@@ -12,6 +12,7 @@ class Network(BaseModel):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='network_user',
         verbose_name=_('User'),
     )
     status = models.BooleanField(
@@ -62,7 +63,12 @@ class Network(BaseModel):
         default=0.000,
         verbose_name=_('Network profit'),
     )
-    # TODO: Add refferer field as a foreign key
+    referrer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='network_referrer',
+        verbose_name=_('Referrer'),
+    )
     network_calculate_date = models.DateTimeField()
 
     class Meta:
@@ -145,6 +151,8 @@ class NetworkTreeTransfer(BaseModel):
 
 
 class NetworkTreeTransferred(BaseModel):
+    # network_tree_transfer is transfer_network_tree_processes
+    # in the previous class
     network_tree_transfer = models.ForeignKey(
         NetworkTreeTransfer,
         on_delete=models.CASCADE,
