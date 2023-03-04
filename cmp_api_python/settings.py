@@ -231,7 +231,7 @@ OTP_TOTP_ISSUER = 'cmp'
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
 # read this https://www.daimto.com/how-to-get-a-google-access-token-with-curl/
-GOOGLE_OAUTH_REDIRECT_URI = 'http://localhost/auth/callback/'
+GOOGLE_OAUTH_REDIRECT_URI = os.getenv('GOOGLE_OAUTH_REDIRECT_URI') # 'http://localhost/auth/callback/'
 # GOOGLE_OAUTH_REDIRECT_URI = 'ietf:wg:oauth:2.0:oob'
 
 # DRF settings
