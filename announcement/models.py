@@ -38,7 +38,10 @@ class Announcement(BaseModel):
         max_length=1000,
         verbose_name=_('Text'),
     )
-    publish_date = models.DateTimeField()
+    publish_date = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = 'announcements'

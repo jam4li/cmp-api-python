@@ -87,7 +87,7 @@ class CMPToken(BaseModel):
         return self.transaction_hash
 
 
-class CMPClaimHistory(models.Model):
+class CMPClaimHistory(BaseModel):
     wallet = models.CharField(
         max_length=255,
         verbose_name=_('Wallet'),
