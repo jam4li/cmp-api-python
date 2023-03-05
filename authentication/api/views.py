@@ -193,3 +193,11 @@ class GoogleLogin(APIView):
                 'auth': {'access_token': token.key},
                 'user': {'email': id_token_data['email']}
             })
+
+
+class Logout(APIView):
+    def get(self, request):
+        try:
+            Token.objects.get(user=request.user).delete()
+        except User.DoesNotExist:
+            return Response({"Error:": f"Could not find user with email:{request.user.email}"}, status=status.HTTP_400_BAD_REQUEST)
