@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'exchange.apps.ExchangeConfig',
     'dashboard.apps.DashboardConfig',
     'invest.apps.InvestConfig',
-    'migration.apps.MigrationConfig',
     'network.apps.NetworkConfig',
     'package.apps.PackageConfig',
     'payment.apps.PaymentConfig',

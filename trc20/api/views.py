@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_200_OK
 from django.utils.translation import gettext
 
 from .serializers import Trc20CreateGatewaySerializer
-from util.coinremitter import create_invoice
+from utils.coinremitter import create_invoice
 
 from trc20.models import Trc20
 
