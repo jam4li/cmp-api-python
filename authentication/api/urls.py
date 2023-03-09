@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import GetGoogleUrl, GoogleLogin, GenerateTOTPSecret, ValidateTOTPToken, Change2faStatus
-
+from .views import GetGoogleUrl, GoogleLogin, GenerateTOTPSecret, ValidateTOTPToken, Change2faStatus, Logout
 
 app_name = 'authentication'
 urlpatterns = [
@@ -18,9 +17,5 @@ urlpatterns = [
     # 2fa
     path('verify/', ValidateTOTPToken.as_view(), name='verify'),
 
-    # TODO: auth/logout
+    path('logout/', Logout.as_view(), name='logout'),
 ]
-
-# GET /admin/auth/google-url
-# POST /admin/auth/verify
-# PUT /admin/auth/callback
