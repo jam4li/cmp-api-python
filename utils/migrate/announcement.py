@@ -2,7 +2,7 @@ import os
 import datetime
 import mysql.connector
 
-from announcement.models import Announcement
+from apps.announcement.models import Announcement
 
 mydb = mysql.connector.connect(
     port=3306,
@@ -42,7 +42,10 @@ for row in records:
         updated_at = datetime.datetime.strptime(str(updated_at), date_format)
 
     if publish_date:
-        publish_date = datetime.datetime.strptime(str(publish_date), date_format)
+        publish_date = datetime.datetime.strptime(
+            str(publish_date),
+            date_format,
+        )
 
     announcement_obj = Announcement.objects.create(
         id=id,

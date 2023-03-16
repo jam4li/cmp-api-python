@@ -2,7 +2,7 @@ import os
 import datetime
 import mysql.connector
 
-from banner.models import Banner
+from apps.banner.models import Banner
 
 mydb = mysql.connector.connect(
     port=3306,

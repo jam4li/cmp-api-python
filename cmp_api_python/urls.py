@@ -16,15 +16,54 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
-    path('', include('dashboard.urls', namespace='dashboard')),
-    path('admin/', admin.site.urls),
-    path('auth/', include('authentication.api.urls', namespace='auth')),
-    path('security/', include('authentication.api.urls', namespace='security')),
-    path('api/announcement/', include('announcement.api.urls', namespace='announcement')),
-    path('api/banner/', include('banner.api.urls', namespace='banner')),
-    path('api/invest/', include('invest.api.urls', namespace='invest')),
-    path('api/package/', include('package.api.urls', namespace='package')),
-    path('api/trc20/', include('trc20.api.urls', namespace='trc20-api')),
-    path('api/wallet/', include('wallet.api.urls', namespace='wallet-api')),
+    path(
+        '',
+        include('apps.dashboard.urls', namespace='dashboard'),
+    ),
+    path(
+        'admin/',
+        admin.site.urls,
+    ),
+    path(
+        'auth/',
+        include('apps.authentication.api.urls', namespace='auth'),
+    ),
+    path(
+        'security/',
+        include('apps.authentication.api.urls', namespace='security'),
+    ),
+    path(
+        'api/announcement/',
+        include('apps.announcement.api.urls', namespace='announcement'),
+    ),
+    path(
+        'api/banner/',
+        include('apps.banner.api.urls', namespace='banner'),
+    ),
+    path(
+        'api/invest/',
+        include('apps.invest.api.urls', namespace='invest'),
+    ),
+    path(
+        'api/package/',
+        include('apps.package.api.urls', namespace='package'),
+    ),
+    path(
+        'api/trc20/',
+        include('apps.trc20.api.urls', namespace='trc20-api'),
+    ),
+    path(
+        'api/wallet/',
+        include('apps.wallet.api.urls', namespace='wallet-api'),
+    ),
+    path(
+        'sentry-debug/',
+        trigger_error,
+    ),
 ]

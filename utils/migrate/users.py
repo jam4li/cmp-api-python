@@ -2,9 +2,9 @@ import os
 import datetime
 import mysql.connector
 
-from users.models import User, UserProfile
+from apps.users.models import User, UserProfile
 
-from package.models import Package
+from apps.package.models import Package
 
 mydb = mysql.connector.connect(
     port=3306,
@@ -70,7 +70,10 @@ for row in records:
     date_format = '%Y-%m-%d %H:%M:%S'
 
     if weekly_withdraw_date:
-        weekly_withdraw_date = datetime.datetime.strptime(str(weekly_withdraw_date), date_format)
+        weekly_withdraw_date = datetime.datetime.strptime(
+            str(weekly_withdraw_date),
+            date_format,
+        )
 
     if created_at:
         created_at = datetime.datetime.strptime(str(created_at), date_format)
@@ -102,4 +105,3 @@ for row in records:
         weekly_withdraw_amount=weekly_withdraw_amount,
         weekly_withdraw_date=weekly_withdraw_date,
     )
-

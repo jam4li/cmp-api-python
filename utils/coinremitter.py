@@ -2,6 +2,7 @@ from django.conf import settings
 import requests
 from django.http import JsonResponse
 
+
 def create_invoice(amount):
     api_key = settings.TETHER_API_KEY
     url = settings.TETHER_GATEWAY_URL

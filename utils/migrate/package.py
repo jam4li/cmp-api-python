@@ -2,7 +2,7 @@ import os
 import datetime
 import mysql.connector
 
-from package.models import Package
+from apps.package.models import Package
 
 mydb = mysql.connector.connect(
     port=3306,
