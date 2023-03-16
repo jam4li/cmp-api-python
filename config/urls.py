@@ -17,10 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-def trigger_error(request):
-    division_by_zero = 1 / 0
-
-
 urlpatterns = [
     path(
         '',
@@ -63,7 +59,7 @@ urlpatterns = [
         include('apps.wallet.api.urls', namespace='wallet-api'),
     ),
     path(
-        'sentry-debug/',
-        trigger_error,
+        '__debug__/',
+        include('debug_toolbar.urls'),
     ),
 ]
