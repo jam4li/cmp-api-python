@@ -3,7 +3,9 @@ version: "3.9"
 services:
   web:
     build: .
-    command: daphne cmp_api_python.asgi:application --bind 0.0.0.0 --port 8000
+    command: daphne config.asgi:application --bind 0.0.0.0 --port 8000
+    environment:
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS}
     volumes:
       - ./:/cmp_api_python/
       - static_volume:/cmp_api_python/static

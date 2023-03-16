@@ -14,3 +14,4 @@ env
 htmlcov
 .vscode
 data/certs/
+logs/
