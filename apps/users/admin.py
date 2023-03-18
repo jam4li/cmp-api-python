@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import User, UserProfile, AdminProfile
 from apps.package.models import Package
@@ -9,9 +10,19 @@ from apps.package.models import Package
 class UserProfileAdmin(admin.ModelAdmin):
     list_select_related = True
     list_per_page = 50
-    raw_id_fields = ('user',)
-    autocomplete_fields = ['package', 'referrer']
-    search_fields = ['user__email']
+    raw_id_fields = (
+        'user',
+    )
+    autocomplete_fields = [
+        'package',
+        'referrer',
+    ]
+    search_fields = [
+        'user__email',
+        'username',
+        'package__name',
+        'referrer__email',
+    ]
 
     fields = (
         'user',
@@ -40,8 +51,12 @@ admin.site.register(UserProfile, UserProfileAdmin)
 class AdminProfileAdmin(admin.ModelAdmin):
     list_select_related = True
     list_per_page = 50
-    raw_id_fields = ('user',)
-    search_fields = ['user__email']
+    raw_id_fields = (
+        'user',
+    )
+    search_fields = [
+        'user__email',
+    ]
 
     fields = (
         'user',
