@@ -6,28 +6,52 @@ from apps.package.models import Package
 # Register your models here.
 
 
-class UserProfileInline(admin.TabularInline):
-    model = UserProfile
-    extra = 0
+class UserProfileAdmin(admin.ModelAdmin):
+    list_select_related = True
+    list_per_page = 50
+    raw_id_fields = ('user',)
+    autocomplete_fields = ['package', 'referrer']
+    search_fields = ['user__email']
 
-
-class AdminProfileInline(admin.TabularInline):
-    model = AdminProfile
-    extra = 0
-
-
-class UserAdmin(admin.ModelAdmin):
     fields = (
-        'email',
-        'name',
-        'enable_google_2fa_verification',
-        'google_2fa_secret',
+        'user',
+        'username',
+        'package',
+        'referrer',
+        'ex_email',
+        'referrer_code',
+        'status',
+        'avatar',
+        'role',
+        'trc20_withdraw_wallet',
+        'weekly_withdraw_amount',
+        'weekly_withdraw_date',
     )
 
-    inlines = [
-        UserProfileInline,
-        AdminProfileInline,
-    ]
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('user')
+        return qs
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
+
+
+class AdminProfileAdmin(admin.ModelAdmin):
+    list_select_related = True
+    list_per_page = 50
+    raw_id_fields = ('user',)
+    search_fields = ['user__email']
+
+    fields = (
+        'user',
+        'role',
+    )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('user')
+        return qs
+
+
+admin.site.register(AdminProfile, AdminProfileAdmin)
