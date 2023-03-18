@@ -5,4 +5,10 @@ from .models import Package
 # Register your models here.
 
 
-admin.site.register(Package)
+class PackageAdmin(admin.ModelAdmin):
+    search_fields = [
+        'name',
+    ]
+
+
+admin.site.register(Package, PackageAdmin)

@@ -2,6 +2,8 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import models, BaseModel
 
+from apps.users.models import User
+
 # Create your models here.
 
 
@@ -15,13 +17,18 @@ class ExchangeParent(BaseModel):
         (PENDING, _("Pending")),
     )
 
-    user_email = models.CharField(
-        max_length=50,
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
         verbose_name=_('User'),
     )
-    parent = models.CharField(
-        max_length=50,
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         verbose_name=_('Parent'),
+        related_name='children',
     )
     status = models.CharField(
         max_length=10,
@@ -34,4 +41,4 @@ class ExchangeParent(BaseModel):
         verbose_name_plural = _('Exchange parents')
 
     def __str__(self):
-        return self.user_email
+        return str(self.user)
