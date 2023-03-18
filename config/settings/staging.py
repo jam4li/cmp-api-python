@@ -10,7 +10,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Update this to match your domain(s)
 ALLOWED_HOSTS = ['staging.cloudminepro.com']
