@@ -26,6 +26,8 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '0'
+
 # Sentry config
 
 sentry_sdk.init(

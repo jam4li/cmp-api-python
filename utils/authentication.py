@@ -5,6 +5,8 @@ import jwt
 from django.conf import settings
 
 from google.oauth2.credentials import Credentials
+from google.oauth2 import id_token
+from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import Flow
 
 
@@ -77,9 +79,7 @@ def callback_google(request):
     # Production or Staging mode
     else:
         # Get the user's credentials (access token and refresh token)
-        credentials = Credentials.from_authorized_user_info(
-            info=flow.credentials.to_json(),
-        )
+        credentials = flow.credentials
 
         # Verify the ID token and fetch the user's profile information
         id_info = id_token.verify_oauth2_token(credentials.id_token, Request())
