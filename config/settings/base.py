@@ -224,15 +224,7 @@ TETHER_GATEWAY_URL = os.getenv('TETHER_GATEWAY_URL')
 TETHER_EXPIRE_TIME = os.getenv('TETHER_EXPIRE_TIME')
 TETHER_PASSWORD = os.getenv('TETHER_PASSWORD')
 
-# 2FA OTP
-OTP_TOTP_ISSUER = 'cmp'
-# Google OAuth2 settings
-GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
-GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
-# read this https://www.daimto.com/how-to-get-a-google-access-token-with-curl/
-# 'http://localhost/auth/callback/'
 GOOGLE_OAUTH_REDIRECT_URI = os.getenv('GOOGLE_OAUTH_REDIRECT_URI')
-# GOOGLE_OAUTH_REDIRECT_URI = 'ietf:wg:oauth:2.0:oob'
 
 # celery broker and result
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
