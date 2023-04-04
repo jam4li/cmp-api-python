@@ -25,6 +25,8 @@ MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 # Django debug toolbar config
 
 INTERNAL_IPS = [

@@ -15,3 +15,4 @@ htmlcov
 .vscode
 data/certs/
 logs/
+google-auth.json
