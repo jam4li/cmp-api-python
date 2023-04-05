@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework import status, views
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -25,10 +26,15 @@ class GoogleCallback(views.APIView):
         user_email = id_info['email']
         user_name = id_info['name']
 
-        return Response({
-            "email": user_email,
-            "name": user_name,
-        })
+        user = User.objects.get(email=user_email)
+        token, created = Token.objects.get_or_create(user=user)
+
+        redirect_url = "http://localhost:8080/dashboard/?token={0}&email={1}".format(
+            token,
+            user_email,
+        )
+
+        return redirect(redirect_url)
 
 
 class Logout(views.APIView):

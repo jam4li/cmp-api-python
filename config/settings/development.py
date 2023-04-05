@@ -18,14 +18,22 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS += [
+    'corsheaders',
     'debug_toolbar',
 ]
+
+MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware',)
 
 MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8080',
+)
 
 # Django debug toolbar config
 
