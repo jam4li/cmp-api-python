@@ -4,5 +4,5 @@ from .views import AnnouncementListAPIView
 
 app_name = 'announcement'
 urlpatterns = [
-    path('', AnnouncementListAPIView.as_view(), name='list'),
+    path('list/', AnnouncementListAPIView.as_view(), name='list'),
 ]

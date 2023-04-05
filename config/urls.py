@@ -27,35 +27,35 @@ urlpatterns = [
         admin.site.urls,
     ),
     path(
-        'auth/',
+        'api/v1/auth/',
         include('apps.authentication.api.urls', namespace='auth'),
     ),
     path(
-        'security/',
-        include('apps.authentication.api.urls', namespace='security'),
-    ),
-    path(
-        'api/announcement/',
+        'api/v1/announcement/',
         include('apps.announcement.api.urls', namespace='announcement'),
     ),
     path(
-        'api/banner/',
+        'api/v1/banner/',
         include('apps.banner.api.urls', namespace='banner'),
     ),
     path(
-        'api/invest/',
+        'api/v1/invest/',
         include('apps.invest.api.urls', namespace='invest'),
     ),
     path(
-        'api/package/',
+        'api/v1/package/',
         include('apps.package.api.urls', namespace='package'),
     ),
     path(
-        'api/trc20/',
+        'api/v1/trc20/',
         include('apps.trc20.api.urls', namespace='trc20-api'),
     ),
     path(
-        'api/wallet/',
+        'api/v1/user/',
+        include('apps.users.api.urls', namespace='user-api'),
+    ),
+    path(
+        'api/v1/wallet/',
         include('apps.wallet.api.urls', namespace='wallet-api'),
     ),
     path(
