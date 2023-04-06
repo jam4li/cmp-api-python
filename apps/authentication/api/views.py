@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.conf import settings
 from rest_framework import status, views
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -29,7 +30,9 @@ class GoogleCallback(views.APIView):
         user = User.objects.get(email=user_email)
         token, created = Token.objects.get_or_create(user=user)
 
-        redirect_url = "http://localhost:8080/dashboard/?token={0}&email={1}".format(
+        front_end_url = settings.FRONT_END_URL
+
+        redirect_url = front_end_url + "/dashboard/?token={0}&email={1}".format(
             token,
             user_email,
         )
