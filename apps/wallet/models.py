@@ -68,4 +68,4 @@ class Wallet(BaseModel):
         verbose_name_plural = _('Wallets')
 
     def __str__(self):
-        return self.title
+        return str(self.user)
