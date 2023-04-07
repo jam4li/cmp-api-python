@@ -59,6 +59,10 @@ urlpatterns = [
         include('apps.wallet.api.urls', namespace='wallet-api'),
     ),
     path(
+        'api/v1/withdraw/',
+        include('apps.withdraw.api.urls', namespace='withdraw-api'),
+    ),
+    path(
         '__debug__/',
         include('debug_toolbar.urls'),
     ),
