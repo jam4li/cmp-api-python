@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
-from ticket.models import TicketDepartment
+from support.models import SupportDepartment
 
-class TicketDepartmentListSerializer(serializers.ModelSerializer):
+
+class SupportDepartmentListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TicketDepartment
+        model = SupportDepartment
         fields = [
             'name',
             'icon',

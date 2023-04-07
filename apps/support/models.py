@@ -8,13 +8,13 @@ from apps.users.models import User
 
 # Create your models here.
 
-class TicketDepartment(BaseModel):
+class SupportDepartment(BaseModel):
     name = models.CharField(
         max_length=50,
         verbose_name=_('Name'),
     )
     icon = models.ImageField(
-        upload_to='ticket/department/',
+        upload_to='support/department/',
         verbose_name=_('Icon'),
     )
     is_active = models.BooleanField(
@@ -23,14 +23,14 @@ class TicketDepartment(BaseModel):
     )
 
     class Meta:
-        verbose_name = _('Ticket department')
-        verbose_name_plural = _('Ticket departments')
+        verbose_name = _('Support department')
+        verbose_name_plural = _('Support departments')
 
     def __str__(self):
         return self.name
 
 
-class Ticket(BaseModel):
+class SupportTicket(BaseModel):
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
@@ -43,7 +43,7 @@ class Ticket(BaseModel):
     CLOSE = "close"
     OPEN = "open"
     PENDING = "pending"
-    TICKET_STATUS_CHOICES = (
+    Support_TICKET_STATUS_CHOICES = (
         (CLOSE, _("Close")),
         (OPEN, _("Open")),
         (PENDING, _("Pending")),
@@ -56,7 +56,7 @@ class Ticket(BaseModel):
         verbose_name=_('User'),
     )
     department = models.ForeignKey(
-        TicketDepartment,
+        SupportDepartment,
         on_delete=models.CASCADE,
         verbose_name=_('Department'),
     )
@@ -85,7 +85,7 @@ class Ticket(BaseModel):
     # the status should be changed to open
     status = models.CharField(
         max_length=10,
-        choices=TICKET_STATUS_CHOICES,
+        choices=Support_TICKET_STATUS_CHOICES,
         default="open",
         verbose_name=_('Status'),
     )
@@ -95,12 +95,12 @@ class Ticket(BaseModel):
         verbose_name_plural = _('Tickets')
 
     def __str__(self):
-        return self.name
+        return str(self.user)
 
 
-class TicketReply(BaseModel):
+class SupportTicketReply(BaseModel):
     ticket = models.ForeignKey(
-        Ticket,
+        SupportTicket,
         on_delete=models.CASCADE,
         verbose_name=_('Ticket'),
     )

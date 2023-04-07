@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'apps.package',
     'apps.payment',
     'apps.referral',
+    'apps.support',
     'apps.transaction',
     'apps.trc20',
     'apps.users',
