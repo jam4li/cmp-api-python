@@ -47,6 +47,10 @@ urlpatterns = [
         include('apps.package.api.urls', namespace='package'),
     ),
     path(
+        'api/v1/transaction/',
+        include('apps.transaction.api.urls', namespace='transaction-api'),
+    ),
+    path(
         'api/v1/trc20/',
         include('apps.trc20.api.urls', namespace='trc20-api'),
     ),
