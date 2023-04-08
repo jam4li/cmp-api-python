@@ -4,5 +4,5 @@ from .views import InvestListAPIView
 
 app_name = 'invest'
 urlpatterns = [
-    path('<str:status>/', InvestListAPIView.as_view(), name='list'),
+    path('list/', InvestListAPIView.as_view(), name='list'),
 ]

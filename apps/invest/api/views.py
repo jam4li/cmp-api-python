@@ -2,26 +2,24 @@ from rest_framework import views
 from rest_framework.response import Response
 
 from apps.invest.models import Invest
-from apps.config.models import Config
 from .serializers import InvestListSerializer
 
 
 class InvestListAPIView(views.APIView):
-    def get(self, request, status=None, *args, **kwargs):
-        if status == 'all' or status == 'finished' or status == 'active':
-            invest_list = Invest.objects.all()
-            serializer = InvestListSerializer(
-                invest_list,
-                many=True,
-                context={"request": request},
-            )
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
 
-            personal_limit_percent = Config.objects.get(
-                key='personal_limit_percent')
+        invest_list = Invest.objects.filter(
+            user=user,
+            finished=False,
+        ).order_by(
+            'created_at',
+        )
 
-            data = {
-                "invests": serializer.data,
-                "personal_limit_percent": personal_limit_percent.value,
-            }
+        serializer = InvestListSerializer(
+            invest_list,
+            many=True,
+            context={"request": request},
+        )
 
-            return Response(data)
+        return Response(serializer.data)
