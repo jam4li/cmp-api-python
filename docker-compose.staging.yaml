@@ -51,8 +51,9 @@ volumes:
   db_data:
   backup_db_data:
   static_volume:
+    external: true
   media_volume:
-
+    external: true
 
 networks:
   my_network:
