@@ -7,7 +7,7 @@ from .serializers import PackageListSerializer, PackageBuySerializer
 
 class PackageListAPIView(views.APIView):
     def get(self, request, format=None):
-        package = Package.objects.filter(status=True)
+        package = Package.objects.filter(status=True).order_by('sort')
 
         serializer = PackageListSerializer(
             package,

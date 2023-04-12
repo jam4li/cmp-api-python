@@ -10,5 +10,11 @@ class PackageAdmin(admin.ModelAdmin):
         'name',
     ]
 
+    list_display = [
+        'name',
+        'price',
+        'sort'
+    ]
+
 
 admin.site.register(Package, PackageAdmin)

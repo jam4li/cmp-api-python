@@ -5,13 +5,6 @@ from .models import Transaction
 # Register your models here.
 
 
-from django.contrib import admin
-
-from .models import Withdraw
-
-# Register your models here.
-
-
 class TransactionAdmin(admin.ModelAdmin):
     list_select_related = True
     list_per_page = 50
@@ -21,8 +14,6 @@ class TransactionAdmin(admin.ModelAdmin):
     autocomplete_fields = [
         'withdraw',
         'payment',
-        'voucher',
-        'cmp_token',
     ]
     search_fields = [
         'user__email',

@@ -23,6 +23,10 @@ class Package(BaseModel):
         null=True,
         verbose_name=_('Image'),
     )
+    sort = models.PositiveSmallIntegerField(
+        default=1,
+        verbose_name=_('Sort'),
+    )
     summery = models.CharField(
         max_length=255,
         blank=True,
