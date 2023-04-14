@@ -44,11 +44,18 @@ class SupportTicketAdmin(admin.ModelAdmin):
         'title',
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('user')
+        return qs
+
 
 admin.site.register(SupportTicket, SupportTicketAdmin)
 
 
 class SupportDepartmentAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
     fields = (
         'name',
         'icon',

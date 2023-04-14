@@ -16,6 +16,8 @@ class SupportDepartment(BaseModel):
     icon = models.ImageField(
         upload_to='support/department/',
         verbose_name=_('Icon'),
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(
         default=True,

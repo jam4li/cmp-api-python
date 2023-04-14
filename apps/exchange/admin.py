@@ -31,5 +31,10 @@ class ExchangeParentAdmin(admin.ModelAdmin):
         'status',
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('user')
+        return qs
+
 
 admin.site.register(ExchangeParent, ExchangeParentAdmin)
