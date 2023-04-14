@@ -39,6 +39,10 @@ urlpatterns = [
         include('apps.banner.api.urls', namespace='banner'),
     ),
     path(
+        'api/v1/exchange/',
+        include('apps.exchange.api.urls', namespace='exchange'),
+    ),
+    path(
         'api/v1/invest/',
         include('apps.invest.api.urls', namespace='invest'),
     ),
@@ -53,6 +57,10 @@ urlpatterns = [
     path(
         'api/v1/trc20/',
         include('apps.trc20.api.urls', namespace='trc20-api'),
+    ),
+    path(
+        'api/v1/support/',
+        include('apps.support.api.urls', namespace='support-api'),
     ),
     path(
         'api/v1/user/',
