@@ -11,6 +11,19 @@ class SupportTicketReplyInline(admin.TabularInline):
 
 
 class SupportTicketAdmin(admin.ModelAdmin):
+    list_select_related = True
+    list_per_page = 50
+    raw_id_fields = (
+        'user',
+    )
+    autocomplete_fields = [
+        'department',
+    ]
+    search_fields = [
+        'user__email',
+        'department__name',
+    ]
+
     fields = (
         'user',
         'department',
@@ -23,6 +36,12 @@ class SupportTicketAdmin(admin.ModelAdmin):
 
     inlines = [
         SupportTicketReplyInline,
+    ]
+
+    list_display = [
+        'user',
+        'department',
+        'title',
     ]
 
 
