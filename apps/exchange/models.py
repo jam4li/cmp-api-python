@@ -28,11 +28,11 @@ class ExchangeParent(BaseModel):
         null=True,
         blank=True,
         verbose_name=_('Parent'),
-        related_name='children',
     )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
+        default='pending',
         verbose_name=_('Status'),
     )
 
