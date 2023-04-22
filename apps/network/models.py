@@ -66,10 +66,15 @@ class Network(BaseModel):
     referrer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
         related_name='network_referrer',
         verbose_name=_('Referrer'),
     )
-    network_calculate_date = models.DateTimeField()
+    network_calculate_date = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = 'networks'
@@ -77,7 +82,7 @@ class Network(BaseModel):
         verbose_name_plural = _('Networks')
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class NetworkTreeTransfer(BaseModel):
