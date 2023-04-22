@@ -28,51 +28,51 @@ urlpatterns = [
     ),
     path(
         'api/v1/auth/',
-        include('apps.authentication.api.urls', namespace='auth'),
+        include('apps.authentication.urls'),
     ),
     path(
         'api/v1/announcement/',
-        include('apps.announcement.api.urls', namespace='announcement'),
+        include('apps.announcement.urls'),
     ),
     path(
         'api/v1/banner/',
-        include('apps.banner.api.urls', namespace='banner'),
+        include('apps.banner.urls'),
     ),
     path(
         'api/v1/exchange/',
-        include('apps.exchange.api.urls', namespace='exchange'),
+        include('apps.exchange.urls'),
     ),
     path(
         'api/v1/invest/',
-        include('apps.invest.api.urls', namespace='invest'),
+        include('apps.invest.urls'),
     ),
     path(
         'api/v1/package/',
-        include('apps.package.api.urls', namespace='package'),
+        include('apps.package.urls'),
     ),
     path(
         'api/v1/transaction/',
-        include('apps.transaction.api.urls', namespace='transaction-api'),
+        include('apps.transaction.urls'),
     ),
     path(
         'api/v1/trc20/',
-        include('apps.trc20.api.urls', namespace='trc20-api'),
+        include('apps.trc20.urls'),
     ),
     path(
         'api/v1/support/',
-        include('apps.support.api.urls', namespace='support-api'),
+        include('apps.support.urls'),
     ),
     path(
         'api/v1/user/',
-        include('apps.users.api.urls', namespace='user-api'),
+        include('apps.users.urls'),
     ),
     path(
         'api/v1/wallet/',
-        include('apps.wallet.api.urls', namespace='wallet-api'),
+        include('apps.wallet.urls'),
     ),
     path(
         'api/v1/withdraw/',
-        include('apps.withdraw.api.urls', namespace='withdraw-api'),
+        include('apps.withdraw.urls'),
     ),
     path(
         '__debug__/',
