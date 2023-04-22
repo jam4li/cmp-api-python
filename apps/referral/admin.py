@@ -5,4 +5,33 @@ from .models import Referral
 # Register your models here.
 
 
-admin.site.register(Referral)
+class ReferralAdmin(admin.ModelAdmin):
+    list_select_related = True
+    list_per_page = 50
+    raw_id_fields = (
+        'user',
+        'referrer',
+    )
+    autocomplete_fields = [
+        'network',
+    ]
+    search_fields = [
+        'user__email',
+        'referrer__email',
+    ]
+
+    fields = (
+        'user',
+        'network',
+        'referrer',
+        'recruited',
+        'binary_place',
+    )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('user')
+        return qs
+
+
+admin.site.register(Referral, ReferralAdmin)

@@ -6,6 +6,8 @@ from utils.response import ApiResponse
 from apps.users.models import User
 from apps.invest.models import Invest
 from apps.wallet.models import Wallet
+from apps.referral.models import Referral
+from apps.network.models import Network
 # from .serializers import AnnouncementListSerializer
 
 
@@ -22,11 +24,20 @@ class UserDashboardAPIView(views.APIView):
         for wallet in wallet_list:
             balance += wallet.balance
 
+        direct_invited = Referral.objects.filter(
+            referrer=user,
+        ).count()
+
+        user_network = Network.objects.get(user=user)
+        binary_right_count = user_network.right_count
+        binary_left_count = user_network.left_count
+        team = binary_right_count + binary_left_count
+
         data = {
             "active_packages": active_packages,
             "balance": balance,
-            "direct_invited": "Pending",
-            "team": "Pending",
+            "direct_invited": direct_invited,
+            "team": team,
         }
 
         success_response = ApiResponse(
