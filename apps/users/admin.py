@@ -21,7 +21,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'user__email',
         'username',
         'package__name',
-        'referrer__email',
+        'referrer__username',
     ]
 
     fields = (
