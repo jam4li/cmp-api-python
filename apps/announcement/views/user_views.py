@@ -1,6 +1,8 @@
 from rest_framework import views
 from rest_framework.response import Response
 
+from utils.response import ApiResponse
+
 from apps.announcement.models import Announcement
 from apps.announcement.serializers.user_serializers import AnnouncementListSerializer
 
@@ -19,4 +21,11 @@ class AnnouncementListAPIView(views.APIView):
             context={"request": request},
         )
 
-        return Response(serializer.data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)

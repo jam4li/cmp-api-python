@@ -2,6 +2,8 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from django.utils.translation import gettext_lazy as _
 
+from utils.response import ApiResponse
+
 from apps.support.models import SupportDepartment, SupportTicket
 from apps.support.serializers.user_serializers import SupportDepartmentListSerializer, SupportTicketCreateSerializer, SupportTicketListSerializer
 
@@ -15,7 +17,14 @@ class SupportDepartmentListAPIView(views.APIView):
             context={"request": request},
         )
 
-        return Response(serializer.data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
 
 
 class SupportTicketCreateAPIView(views.APIView):
@@ -61,4 +70,11 @@ class SupportTicketListAPIView(views.APIView):
             context={"request": request},
         )
 
-        return Response(serializer.data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)

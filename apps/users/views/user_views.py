@@ -1,6 +1,8 @@
 from rest_framework import views
 from rest_framework.response import Response
 
+from utils.response import ApiResponse
+
 from apps.users.models import User
 from apps.invest.models import Invest
 from apps.wallet.models import Wallet
@@ -27,7 +29,14 @@ class UserDashboardAPIView(views.APIView):
             "team": "Pending",
         }
 
-        return Response(data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
 
 
 class UserDetailAPIView(views.APIView):
@@ -36,4 +45,11 @@ class UserDetailAPIView(views.APIView):
             "name": "User",
         }
 
-        return Response(data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)

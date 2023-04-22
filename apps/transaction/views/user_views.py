@@ -1,6 +1,8 @@
 from rest_framework import views
 from rest_framework.response import Response
 
+from utils.response import ApiResponse
+
 from apps.transaction.models import Transaction
 from apps.transaction.serializers.user_serializers import TransactionListSerializer
 
@@ -21,4 +23,11 @@ class TransactionListAPIView(views.APIView):
             context={"request": request},
         )
 
-        return Response(serializer.data)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
