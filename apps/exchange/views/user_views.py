@@ -1,8 +1,12 @@
 from rest_framework import views
 from rest_framework.response import Response
 
+from utils.response import ApiResponse
+
 from apps.users.models import User
 from apps.exchange.models import ExchangeParent
+
+from apps.exchange.serializers.user_serializers import ParentDetailSerializer
 
 
 class ParentCreateAPIView(views.APIView):
@@ -30,3 +34,35 @@ class ParentCreateAPIView(views.APIView):
         }
 
         return Response(data)
+
+
+class ParentDetailAPIView(views.APIView):
+    def get(self, request, format=None):
+        user = self.request.user
+
+        try:
+            exchange_parent = ExchangeParent.objects.get(user=user)
+
+            serializer = ParentDetailSerializer(
+                exchange_parent,
+                context={"request": request},
+            )
+
+            success_response = ApiResponse(
+                success=True,
+                code=200,
+                data=serializer.data,
+                message='Data retrieved successfully'
+            )
+
+            return Response(success_response)
+
+        except ExchangeParent.DoesNotExist:
+            success_response = ApiResponse(
+                success=True,
+                code=200,
+                data={},
+                message='Data retrieved successfully'
+            )
+
+            return Response(success_response)

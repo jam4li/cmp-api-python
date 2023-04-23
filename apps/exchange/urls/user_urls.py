@@ -6,4 +6,5 @@ app_name = 'exchange_user'
 
 urlpatterns = [
     path('create/', ParentCreateAPIView.as_view(), name='parent-create'),
+    path('detail/', ParentDetailAPIView.as_view(), name='parent-detail'),
 ]
