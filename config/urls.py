@@ -51,6 +51,10 @@ urlpatterns = [
         include('apps.package.urls'),
     ),
     path(
+        'api/v1/referral/',
+        include('apps.referral.urls'),
+    ),
+    path(
         'api/v1/transaction/',
         include('apps.transaction.urls'),
     ),
