@@ -66,3 +66,17 @@ class ParentDetailAPIView(views.APIView):
             )
 
             return Response(success_response)
+
+
+class AcceptUserView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_email')
+        # Your logic to accept a user
+        return Response({'status': 'Accepted'})
+
+
+class RejectUserView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        # Your logic to reject a user
+        return Response({'status': 'Rejected'})
