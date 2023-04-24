@@ -70,13 +70,31 @@ class ParentDetailAPIView(views.APIView):
 
 class AcceptUserView(views.APIView):
     def get(self, request, *args, **kwargs):
-        user_id = kwargs.get('user_email')
-        # Your logic to accept a user
+        user_id = kwargs.get('user_id')
+        user = User.objects.get(
+            id=user_id,
+        )
+
+        exchange_parent = ExchangeParent.objects.get(
+            user=user,
+        )
+        exchange_parent.status = 'accepted'
+        exchange_parent.save()
+
         return Response({'status': 'Accepted'})
 
 
 class RejectUserView(views.APIView):
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
-        # Your logic to reject a user
+        user = User.objects.get(
+            id=user_id,
+        )
+
+        exchange_parent = ExchangeParent.objects.get(
+            user=user,
+        )
+        exchange_parent.status = 'rejected'
+        exchange_parent.save()
+
         return Response({'status': 'Rejected'})

@@ -18,10 +18,20 @@ class ExchangeUserSerializer(serializers.ModelSerializer):
         ]
 
     def get_accept_url(self, obj):
-        return reverse('exchange_user:accept-user', kwargs={'user_id': obj.id})
+        request = self.context.get('request')
+        relative_url = reverse(
+            'exchange_user:accept-user',
+            kwargs={'user_id': obj.id},
+        )
+        return request.build_absolute_uri(relative_url)
 
     def get_reject_url(self, obj):
-        return reverse('exchange_user:reject-user', kwargs={'user_id': obj.id})
+        request = self.context.get('request')
+        relative_url = reverse(
+            'exchange_user:reject-user',
+            kwargs={'user_id': obj.id},
+        )
+        return request.build_absolute_uri(relative_url)
 
 
 class ParentDetailSerializer(serializers.ModelSerializer):
@@ -53,6 +63,7 @@ class ParentDetailSerializer(serializers.ModelSerializer):
         return ExchangeUserSerializer(
             [user_instance.user for user_instance in accepted_users],
             many=True,
+            context=self.context,
         ).data
 
     def get_rejected_users(self, obj):
@@ -64,6 +75,7 @@ class ParentDetailSerializer(serializers.ModelSerializer):
         return ExchangeUserSerializer(
             [user_instance.user for user_instance in rejected_users],
             many=True,
+            context=self.context,
         ).data
 
     def get_pending_users(self, obj):
@@ -75,4 +87,5 @@ class ParentDetailSerializer(serializers.ModelSerializer):
         return ExchangeUserSerializer(
             [user_instance.user for user_instance in pending_users],
             many=True,
+            context=self.context,
         ).data
