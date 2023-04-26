@@ -5,6 +5,34 @@ from apps.exchange.models import ExchangeParent
 from apps.users.models import User
 
 
+class CMEXBITUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'name',
+        ]
+
+
+class CMEXBITExchangeParentSeiralizer(serializers.ModelSerializer):
+    user = CMEXBITUserSerializer()
+    parent = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ExchangeParent
+        fields = [
+            'user',
+            'parent',
+            'status',
+        ]
+
+    def get_parent(self, obj):
+        return CMEXBITUserSerializer(
+            obj.parent.user,
+            context=self.context,
+        ).data
+
+
 class ExchangeUserSerializer(serializers.ModelSerializer):
     accept_url = serializers.SerializerMethodField()
     reject_url = serializers.SerializerMethodField()

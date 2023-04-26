@@ -6,6 +6,11 @@ app_name = 'exchange_user'
 
 urlpatterns = [
     path(
+        'bitmex/',
+        CMEXBITApiView.as_view(),
+        name='reject-user',
+    ),
+    path(
         'create/',
         ParentCreateAPIView.as_view(),
         name='parent-create',

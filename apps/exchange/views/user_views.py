@@ -1,12 +1,33 @@
 from rest_framework import views
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from utils.response import ApiResponse
 
 from apps.users.models import User
 from apps.exchange.models import ExchangeParent
 
-from apps.exchange.serializers.user_serializers import ParentDetailSerializer
+from apps.exchange.serializers.user_serializers import ParentDetailSerializer, CMEXBITExchangeParentSeiralizer
+
+
+class CMEXBITApiView(views.APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        email = self.request.data.get('email')
+        user = User.objects.get(email=email)
+        exchange_parent = ExchangeParent.objects.get(user=user)
+
+        serializer = CMEXBITExchangeParentSeiralizer(exchange_parent)
+
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
 
 
 class ParentCreateAPIView(views.APIView):
