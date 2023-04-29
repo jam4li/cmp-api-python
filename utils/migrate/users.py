@@ -81,27 +81,31 @@ for row in records:
     if updated_at:
         updated_at = datetime.datetime.strptime(str(updated_at), date_format)
 
-    user_obj = User.objects.create(
+    user_obj, _ = User.objects.get_or_create(
         id=id,
-        email=email,
-        name=name,
-        enable_google_2fa_verification=enable_google_2fa_verification,
-        google_2fa_secret=google_2fa_secret,
-        created_at=created_at,
-        updated_at=updated_at,
     )
 
-    user_profile = UserProfile.objects.create(
+    user_obj.email = email
+    user_obj.name = name
+    user_obj.enable_google_2fa_verification = enable_google_2fa_verification
+    user_obj.google_2fa_secret = google_2fa_secret
+    user_obj.created_at = created_at
+    user_obj.updated_at = updated_at
+    user_obj.save()
+
+    user_profile, _ = UserProfile.objects.get_or_create(
         user=user_obj,
-        username=username,
-        package=package,
-        referrer=referrer,
-        ex_email=ex_email,
-        referrer_code=referrer_code,
-        status=status,
-        avatar=avatar,
-        role=role,
-        trc20_withdraw_wallet=trc20_withdraw_wallet,
-        weekly_withdraw_amount=weekly_withdraw_amount,
-        weekly_withdraw_date=weekly_withdraw_date,
     )
+
+    user_profile.username = username
+    user_profile.package = package
+    user_profile.referrer = referrer
+    user_profile.ex_email = ex_email
+    user_profile.referrer_code = referrer_code
+    user_profile.status = status
+    user_profile.avatar = avatar
+    user_profile.role = role
+    user_profile.trc20_withdraw_wallet = trc20_withdraw_wallet
+    user_profile.weekly_withdraw_amount = weekly_withdraw_amount
+    user_profile.weekly_withdraw_date = weekly_withdraw_date
+    user_profile.save()
