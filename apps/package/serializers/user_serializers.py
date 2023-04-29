@@ -11,7 +11,7 @@ class PackageListSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'image',
-            'summery',
+            'summary',
             'fee',
             'daily_profit',
             'daily_profit_percent',

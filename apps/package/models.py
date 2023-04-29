@@ -27,11 +27,11 @@ class Package(BaseModel):
         default=1,
         verbose_name=_('Sort'),
     )
-    summery = models.CharField(
+    summary = models.CharField(
         max_length=255,
         blank=True,
         null=True,
-        verbose_name=_('Summery'),
+        verbose_name=_('Summary'),
     )
     status = models.BooleanField(
         default=False,

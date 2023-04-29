@@ -26,7 +26,7 @@ for row in records:
     author = row[2]
     image = row[3]
     status = row[4]
-    summery = row[5]
+    summary = row[5]
     text = row[6]
     publish_date = row[7]
     created_at = row[8]
@@ -53,7 +53,7 @@ for row in records:
         author=author,
         image=image,
         status=status,
-        summery=summery,
+        summary=summary,
         text=text,
         publish_date=publish_date,
         created_at=created_at,

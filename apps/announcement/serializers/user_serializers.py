@@ -10,7 +10,7 @@ class AnnouncementListSerializer(serializers.ModelSerializer):
             'title',
             'author',
             'image',
-            'summery',
+            'summary',
             'text',
             'publish_date',
         ]

@@ -30,9 +30,9 @@ class Announcement(BaseModel):
         choices=STATUS_CHOICES,
         verbose_name=_('Status'),
     )
-    summery = models.TextField(
+    summary = models.TextField(
         max_length=500,
-        verbose_name=_('Summery'),
+        verbose_name=_('Summary'),
     )
     text = models.TextField(
         max_length=1000,

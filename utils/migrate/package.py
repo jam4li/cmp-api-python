@@ -24,7 +24,7 @@ for row in records:
     id = row[0]
     name = row[1]
     price = row[2]
-    summery = row[4]
+    summary = row[4]
     status = row[5]
     fee = row[6]
     daily_profit = row[7]
@@ -52,7 +52,7 @@ for row in records:
         id=id,
         name=name,
         price=price,
-        summery=summery,
+        summery=summary,
         status=status,
         fee=fee,
         daily_profit=daily_profit,
