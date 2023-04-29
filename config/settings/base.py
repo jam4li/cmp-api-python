@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'apps.payment',
     'apps.referral',
     'apps.support',
+    'apps.telegram',
     'apps.transaction',
     'apps.trc20',
     'apps.users',
@@ -232,3 +233,5 @@ FRONT_END_URL = os.getenv('FRONT_END_URL')
 # celery broker and result
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 # CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
