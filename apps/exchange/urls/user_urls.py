@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         'bitmex/',
         CMEXBITApiView.as_view(),
-        name='reject-user',
+        name='bitmex',
     ),
     path(
         'create/',
