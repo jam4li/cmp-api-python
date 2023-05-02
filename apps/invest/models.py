@@ -40,12 +40,13 @@ class Invest(BaseModel):
         verbose_name=_('Payout binary status'),
     )
     payout_direct_status = models.BooleanField(
+        default=False,
         verbose_name=_('Payout direct status'),
     )
     finished = models.BooleanField(
+        default=False,
         verbose_name=_('Finished'),
     )
-    # TODO: calculated_at default = now()
     calculated_at = models.DateTimeField(
         blank=True,
         null=True,
