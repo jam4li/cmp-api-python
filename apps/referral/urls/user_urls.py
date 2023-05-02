@@ -8,9 +8,11 @@ urlpatterns = [
     path(
         'direct/list/',
         ReferralDirectListAPIView.as_view(),
+        name='direct-list',
     ),
     path(
         'binary/detail/',
         ReferralBinaryDetailAPIView.as_view(),
+        name='binary-detail',
     ),
 ]
