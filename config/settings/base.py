@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'apps.announcement',
     'apps.banner',
     'apps.base',
-    'apps.cmp',
     'apps.config',
     'apps.exchange',
     'apps.dashboard',
@@ -57,7 +56,6 @@ INSTALLED_APPS = [
     'apps.transaction',
     'apps.trc20',
     'apps.users',
-    'apps.voucher',
     'apps.wallet',
     'apps.withdraw',
 
