@@ -8,13 +8,16 @@ urlpatterns = [
     path(
         'department/list/',
         SupportDepartmentListAPIView.as_view(),
+        name='department-list',
     ),
     path(
         'ticket/create/',
         SupportTicketCreateAPIView.as_view(),
+        name='ticket-create',
     ),
     path(
         'ticket/list/',
         SupportTicketListAPIView.as_view(),
+        name='ticket-list',
     ),
 ]
