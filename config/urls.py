@@ -31,8 +31,8 @@ urlpatterns = [
         include('apps.authentication.urls'),
     ),
     path(
-        'api/v1/announcement/',
-        include('apps.announcement.urls'),
+        'api/v1/banner/',
+        include('apps.banner.urls'),
     ),
     path(
         'api/v1/banner/',

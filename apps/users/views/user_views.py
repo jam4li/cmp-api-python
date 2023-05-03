@@ -8,7 +8,7 @@ from apps.invest.models import Invest
 from apps.wallet.models import Wallet
 from apps.referral.models import Referral
 from apps.network.models import Network
-# from .serializers import AnnouncementListSerializer
+# from .serializers import BannerListSerializer
 
 
 class UserDashboardAPIView(views.APIView):

@@ -1,23 +1,23 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.announcement.models import Announcement
-from apps.announcement.serializers.user_serializers import AnnouncementListSerializer
+from apps.banner.models import Banner
+from apps.banner.serializers.user_serializers import BannerListSerializer
 
 
-class AnnouncementListSerializerTest(TestCase):
+class BannerListSerializerTest(TestCase):
     def setUp(self):
-        self.announcement = Announcement.objects.create(
-            title='Test Announcement',
+        self.banner = Banner.objects.create(
+            title='Test Banner',
             author='John Doe',
-            image='announcement/test_img.jpg',
-            status=Announcement.PUBLISH,
+            image='banner/test_img.jpg',
+            status=Banner.PUBLISH,
             summary='This is a test summary.',
             text='This is a test text.',
             publish_date=timezone.now(),
         )
-        self.serializer = AnnouncementListSerializer(
-            instance=self.announcement,
+        self.serializer = BannerListSerializer(
+            instance=self.banner,
         )
 
     def test_contains_expected_fields(self):
@@ -35,22 +35,22 @@ class AnnouncementListSerializerTest(TestCase):
         data = self.serializer.data
         self.assertEqual(
             data['title'],
-            self.announcement.title,
+            self.banner.title,
         )
         self.assertEqual(
             data['author'],
-            self.announcement.author,
+            self.banner.author,
         )
         self.assertEqual(
             data['image'],
-            self.announcement.image.url,
+            self.banner.image.url,
         )
         self.assertEqual(
             data['summary'],
-            self.announcement.summary,
+            self.banner.summary,
         )
         self.assertEqual(
             data['text'],
-            self.announcement.text,
+            self.banner.text,
         )
         # TODO: Write test for dates

@@ -1,1 +1,1 @@
-default_app_config = 'apps.banner.apps.AnnouncementConfig'
+default_app_config = 'apps.banner.apps.BannerConfig'

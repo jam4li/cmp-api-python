@@ -6,30 +6,47 @@ from apps.base.models import models, BaseModel
 
 
 class Banner(BaseModel):
-    big_title = models.CharField(
-        max_length=255,
-        verbose_name=_('Big title'),
+    PUBLISH = "publish"
+    DRAFT = "draft"
+    STATUS_CHOICES = (
+        (PUBLISH, _("Publish")),
+        (DRAFT, _("Draft")),
     )
-    small_title = models.CharField(
+
+    title = models.CharField(
         max_length=255,
-        verbose_name=_('Small title'),
+        verbose_name=_('Title'),
     )
-    sort = models.IntegerField(
-        verbose_name=_('Sort'),
-        null=True,
-        blank=True,
+    author = models.CharField(
+        max_length=255,
+        verbose_name=_('Author'),
     )
     image = models.ImageField(
-        upload_to='banner/',
-        null=True,
-        blank=True,
+        upload_to='banner',
         verbose_name=_('Image'),
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        verbose_name=_('Status'),
+    )
+    summary = models.TextField(
+        max_length=500,
+        verbose_name=_('Summary'),
+    )
+    text = models.TextField(
+        max_length=1000,
+        verbose_name=_('Text'),
+    )
+    publish_date = models.DateTimeField(
+        blank=True,
+        null=True,
     )
 
     class Meta:
-        db_table = 'banners'
+        db_table = 'banner'
         verbose_name = _('Banner')
         verbose_name_plural = _('Banners')
 
     def __str__(self):
-        return self.small_title
+        return self.title

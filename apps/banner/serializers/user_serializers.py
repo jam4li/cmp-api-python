@@ -7,7 +7,10 @@ class BannerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
         fields = [
-            'big_title',
-            'small_title',
+            'title',
+            'author',
             'image',
+            'summary',
+            'text',
+            'publish_date',
         ]
