@@ -61,7 +61,6 @@ class Withdraw(BaseModel):
     )
 
     class Meta:
-        db_table = 'withdraws'
         verbose_name = _('Withdraw')
         verbose_name_plural = _('Withdraws')
 

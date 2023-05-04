@@ -62,7 +62,6 @@ class Payment(BaseModel):
     )
 
     class Meta:
-        db_table = 'payments'
         verbose_name = _('Payment')
         verbose_name_plural = _('Payments')
 

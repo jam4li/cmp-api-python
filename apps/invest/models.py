@@ -57,7 +57,6 @@ class Invest(BaseModel):
     )
 
     class Meta:
-        db_table = 'invests'
         verbose_name = _('Invest')
         verbose_name_plural = _('Invests')
 

@@ -10,7 +10,6 @@ class Config(BaseModel):
     value = models.CharField(max_length=500, verbose_name=_('Value'))
 
     class Meta:
-        db_table = 'configs'
         verbose_name = _('Config')
         verbose_name_plural = _('Configs')
 
@@ -26,7 +25,6 @@ class DailyProfit(BaseModel):
     )
 
     class Meta:
-        db_table = 'daily_profits'
         verbose_name = _('Daily profit')
         verbose_name_plural = _('Daily profits')
 

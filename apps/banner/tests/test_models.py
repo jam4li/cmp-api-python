@@ -68,7 +68,7 @@ class BannerModelTest(TestCase):
         )
         self.assertEqual(
             self.banner.status,
-            banner.DRAFT,
+            Banner.DRAFT,
         )
         self.assertEqual(
             self.banner.summary,

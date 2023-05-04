@@ -77,7 +77,6 @@ class Network(BaseModel):
     )
 
     class Meta:
-        db_table = 'networks'
         verbose_name = _('Network')
         verbose_name_plural = _('Networks')
 
@@ -147,7 +146,6 @@ class NetworkTreeTransfer(BaseModel):
     )
 
     class Meta:
-        db_table = 'transfer_network_tree_processes'
         verbose_name = _('Network tree transfer')
         verbose_name_plural = _('Network tree transfers')
 
@@ -201,7 +199,6 @@ class NetworkTreeTransferred(BaseModel):
     )
 
     class Meta:
-        db_table = 'transferred_network_trees'
         verbose_name = _('Network tree transferred')
         verbose_name_plural = _('Network tree transferred')
 

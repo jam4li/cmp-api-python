@@ -44,7 +44,6 @@ class Banner(BaseModel):
     )
 
     class Meta:
-        db_table = 'banner'
         verbose_name = _('Banner')
         verbose_name_plural = _('Banners')
 

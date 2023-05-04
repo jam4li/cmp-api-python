@@ -46,7 +46,6 @@ class Referral(BaseModel):
     )
 
     class Meta:
-        db_table = 'referrals'
         verbose_name = _('Referral')
         verbose_name_plural = _('Referrals')
 

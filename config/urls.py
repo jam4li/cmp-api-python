@@ -35,10 +35,6 @@ urlpatterns = [
         include('apps.banner.urls'),
     ),
     path(
-        'api/v1/banner/',
-        include('apps.banner.urls'),
-    ),
-    path(
         'api/v1/exchange/',
         include('apps.exchange.urls'),
     ),
