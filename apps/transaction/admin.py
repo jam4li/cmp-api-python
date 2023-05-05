@@ -23,8 +23,6 @@ class TransactionAdmin(admin.ModelAdmin):
         'user',
         'withdraw',
         'payment',
-        'voucher',
-        'cmp_token',
         'amount',
         'type',
         'status',

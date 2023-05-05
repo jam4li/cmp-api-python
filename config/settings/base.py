@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'apps.base',
     'apps.config',
     'apps.exchange',
-    'apps.dashboard',
     'apps.invest',
     'apps.network',
     'apps.package',
