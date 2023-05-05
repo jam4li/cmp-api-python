@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Network, NetworkTreeTransfer, NetworkTreeTransferred
+from .models import Network
 
 # Register your models here.
 
@@ -39,9 +39,3 @@ class NetworkAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Network, NetworkAdmin)
-
-
-admin.site.register(NetworkTreeTransfer)
-
-
-admin.site.register(NetworkTreeTransferred)
