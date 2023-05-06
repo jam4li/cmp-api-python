@@ -61,45 +61,35 @@ class Trc20CreateGatewayAPIView(views.APIView):
 
 class Trc20NotifyGatewayAPIView(views.APIView):
     def post(self, request, format=None):
-        content = {
-            'error': '',
-        }
-
         try:
             status = self.request.data['status_code']
 
             if status == "1" or status == "2" or status == "3":
                 invoice_id = self.request.data['invoice_id']
                 amount = self.request.data['payment_history[0][amount]']
-                transaction_hash = self.request.data['payment_history[0][txid]']
-                symbol = 'USDT'
+                payment_txid = self.request.data['payment_history[0][txid]']
+                payment_confirmation = self.request.data['payment_history[0][confirmation]']
 
-                payment = Trc20.objects.get(invoice_id=invoice_id)
-                payment_code = payment.payment_code
+                trc20_obj = Trc20.objects.get(invoice_id=invoice_id)
+                trc20_obj.status = status
+                trc20_obj.paid_amount = amount
+                trc20_obj.payment_txid = payment_txid
+                trc20_obj.payment_confirmation = payment_confirmation
+                trc20_obj.save()
 
-                hash = str(payment_code) + str(transaction_hash) + \
-                    "e178afd646065c77b36a5911448f7b41" + str(payment.user_id)
-                hash = hash.encode()
-                hash = hashlib.sha1(hash)
-                hash = hash.hexdigest()
-
-                body = {
-                    'payment_code': payment_code,
-                    'hash': hash,
-                    'transaction_hash': transaction_hash,
-                    'user_id': payment.user_id,
-                    'amount': amount,
-                    'symbol': symbol,
-                }
-
-                response = requests.post(payment.callback_url, data=body)
-
-                return Response(body, status=HTTP_200_OK)
+                return Response({}, status=HTTP_200_OK)
 
             else:
                 return Response({}, status=HTTP_200_OK)
 
         except Exception as e:
-            content['error'] = str(e)
+            response = ApiResponse(
+                success=False,
+                code=500,
+                error={
+                    'code': str(e),
+                    'detail': 'Server error',
+                }
+            )
 
-            return Response(content, status=HTTP_200_OK)
+            return Response(response, status=HTTP_200_OK)

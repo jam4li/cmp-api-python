@@ -14,6 +14,7 @@ class Trc20Admin(admin.ModelAdmin):
     search_fields = [
         'user__email',
         'address',
+        'payment_txid',
     ]
 
     fields = (
@@ -25,11 +26,14 @@ class Trc20Admin(admin.ModelAdmin):
         'address',
         'symbol',
         'status',
+        'payment_txid',
+        'payment_confirmation',
     )
 
     list_display = [
         'user',
         'address',
+        'payment_txid',
     ]
 
     def get_queryset(self, request):

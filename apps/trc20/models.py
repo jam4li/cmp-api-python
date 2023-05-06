@@ -56,6 +56,17 @@ class Trc20(BaseModel):
         choices=STATUS_CHOICES,
         verbose_name=_('Status'),
     )
+    payment_txid = models.CharField(
+        max_length=80,
+        blank=True,
+        null=True,
+        verbose_name=_('Payment txid'),
+    )
+    payment_confirmation = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('Payment confirmation'),
+    )
 
     class Meta:
         verbose_name = _('Trc20')
