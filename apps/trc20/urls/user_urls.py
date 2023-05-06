@@ -5,6 +5,6 @@ from apps.trc20.views.user_views import Trc20CreateGatewayAPIView, Trc20NotifyGa
 app_name = 'trc20_user'
 
 urlpatterns = [
-    path('create/', Trc20CreateGatewayAPIView.as_view(), name='create-getway'),
-    path('notify/', Trc20NotifyGatewayAPIView.as_view(), name='notify-getway'),
+    path('create/', Trc20CreateGatewayAPIView.as_view(), name='create'),
+    path('notify/', Trc20NotifyGatewayAPIView.as_view(), name='notify'),
 ]

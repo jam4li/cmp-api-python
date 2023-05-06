@@ -7,9 +7,6 @@ class Trc20CreateGatewaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Trc20
         fields = (
-            'amount',
-            'payment_code',
-            'user_id',
+            'total_amount',
             'symbol',
-            'callback_url',
         )

@@ -1,52 +1,62 @@
-import requests
-import hashlib
 from rest_framework import views
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework.status import HTTP_200_OK
 from django.utils.translation import gettext
 
-from apps.trc20.serializers.user_serializers import Trc20CreateGatewaySerializer
-from utils.coinremitter import create_invoice
+from utils.response import ApiResponse
 
+from apps.trc20.serializers.user_serializers import Trc20CreateGatewaySerializer
 from apps.trc20.models import Trc20
+
+from utils.coinremitter import create_invoice
 
 
 class Trc20CreateGatewayAPIView(views.APIView):
-    permission_classes = (AllowAny,)
-
     def post(self, request, format=None):
-        content = {
-            'statusCode': '',
-            'error': '',
-            'message': '',
-        }
-
         serializer = Trc20CreateGatewaySerializer(data=request.data)
 
         if serializer.is_valid():
-            amount = self.request.data.get('amount')
-            invoice = create_invoice(amount)
+            total_amount = self.request.data.get('total_amount')
+            invoice = create_invoice(total_amount)
+
+            invoice_message = invoice['msg']
+            invoice_data = invoice['data']
 
             serializer.save(
-                invoice_id=invoice['data']['invoice_id'],
+                user=self.request.user,
+                message=invoice_message,
+                invoice_id=invoice_data['invoice_id'],
+                total_amount=float(
+                    invoice_data['total_amount']['USDTTRC20'],
+                ),
+                address=invoice_data['address'],
+                symbol=invoice_data['coin'],
+                status=invoice_data['status_code'],
             )
 
             data = {
-                'success': True,
-                'data': {
-                    'address': invoice['data']['url'],
-                }
+                'gateway_address': invoice['data']['url'],
             }
 
-            return Response(data)
+            success_response = ApiResponse(
+                success=True,
+                code=200,
+                data=data,
+                message='Data retrieved successfully'
+            )
+
+            return Response(success_response)
 
         else:
-            content['statusCode'] = 400
-            content['error'] = ''
-            content['message'] = gettext('Not valid')
+            response = ApiResponse(
+                success=False,
+                code=400,
+                error={
+                    'code': 'not_valid',
+                    'detail': 'Not valid',
+                }
+            )
 
-            return Response(content)
+            return Response(response)
 
 
 class Trc20NotifyGatewayAPIView(views.APIView):

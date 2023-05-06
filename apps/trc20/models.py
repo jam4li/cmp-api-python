@@ -2,41 +2,54 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import models, BaseModel
 
+from apps.users.models import User
+
 # Create your models here.
 
 
 class Trc20(BaseModel):
     PENDING = 0
     PAID = 1
-    FAILED = 3
+    UNDERPAID = 2
+    OVERPAID = 3
+    EXPIRED = 4
+    CANCELLED = 5
     STATUS_CHOICES = (
         (PENDING, _("Pending")),
         (PAID, _("Paid")),
-        (FAILED, _("Failed")),
+        (UNDERPAID, _("Under paid")),
+        (OVERPAID, _("Over paid")),
+        (EXPIRED, _("Expired")),
+        (CANCELLED, _("Cancelled")),
     )
 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+    )
+    message = invoice_id = models.CharField(
+        max_length=50,
+        verbose_name=_('Message'),
+    )
     invoice_id = models.CharField(
         max_length=20,
         verbose_name=_('Invoice id'),
     )
-    amount = models.FloatField(
-        verbose_name=_('Amount'),
+    total_amount = models.FloatField(
+        verbose_name=_('Total amount'),
     )
-    payment_code = models.CharField(
-        max_length=50,
-        verbose_name=_('Payment code'),
+    paid_amount = models.FloatField(
+        default=0.0,
+        verbose_name=_('Paid amount'),
     )
-    user_id = models.CharField(
-        max_length=20,
-        verbose_name=_('User id'),
+    address = models.CharField(
+        max_length=40,
+        verbose_name=_('Address'),
     )
     symbol = models.CharField(
         max_length=20,
         verbose_name=_('Symbol'),
-    )
-    callback_url = models.CharField(
-        max_length=100,
-        verbose_name=_('Callback url'),
     )
     status = models.SmallIntegerField(
         default=0,
