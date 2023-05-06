@@ -15,8 +15,34 @@ class CMEXBITApiView(views.APIView):
 
     def post(self, request):
         email = self.request.data.get('email')
-        user = User.objects.get(email=email)
-        exchange_parent = ExchangeParent.objects.get(user=user)
+
+        try:
+            user = User.objects.get(email=email)
+            exchange_parent = ExchangeParent.objects.get(user=user)
+
+        except User.DoesNotExist:
+            response = ApiResponse(
+                success=False,
+                code=404,
+                error={
+                    'code': 'user_not_found',
+                    'detail': 'User not found in the database',
+                }
+            )
+
+            return Response(response)
+
+        except ExchangeParent.DoesNotExist:
+            response = ApiResponse(
+                success=False,
+                code=404,
+                error={
+                    'code': 'parent_not_found',
+                    'detail': 'The parent email not found',
+                }
+            )
+
+            return Response(response)
 
         serializer = CMEXBITExchangeParentSeiralizer(exchange_parent)
 
