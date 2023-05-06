@@ -16,7 +16,7 @@ class ExchangeParentAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         'user__email',
-        'parent__user',
+        'parent__user__email',
     ]
 
     fields = (
