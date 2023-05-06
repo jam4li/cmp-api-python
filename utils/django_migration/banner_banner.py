@@ -1,5 +1,6 @@
 import os
 import datetime
+import pytz
 import mysql.connector
 
 from apps.banner.models import Banner
@@ -33,7 +34,7 @@ for row in records:
     updated_at = row[9]
 
     # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
+    date_format = '%Y-%m-%d %H:%M:%S.%f'
 
     if created_at:
         created_at = datetime.datetime.strptime(str(created_at), date_format)
