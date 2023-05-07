@@ -38,8 +38,25 @@ services:
       - static_volume:/cmp_api_python/static
       - media_volume:/cmp_api_python/media
 
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - ./:/cmp_api_python/
+    depends_on:
+      - redis
+    env_file:
+      - ./.env
+
 volumes:
   db_data:
   backup_db_data:
   static_volume:
+    external: true
   media_volume:
+    external: true
