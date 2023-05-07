@@ -49,6 +49,8 @@ services:
     image: "redis:latest"
     ports:
       - "6379:6379"
+    networks:
+      - my_network
 
   celery_worker:
     build: .
@@ -59,6 +61,8 @@ services:
       - redis
     env_file:
       - ./.env
+    networks:
+      - my_network
 
   celery_beat:
     build: .
@@ -69,6 +73,8 @@ services:
       - redis
     env_file:
       - ./.env
+    networks:
+      - my_network
 
 volumes:
   db_data:
