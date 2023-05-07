@@ -17,7 +17,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['api.cloudminepro.com']
 
 # Use a more secure secret key in production
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # Add any other production-specific settings here
 

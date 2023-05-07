@@ -53,7 +53,7 @@ def callback_google(request):
     flow.fetch_token(authorization_response=authorization_response)
 
     # Development mode
-    if os.environ['OAUTHLIB_INSECURE_TRANSPORT'] == '1':
+    if os.environ.get('OAUTHLIB_INSECURE_TRANSPORT') == '1':
         # Get the user's credentials (access token and refresh token)
         credentials = flow.credentials
 

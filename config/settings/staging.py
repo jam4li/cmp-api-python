@@ -25,7 +25,7 @@ INSTALLED_APPS += [
 MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware',)
 
 # Use a more secure secret key in staging
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # Add any other staging-specific settings here
 # For example, you may want to configure HTTPS settings

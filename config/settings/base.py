@@ -105,11 +105,11 @@ ASGI_APPLICATION = 'config.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USERNAME'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'PORT': os.environ['DATABASE_PORT'],
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USERNAME'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
@@ -216,18 +216,18 @@ LOGGING = {
 # Payment Configuration
 
 # TODO: Because of Django's problem in env variables
-TETHER_API_KEY = os.getenv('TETHER_FIRST_API_KEY') + \
-    '$YdPoyS2KOy8YFVV' + os.getenv('TETHER_SECOND_API_KEY')
+TETHER_API_KEY = os.environ.get('TETHER_FIRST_API_KEY') + \
+    '$YdPoyS2KOy8YFVV' + os.environ.get('TETHER_SECOND_API_KEY')
 
-TETHER_GATEWAY_URL = os.getenv('TETHER_GATEWAY_URL')
-TETHER_EXPIRE_TIME = os.getenv('TETHER_EXPIRE_TIME')
-TETHER_PASSWORD = os.getenv('TETHER_PASSWORD')
+TETHER_GATEWAY_URL = os.environ.get('TETHER_GATEWAY_URL')
+TETHER_EXPIRE_TIME = os.environ.get('TETHER_EXPIRE_TIME')
+TETHER_PASSWORD = os.environ.get('TETHER_PASSWORD')
 
-GOOGLE_OAUTH_REDIRECT_URI = os.getenv('GOOGLE_OAUTH_REDIRECT_URI')
-FRONT_END_URL = os.getenv('FRONT_END_URL')
+GOOGLE_OAUTH_REDIRECT_URI = os.environ.get('GOOGLE_OAUTH_REDIRECT_URI')
+FRONT_END_URL = os.environ.get('FRONT_END_URL')
 
 # celery broker and result
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 # CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
