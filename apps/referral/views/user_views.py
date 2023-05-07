@@ -8,9 +8,12 @@ from apps.referral.models import Referral
 from apps.network.models import Network
 from apps.referral.serializers.user_serializers import ReferralDirectListSerializer, ReferralBinaryDetailSerializer
 
+from apps.referral.tasks import my_example_task
+
 
 class ReferralDirectListAPIView(views.APIView):
     def get(self, request, format=None):
+        my_example_task.apply_async()
         user = self.request.user
 
         direct_list = Referral.objects.filter(
