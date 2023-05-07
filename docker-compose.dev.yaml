@@ -43,9 +43,19 @@ services:
     ports:
       - "6379:6379"
 
-  celery:
+  celery_worker:
     build: .
     command: celery -A config worker --loglevel=info
+    volumes:
+      - ./:/cmp_api_python/
+    depends_on:
+      - redis
+    env_file:
+      - ./.env
+
+  celery_beat:
+    build: .
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ./:/cmp_api_python/
     depends_on:

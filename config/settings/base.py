@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 import logging.config
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -59,6 +61,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_celery_beat',
     'django_otp',
     'django_otp.plugins.otp_totp',
 ]
@@ -233,5 +236,15 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+# Run the task daily at 00:00 (midnight)
+CELERY_BEAT_SCHEDULE = {
+    'run_my_task': {
+        'task': 'apps.referral.tasks.my_example_task',
+        'schedule': crontab(hour=0, minute=0),
+    },
+}
+
+CELERY_BEAT_SCHEDULE_FILENAME = 'celery_beat_schedule'
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
