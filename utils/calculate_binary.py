@@ -67,6 +67,34 @@ class CompleteBinaryTree:
             index = left_child_index
         return index
 
+    def insert_new_user(self, new_user_id, parent_user_id, child_side="left"):
+        # Get the parent user index
+        parent_user_index = self.nodes.index(parent_user_id)
+
+        if child_side == "left":
+            # Find the left child index of the parent user
+            child_index = self.find_left_child_index(parent_user_index)
+        elif child_side == "right":
+            # Find the right child index of the parent user
+            child_index = self.find_right_child_index(parent_user_index)
+        else:
+            raise ValueError("Invalid child_side, must be 'left' or 'right'")
+
+        # If the child position is empty, insert the new user there
+        if child_index >= len(self.nodes) or self.nodes[child_index] is None:
+            self.insert(new_user_id, parent_user_id, child_side)
+        else:
+            # If the child position is taken, find the left-most or right-most descendant
+            if child_side == "left":
+                descendant_index = self.find_left_most_descendant(
+                    parent_user_index)
+            else:
+                descendant_index = self.find_right_most_descendant(
+                    parent_user_index)
+
+            # Insert the new user as the left or right child of the left-most or right-most descendant
+            self.insert(new_user_id, self.nodes[descendant_index], child_side)
+
     def find_right_most_descendant(self, index):
         # Keep traversing the right children until there are no more right children.
         while index < len(self.nodes):
@@ -104,33 +132,17 @@ class CompleteBinaryTree:
 if __name__ == '__main__':
     tree = CompleteBinaryTree()
 
-    tree.insert("user1", None)  # User1 is the root
-    tree.insert("user2", "user1", "left")
-    tree.insert("user3", "user1", "right")
+    tree.insert_new_user("user1", None)  # User1 is the root
+    tree.insert_new_user("user2", "user1", "left")
+    tree.insert_new_user("user3", "user1", "right")
 
-    parent_user_id = "user1"
+    tree.insert_new_user("user4", "user1", "left")
 
-    # User1 invites a new user (user8), but left and right children are taken, so the new user will be added under user5 as the left child
-    new_user_id = "user4"
-    parent_user_index = tree.nodes.index(parent_user_id)
-    find_left_most_descendant = tree.find_left_most_descendant(
-        parent_user_index)
-    tree.insert(new_user_id, tree.nodes[find_left_most_descendant], "left")
+    tree.insert_new_user("user5", "user1", "left")
 
-    # User1 invites a new user (user8), but left and right children are taken, so the new user will be added under user5 as the left child
-    new_user_id = "user5"
-    parent_user_index = tree.nodes.index(parent_user_id)
-    find_left_most_descendant = tree.find_left_most_descendant(
-        parent_user_index)
-    tree.insert(new_user_id, tree.nodes[find_left_most_descendant], "left")
+    tree.insert_new_user("user6", "user3", "right")
 
-    parent_user_id = "user3"
-    new_user_id = "user6"
-    tree.insert(new_user_id, parent_user_id, "right")
-
-    parent_user_id = "user3"
-    new_user_id = "user7"
-    tree.insert(new_user_id, parent_user_id, "left")
+    tree.insert_new_user("user7", "user3", "left")
 
     print(tree.nodes)
     print(tree.binary_places)
