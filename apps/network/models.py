@@ -4,6 +4,7 @@ from apps.base.models import models, BaseModel
 
 from apps.users.models import User
 from apps.package.models import Package
+from apps.invest.models import Invest
 
 # Create your models here.
 
@@ -79,6 +80,60 @@ class Network(BaseModel):
     class Meta:
         verbose_name = _('Network')
         verbose_name_plural = _('Networks')
+
+    def __str__(self):
+        return str(self.user)
+
+
+class NetworkTransaction(BaseModel):
+    BINARY = "binary"
+    DIRECT = "direct"
+    PROFIT = "profit"
+    TYPE_CHOICES = (
+        (BINARY, _("Binary")),
+        (DIRECT, _("Direct")),
+        (PROFIT, _("Profit")),
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+    )
+    invest = models.ForeignKey(
+        Invest,
+        on_delete=models.CASCADE,
+        verbose_name=_('Invest'),
+    )
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
+        verbose_name=_('Type'),
+    )
+    amount = models.DecimalField(
+        max_digits=20,
+        decimal_places=3,
+        verbose_name=_('Amount'),
+    )
+    day = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('Day'),
+    )
+    description = models.TextField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_('Description'),
+    )
+    deleted_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        verbose_name = _('Network transaction')
+        verbose_name_plural = _('Network transactions')
 
     def __str__(self):
         return str(self.user)
