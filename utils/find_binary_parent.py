@@ -3,32 +3,35 @@ from apps.referral.models import Referral
 
 user_list = User.objects.all()
 
-referral_not_found = 0
-parent_not_found = 0
+referral_not_found_counter = 0
 
-binary_place_not_integer = 0
-parent_binary_not_integer = 0
+
+def convert_old_to_new_binary_place(old_binary_place):
+    new_binary_place = ''
+    while old_binary_place > 1:
+        new_binary_place = str(old_binary_place % 2) + new_binary_place
+        old_binary_place //= 2
+    return new_binary_place
+
 
 for user in user_list:
     try:
         referral_obj = Referral.objects.get(user=user)
     except Referral.DoesNotExist:
-        referral_not_found += 1
-
-        print("Referral Not Found:", end=' ')
-        print(referral_not_found)
-
-        print("Parent Referral Not Found:", end=' ')
-        print(parent_not_found)
+        referral_not_found_counter += 1
 
         continue
 
     try:
         binary_place = int(referral_obj.binary_place)
-    except:
-        print('Binary Place is not integer')
+        new_binary_place = convert_old_to_new_binary_place(binary_place)
+        print('-------')
         print(binary_place)
-        binary_place_not_integer += 1
+        print(new_binary_place)
+        print('-------')
+        referral_obj.binary_place = new_binary_place
+        referral_obj.save()
+    except:
         continue
 
     if binary_place % 2 != 0:
@@ -37,9 +40,6 @@ for user in user_list:
     try:
         parent_binary_place = str(binary_place // 2)
     except:
-        print('Parent binary place is not integer')
-        print(parent_binary_place)
-        parent_binary_not_integer += 1
         continue
 
     try:
@@ -47,23 +47,7 @@ for user in user_list:
             binary_place=parent_binary_place,
         )
     except Referral.DoesNotExist:
-        parent_not_found += 1
-
-        print(referral_obj.user.email)
-
-        print("Referral Not Found:", end=' ')
-        print(referral_not_found)
-
-        print("Parent Referral Not Found:", end=' ')
-        print(parent_not_found)
-
         continue
 
-    print("Referral Not Found:", end=' ')
-    print(referral_not_found)
-
-    print("Parent Referral Not Found:", end=' ')
-    print(parent_not_found)
-
-print(binary_place_not_integer)
-print(parent_binary_not_integer)
+print('Referral Not Found')
+print(referral_not_found_counter)
