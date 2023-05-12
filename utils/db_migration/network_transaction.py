@@ -18,20 +18,20 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
-# Sets wait_timeout to 8 hours
 cursor.execute("SET GLOBAL wait_timeout = 28800")
-# Sets interactive_timeout to 8 hours
 cursor.execute("SET GLOBAL interactive_timeout = 28800")
+cursor.execute("SET SESSION net_read_timeout=28800")
+cursor.execute("SET SESSION net_write_timeout=28800")
 
 cmd = "select id, user_id, invest_id, type, amount, day, description, created_at, updated_at, deleted_at from network_transactions"
 
 cursor.execute(cmd)
 
+existing_objects = []
+new_objects = []
+
 while True:
     records = cursor.fetchmany(1000)
-
-    new_objects = []
-    existing_objects = []
 
     for row in records:
         id = row[0]
@@ -56,61 +56,60 @@ while True:
             print(user.email)
             continue
 
-        amount = decimal.Decimal(amount)
-
-        # Change mysql's date to python's date
-        date_format = '%Y-%m-%d %H:%M:%S'
-
-        if created_at:
-            created_at = datetime.datetime.strptime(
-                str(created_at), date_format)
-            created_at = created_at.replace(tzinfo=pytz.UTC)
-
-        if updated_at:
-            updated_at = datetime.datetime.strptime(
-                str(updated_at), date_format)
-            updated_at = updated_at.replace(tzinfo=pytz.UTC)
-
-        if deleted_at:
-            deleted_at = datetime.datetime.strptime(
-                str(deleted_at), date_format)
-            deleted_at = deleted_at.replace(tzinfo=pytz.UTC)
+        if updated_at is None:
+            updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
         try:
-            network_transaction_obj = NetworkTransaction.objects.get(
-                id=id,
-            )
-
-            network_transaction_obj.user = user
-            network_transaction_obj.invest = invest
-            network_transaction_obj.type = type
-            network_transaction_obj.amount = amount
-            network_transaction_obj.day = day
-            network_transaction_obj.description = description
-            network_transaction_obj.created_at = created_at
-            network_transaction_obj.updated_at = updated_at
-            network_transaction_obj.deleted_at = deleted_at
-            existing_objects.append(network_transaction_obj)
+            network_transaction_obj = NetworkTransaction.objects.select_related(
+                'user',
+                'invest',
+            ).get(id=id)
 
         except NetworkTransaction.DoesNotExist:
-            network_transaction_obj = NetworkTransaction(
-                id=id,
-                user=user,
-                invest=invest,
-                type=type,
-                amount=amount,
-                day=day,
-                description=description,
-                created_at=created_at,
-                updated_at=updated_at,
-                deleted_at=deleted_at,
-            )
+            network_transaction_obj = NetworkTransaction(id=id)
             new_objects.append(network_transaction_obj)
+
+        network_transaction_obj.user = user
+        network_transaction_obj.invest = invest
+        network_transaction_obj.type = type
+        network_transaction_obj.amount = amount
+        network_transaction_obj.day = day
+        network_transaction_obj.description = description
+        network_transaction_obj.created_at = created_at
+        network_transaction_obj.updated_at = updated_at
+        network_transaction_obj.deleted_at = deleted_at
+
+        existing_objects.append(network_transaction_obj)
+
+    if len(new_objects) > 5000:
+        NetworkTransaction.objects.bulk_create(new_objects)
+        print(new_objects)
+        new_objects = []
+
+    if len(existing_objects) > 5000:
+        NetworkTransaction.objects.bulk_update(
+            existing_objects, [
+                'user',
+                'invest',
+                'type',
+                'amount',
+                'day',
+                'description',
+                'created_at',
+                'updated_at',
+                'deleted_at',
+            ],
+        )
+        print(existing_objects)
+        existing_objects = []
 
     print(new_objects)
     print(existing_objects)
 
+if new_objects:
     NetworkTransaction.objects.bulk_create(new_objects)
+
+if existing_objects:
     NetworkTransaction.objects.bulk_update(
         existing_objects,
         [
