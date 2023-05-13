@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   web:
+    container_name: django_api
     build: .
     command: daphne config.asgi:application --bind 0.0.0.0 --port 8000
     environment:
@@ -18,6 +19,7 @@ services:
       - db
 
   db:
+    container_name: django_db
     image: mysql:latest
     ports:
       - 3306:3306
@@ -30,6 +32,7 @@ services:
       - db_data:/var/lib/mysql:rw
 
   nginx:
+    container_name: django_nginx
     image: nginx:1.21.6-alpine
     ports:
       - 80:80
@@ -39,11 +42,13 @@ services:
       - media_volume:/cmp_api_python/media
 
   redis:
+    container_name: django_redis
     image: "redis:latest"
     ports:
       - "6379:6379"
 
   celery_worker:
+    container_name: django_celery_worker
     build: .
     command: celery -A config worker --loglevel=info
     volumes:
@@ -54,6 +59,7 @@ services:
       - ./.env
 
   celery_beat:
+    container_name: django_celery_beat
     build: .
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
