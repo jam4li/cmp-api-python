@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.referral.views.user_views import ReferralDirectListAPIView, ReferralBinaryDetailAPIView
+from apps.referral.views.user_views import ReferralDirectListAPIView, ReferralBinaryDetailAPIView, ReferralNetworkDetailAPIView
 
 app_name = 'referral_user'
 
@@ -14,5 +14,10 @@ urlpatterns = [
         'binary/detail/',
         ReferralBinaryDetailAPIView.as_view(),
         name='binary-detail',
+    ),
+    path(
+        'network/detail/',
+        ReferralNetworkDetailAPIView.as_view(),
+        name='network-detail',
     ),
 ]
