@@ -2,6 +2,7 @@ import os
 import datetime
 import mysql.connector
 import decimal
+import pytz
 
 from apps.referral.models import Referral
 
@@ -18,56 +19,106 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
+cursor.execute("SET GLOBAL wait_timeout = 28800")
+cursor.execute("SET GLOBAL interactive_timeout = 28800")
+cursor.execute("SET SESSION net_read_timeout=28800")
+cursor.execute("SET SESSION net_write_timeout=28800")
+
 cmd = "select id, user_id, network_id, referrer_id, recruited, binary_place, created_at, updated_at from referrals"
 
 cursor.execute(cmd)
 
-records = cursor.fetchall()
+existing_objects = []
+new_objects = []
 
-for row in records:
-    id = row[0]
-    user_id = row[1]
-    network_id = row[2]
-    referrer_id = row[3]
-    recruited = row[4]
-    binary_place = row[5]
-    created_at = row[6]
-    updated_at = row[7]
+while True:
+    records = cursor.fetchmany(1000)
 
-    # Find User
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        pass
+    if not records:
+        break
 
-    # Find Network
-    try:
-        network = Network.objects.get(id=network_id)
-    except Network.DoesNotExist:
-        pass
+    for row in records:
+        id = row[0]
+        user_id = row[1]
+        network_id = row[2]
+        referrer_id = row[3]
+        recruited = row[4]
+        binary_place = row[5]
+        created_at = row[6]
+        updated_at = row[7]
 
-    # Find Referrer
-    try:
-        referrer = User.objects.get(id=referrer_id)
-    except User.DoesNotExist:
-        referrer = None
+        # Find User
+        try:
+            user = User.objects.get(id=user_id)
+            network = Network.objects.get(id=network_id)
+        except User.DoesNotExist:
+            pass
+        except Network.DoesNotExist:
+            pass
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
+        try:
+            referrer = User.objects.get(id=referrer_id)
+        except User.DoesNotExist:
+            referrer = None
 
-    if created_at:
-        created_at = datetime.datetime.strptime(str(created_at), date_format)
+        if created_at is None:
+            created_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    if updated_at:
-        updated_at = datetime.datetime.strptime(str(updated_at), date_format)
+        if updated_at is None:
+            updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    referral_obj = Referral.objects.create(
-        id=id,
-        user=user,
-        network=network,
-        referrer=referrer,
-        recruited=recruited,
-        binary_place=binary_place,
-        created_at=created_at,
-        updated_at=updated_at,
+        try:
+            referral_obj = Referral.objects.get(id=id)
+        except Referral.DoesNotExist:
+            referral_obj = Referral(id=id)
+            new_objects.append(referral_obj)
+
+        referral_obj.user = user
+        referral_obj.network = network
+        referral_obj.referrer = referrer
+        referral_obj.recruited = recruited
+        referral_obj.binary_place = binary_place
+        referral_obj.created_at = created_at
+        referral_obj.updated_at = updated_at
+
+        existing_objects.append(referral_obj)
+
+    if len(new_objects) > 5000:
+        Referral.objects.bulk_create(new_objects)
+        print(new_objects)
+        new_objects = []
+
+    if len(existing_objects) > 5000:
+        Referral.objects.bulk_update(
+            existing_objects, [
+                'user',
+                'network',
+                'referrer',
+                'recruited',
+                'binary_place',
+                'created_at',
+                'updated_at',
+            ],
+        )
+        print(existing_objects)
+        existing_objects = []
+
+    print(new_objects)
+    print(existing_objects)
+
+if new_objects:
+    Referral.objects.bulk_create(new_objects)
+
+if existing_objects:
+    Referral.objects.bulk_update(
+        existing_objects,
+        [
+            'user',
+            'network',
+            'referrer',
+            'recruited',
+            'binary_place',
+            'created_at',
+            'updated_at',
+        ],
     )

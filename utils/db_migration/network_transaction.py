@@ -33,6 +33,9 @@ new_objects = []
 while True:
     records = cursor.fetchmany(1000)
 
+    if not records:
+        break
+
     for row in records:
         id = row[0]
         user_id = row[1]

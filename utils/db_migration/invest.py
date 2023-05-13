@@ -2,6 +2,7 @@ import os
 import datetime
 import mysql.connector
 import decimal
+import pytz
 
 from apps.invest.models import Invest
 
@@ -19,92 +20,122 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
+cursor.execute("SET GLOBAL wait_timeout = 28800")
+cursor.execute("SET GLOBAL interactive_timeout = 28800")
+cursor.execute("SET SESSION net_read_timeout=28800")
+cursor.execute("SET SESSION net_write_timeout=28800")
+
 cmd = "select id, user_id, package_id, invest, total_invest, profit, payout_binary_status, payout_direct_status, finished, calculated_at, created_at, updated_at, deleted_at from invests"
 
 cursor.execute(cmd)
 
-records = cursor.fetchall()
+existing_objects = []
+new_objects = []
 
-for row in records:
-    id = row[0]
-    user_id = row[1]
-    package_id = row[2]
-    invest = row[3]
-    total_invest = row[4]
-    profit = row[5]
-    payout_binary_status = row[6]
-    payout_direct_status = row[7]
-    finished = row[8]
-    calculated_at = row[9]
-    created_at = row[10]
-    updated_at = row[11]
-    deleted_at = row[12]
+while True:
+    records = cursor.fetchmany(1000)
 
-    # Find Package and User
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        user = None
+    if not records:
+        break
 
-    try:
-        package = Package.objects.get(id=package_id)
-    except Package.DoesNotExist:
-        package = None
+    for row in records:
+        id = row[0]
+        user_id = row[1]
+        package_id = row[2]
+        invest = row[3]
+        total_invest = row[4]
+        profit = row[5]
+        payout_binary_status = row[6]
+        payout_direct_status = row[7]
+        finished = row[8]
+        calculated_at = row[9]
+        created_at = row[10]
+        updated_at = row[11]
+        deleted_at = row[12]
 
-    # Convert invest, total_invest, profit to decimal
-    invest = decimal.Decimal(invest)
-    total_invest = decimal.Decimal(total_invest)
-    profit = decimal.Decimal(profit)
+        # Find Package and User
+        try:
+            user = User.objects.get(id=user_id)
+            package = Package.objects.get(id=package_id)
+        except User.DoesNotExist:
+            user = None
+        except Package.DoesNotExist:
+            package = None
 
-    # Check payout_binary_status to set True or False
-    if payout_binary_status == 0:
-        payout_binary_status = False
-    else:
-        payout_binary_status = True
+        if created_at is None:
+            created_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    # Check payout_direct_status to set True or False
-    if payout_direct_status == 0:
-        payout_direct_status = False
-    else:
-        payout_direct_status = True
+        if updated_at is None:
+            updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    # Check finished to set True or False
-    if finished == 0:
-        finished = False
-    else:
-        finished = True
+        try:
+            invest_obj = Invest.objects.get(id=id)
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
+        except Invest.DoesNotExist:
+            invest_obj = Invest(id=id)
+            new_objects.append(invest_obj)
 
-    # Check calculated_at, created_at, updated_at, deleted_at
-    if calculated_at:
-        calculated_at = datetime.datetime.strptime(
-            str(calculated_at),
-            date_format,
+        invest_obj.user = user
+        invest_obj.package = package
+        invest_obj.invest = invest
+        invest_obj.total_invest = total_invest
+        invest_obj.profit = profit
+        invest_obj.payout_binary_status = payout_binary_status
+        invest_obj.payout_direct_status = payout_direct_status
+        invest_obj.finished = finished
+        invest_obj.calculated_at = calculated_at
+        invest_obj.deleted_at = deleted_at
+        invest_obj.created_at = created_at
+        invest_obj.updated_at = updated_at
+
+        existing_objects.append(invest_obj)
+
+    if len(new_objects) > 5000:
+        Invest.objects.bulk_create(new_objects)
+        print(new_objects)
+        new_objects = []
+
+    if len(existing_objects) > 5000:
+        Invest.objects.bulk_update(
+            existing_objects, [
+                'user',
+                'package',
+                'invest',
+                'total_invest',
+                'profit',
+                'payout_binary_status',
+                'payout_direct_status',
+                'finished',
+                'calculated_at',
+                'deleted_at',
+                'created_at',
+                'updated_at',
+            ],
         )
+        print(existing_objects)
+        existing_objects = []
 
-    if created_at:
-        created_at = datetime.datetime.strptime(str(created_at), date_format)
+    print(new_objects)
+    print(existing_objects)
 
-    if updated_at:
-        updated_at = datetime.datetime.strptime(str(updated_at), date_format)
+if new_objects:
+    Invest.objects.bulk_create(new_objects)
 
-    if deleted_at:
-        deleted_at = datetime.datetime.strptime(str(deleted_at), date_format)
-
-    invest_obj = Invest.objects.create(
-        id=id,
-        user=user,
-        package=package,
-        invest=invest,
-        total_invest=total_invest,
-        profit=profit,
-        payout_binary_status=payout_binary_status,
-        payout_direct_status=payout_direct_status,
-        finished=finished,
-        calculated_at=calculated_at,
-        deleted_at=deleted_at,
-        created_at=created_at,
-        updated_at=updated_at,
+if existing_objects:
+    Invest.objects.bulk_update(
+        existing_objects,
+        [
+            'user',
+            'package',
+            'invest',
+            'total_invest',
+            'profit',
+            'payout_binary_status',
+            'payout_direct_status',
+            'finished',
+            'calculated_at',
+            'deleted_at',
+            'created_at',
+            'updated_at',
+        ],
     )

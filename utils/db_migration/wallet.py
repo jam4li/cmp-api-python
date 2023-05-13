@@ -2,6 +2,7 @@ import os
 import datetime
 import mysql.connector
 import decimal
+import pytz
 
 from apps.users.models import User
 from apps.package.models import Package
@@ -17,61 +18,111 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
+cursor.execute("SET GLOBAL wait_timeout = 28800")
+cursor.execute("SET GLOBAL interactive_timeout = 28800")
+cursor.execute("SET SESSION net_read_timeout=28800")
+cursor.execute("SET SESSION net_write_timeout=28800")
+
 cmd = "select id, user_id, wallet_id from user_wallet"
 
 cursor.execute(cmd)
 
-records = cursor.fetchall()
+existing_objects = []
+new_objects = []
 
-for row in records:
-    id = row[0]
-    user_id = row[1]
-    wallet_id = row[2]
+while True:
+    records = cursor.fetchmany(1000)
 
-    # Find users from user_id
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        continue
+    if not records:
+        break
 
-    # Find wallet and retrieve data
-    cmd = "select id, title, type, access_type, balance, blocked_amount, created_at, updated_at from wallets where id=" + \
-        str(wallet_id)
-    cursor.execute(cmd)
-    wallet = cursor.fetchone()
+    for row in records:
+        id = row[0]
+        user_id = row[1]
+        wallet_id = row[2]
 
-    wallet_id = wallet[0]
-    wallet_title = wallet[1]
-    wallet_type = wallet[2]
-    wallet_access_type = wallet[3]
-    wallet_balance = wallet[4]
-    wallet_blocked_amount = wallet[5]
-    wallet_created_at = wallet[6]
-    wallet_updated_at = wallet[7]
+        # Find users from user_id
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            continue
 
-    # Convert wallet_balance, wallet_blocked_amount to decimal
-    wallet_balance = decimal.Decimal(wallet_balance)
-    wallet_blocked_amount = decimal.Decimal(wallet_blocked_amount)
+        # Find wallet and retrieve data
+        cmd = "select id, title, type, access_type, balance, blocked_amount, created_at, updated_at from wallets where id=" + \
+            str(wallet_id)
+        cursor.execute(cmd)
+        wallet = cursor.fetchone()
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
+        wallet_id = wallet[0]
+        wallet_title = wallet[1]
+        wallet_type = wallet[2]
+        wallet_access_type = wallet[3]
+        wallet_balance = wallet[4]
+        wallet_blocked_amount = wallet[5]
+        wallet_created_at = wallet[6]
+        wallet_updated_at = wallet[7]
 
-    if wallet_created_at:
-        wallet_created_at = datetime.datetime.strptime(
-            str(wallet_created_at), date_format)
+        if wallet_created_at is None:
+            wallet_created_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    if wallet_updated_at:
-        wallet_updated_at = datetime.datetime.strptime(
-            str(wallet_updated_at), date_format)
+        if wallet_updated_at is None:
+            wallet_updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-    wallet_obj = Wallet.objects.create(
-        id=wallet_id,
-        user=user,
-        title=wallet_title,
-        type=wallet_type,
-        access_type=wallet_access_type,
-        balance=wallet_balance,
-        blocked_amount=wallet_blocked_amount,
-        created_at=wallet_created_at,
-        updated_at=wallet_updated_at,
+        try:
+            wallet_obj = Wallet.objects.get(id=wallet_id)
+        except Wallet.DoesNotExist:
+            wallet_obj = Wallet(id=wallet_id)
+            new_objects.append(wallet_obj)
+
+        wallet_obj.user = user
+        wallet_obj.title = wallet_title
+        wallet_obj.type = wallet_type
+        wallet_obj.access_type = wallet_access_type
+        wallet_obj.balance = wallet_balance
+        wallet_obj.blocked_amount = wallet_blocked_amount
+        wallet_obj.created_at = wallet_created_at
+        wallet_obj.updated_at = wallet_updated_at
+
+        existing_objects.append(wallet_obj)
+
+    if len(new_objects) > 5000:
+        Wallet.objects.bulk_create(new_objects)
+        print(new_objects)
+        new_objects = []
+
+    if len(existing_objects) > 5000:
+        Wallet.objects.bulk_update(
+            existing_objects, [
+                'user',
+                'title',
+                'type',
+                'access_type',
+                'balance',
+                'blocked_amount',
+                'created_at',
+                'updated_at',
+            ],
+        )
+        print(existing_objects)
+        existing_objects = []
+
+    print(new_objects)
+    print(existing_objects)
+
+if new_objects:
+    Wallet.objects.bulk_create(new_objects)
+
+if existing_objects:
+    Wallet.objects.bulk_update(
+        existing_objects,
+        [
+            'user',
+            'title',
+            'type',
+            'access_type',
+            'balance',
+            'blocked_amount',
+            'created_at',
+            'updated_at',
+        ],
     )
