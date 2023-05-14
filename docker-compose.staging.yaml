@@ -1,3 +1,10 @@
+# Note: Before running, you should ensure the Docker network my_network and volume backup_db_data already exist.
+# If they don't, you can create them with
+# docker network create my_network and docker volume create backup_db_data.
+# Note: To run backup_db directly from the Docker CLI run the below steps
+# docker container run --name django_backup_db -p 3307:3306 -e MYSQL_DATABASE=${DATABASE_NAME} -e MYSQL_PASSWORD=${DATABASE_PASSWORD}
+# -e MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD} -v backup_db_data:/var/lib/mysql --network my_network mysql:latest
+
 version: "3.9"
 
 services:
@@ -31,19 +38,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql:rw
-    networks:
-      - my_network
-
-  backup_db:
-    image: mysql:latest
-    ports:
-      - 3307:3306
-    environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-    volumes:
-      - backup_db_data:/var/lib/mysql:rw
     networks:
       - my_network
 
