@@ -3,6 +3,7 @@ import datetime
 import mysql.connector
 import pytz
 from django.utils import timezone
+from django.db import IntegrityError
 
 from apps.users.models import User, UserProfile
 
@@ -105,18 +106,35 @@ for row in records:
 
     try:
         user_obj = User.objects.get(id=id)
+        user_obj.email = email
+        user_obj.name = name
+        user_obj.enable_google_2fa_verification = enable_google_2fa_verification
+        user_obj.google_2fa_secret = google_2fa_secret
+        user_obj.created_at = created_at
+        user_obj.updated_at = updated_at
+        user_obj.save()
     except User.DoesNotExist:
         try:
             user_obj = User.objects.get(email=email)
+            user_obj.name = name
+            user_obj.enable_google_2fa_verification = enable_google_2fa_verification
+            user_obj.google_2fa_secret = google_2fa_secret
+            user_obj.created_at = created_at
+            user_obj.updated_at = updated_at
+            user_obj.save()
         except User.DoesNotExist:
-            user_obj = User(id=id, email=email)
-
-    user_obj.name = name
-    user_obj.enable_google_2fa_verification = enable_google_2fa_verification
-    user_obj.google_2fa_secret = google_2fa_secret
-    user_obj.created_at = created_at
-    user_obj.updated_at = updated_at
-    user_obj.save()
+            user_obj = User(
+                id=id,
+                email=email,
+                name=name,
+                enable_google_2fa_verification=enable_google_2fa_verification,
+                google_2fa_secret=google_2fa_secret,
+                created_at=created_at,
+                updated_at=updated_at,
+            )
+            user_obj.save()
+    except IntegrityError:
+        continue
 
     user_profile, _ = UserProfile.objects.get_or_create(
         user=user_obj,
