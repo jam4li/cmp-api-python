@@ -4,8 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 from utils.response import ApiResponse
 
-from apps.support.models import SupportDepartment, SupportTicket
-from apps.support.serializers.user_serializers import SupportDepartmentListSerializer, SupportTicketCreateSerializer, SupportTicketListSerializer
+from apps.support.models import SupportDepartment, SupportTicket, SupportTicketReply
+from apps.support.serializers.user_serializers import SupportDepartmentListSerializer, SupportTicketCreateSerializer, SupportTicketListSerializer, SupportTicketDetailSerializer
 
 
 class SupportDepartmentListAPIView(views.APIView):
@@ -66,6 +66,33 @@ class SupportTicketListAPIView(views.APIView):
 
         serializer = SupportTicketListSerializer(
             support_ticket,
+            many=True,
+            context={"request": request},
+        )
+
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=serializer.data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
+
+
+class SupportTicketDetailAPIView(views.APIView):
+    def get(self, request, pk, format=None):
+        try:
+            support_ticket = SupportTicket.objects.get(id=pk)
+        except SupportTicket.DoesNotExist:
+            pass
+
+        support_ticket_reply_list = SupportTicketReply.objects.filter(
+            ticket=support_ticket,
+        )
+
+        serializer = SupportTicketDetailSerializer(
+            support_ticket_reply_list,
             many=True,
             context={"request": request},
         )

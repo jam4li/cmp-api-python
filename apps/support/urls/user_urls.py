@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.support.views.user_views import SupportDepartmentListAPIView, SupportTicketCreateAPIView, SupportTicketListAPIView
+from apps.support.views.user_views import SupportDepartmentListAPIView, SupportTicketCreateAPIView, SupportTicketListAPIView, SupportTicketDetailAPIView
 
 app_name = 'support_user'
 
@@ -20,4 +20,9 @@ urlpatterns = [
         SupportTicketListAPIView.as_view(),
         name='ticket-list',
     ),
+    path(
+        'ticket/detail/<int:pk>/',
+        SupportTicketDetailAPIView.as_view(),
+        name='ticket-detail',
+    )
 ]

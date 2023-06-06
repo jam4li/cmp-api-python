@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.support.models import SupportTicket, SupportDepartment
+from apps.support.models import SupportTicket, SupportDepartment, SupportTicketReply
 
 
 class SupportDepartmentListSerializer(serializers.ModelSerializer):
@@ -36,4 +36,12 @@ class SupportTicketListSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'created_at',
+        ]
+
+
+class SupportTicketDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportTicketReply
+        fields = [
+            'content',
         ]
