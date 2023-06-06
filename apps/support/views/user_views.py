@@ -105,3 +105,25 @@ class SupportTicketDetailAPIView(views.APIView):
         )
 
         return Response(success_response)
+
+    def post(self, request, pk, format=None):
+        try:
+            support_ticket = SupportTicket.objects.get(id=pk)
+        except SupportTicket.DoesNotExist:
+            pass
+
+        reply = self.request.data.get('reply')
+
+        SupportTicketReply.objects.create(
+            ticket=support_ticket,
+            content=reply,
+        )
+
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data={},
+            message='Data created successfully'
+        )
+
+        return Response(success_response)
