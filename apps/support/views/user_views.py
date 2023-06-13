@@ -31,6 +31,20 @@ class SupportTicketCreateAPIView(views.APIView):
     def post(self, request):
         user = self.request.user
 
+        has_support_ticket = SupportTicket.objects.filter(
+            user=user,
+            status="open",
+        ).exists()
+
+        if has_support_ticket:
+            return Response({
+                "success": False,
+                "message": _("Failed to create support ticket."),
+                "errors": serializer.errors,
+            },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         serializer = SupportTicketCreateSerializer(
             data=request.data,
             context={'request': request},
@@ -113,6 +127,9 @@ class SupportTicketDetailAPIView(views.APIView):
             pass
 
         reply = self.request.data.get('reply')
+
+        support_ticket.is_admin_replied = False
+        support_ticket.save()
 
         SupportTicketReply.objects.create(
             ticket=support_ticket,

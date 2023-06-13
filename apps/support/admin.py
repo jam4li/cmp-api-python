@@ -32,6 +32,8 @@ class SupportTicketAdmin(admin.ModelAdmin):
         'attachments',
         'important_level',
         'status',
+        'admin_respondent',
+        'is_admin_replied',
     )
 
     inlines = [
@@ -42,12 +44,25 @@ class SupportTicketAdmin(admin.ModelAdmin):
         'user',
         'department',
         'title',
+        'status',
+        'is_admin_replied',
     ]
+
+    readonly_fields = (
+        'admin_respondent',
+        'is_admin_replied',
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('user')
         return qs
+
+    def save_model(self, request, obj, form, change):
+        if not obj.is_admin_replied:
+            obj.is_admin_replied = True
+        obj.admin_respondent = request.user  # Set the admin who replied
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(SupportTicket, SupportTicketAdmin)

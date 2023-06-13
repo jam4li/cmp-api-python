@@ -55,6 +55,7 @@ class SupportTicket(BaseModel):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='support_tickets',
         verbose_name=_('User'),
     )
     department = models.ForeignKey(
@@ -90,6 +91,16 @@ class SupportTicket(BaseModel):
         choices=Support_TICKET_STATUS_CHOICES,
         default="open",
         verbose_name=_('Status'),
+    )
+    is_admin_replied = models.BooleanField(
+        default=False,
+    )
+    admin_respondent = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='admin_replied_tickets',
+        blank=True,
+        null=True,
     )
 
     class Meta:
