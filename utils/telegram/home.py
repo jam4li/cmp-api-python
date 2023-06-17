@@ -47,9 +47,20 @@ async def home_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         )
 
     elif _("Support") in button_text:
-        await update.message.reply_text(
-            "Support Support",
-        )
+        deep_link = "https://t.me/defacer"
+        buttons = [
+            InlineKeyboardButton(
+                "Chat with admin",
+                url=deep_link,
+            ),
+        ],
+
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        user_id = update.message.from_user.id
+        await update.message.reply_text("Choose the button to start", reply_markup=reply_markup)
+
+        return HOME_MENU
 
     elif _("Motivational") in button_text:
         await update.message.reply_text(
@@ -60,5 +71,3 @@ async def home_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         await update.message.reply_text(
             "Settings Settings",
         )
-
-    # return HOME_MENU
