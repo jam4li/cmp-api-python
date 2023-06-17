@@ -32,9 +32,31 @@ async def home_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         return EDUCATE
 
     elif _("Company") in button_text:
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    "Branches",
+                    callback_data="branch",
+                ),
+                InlineKeyboardButton(
+                    "Seminars",
+                    callback_data="seminar",
+                ),
+                InlineKeyboardButton(
+                    "Business Cards",
+                    callback_data="business_card",
+                ),
+            ],
+        ]
+
+        reply_markup = InlineKeyboardMarkup(buttons)
+
         await update.message.reply_text(
-            "Company Company",
+            "Please choose",
+            reply_markup=reply_markup,
         )
+
+        return COMPANY
 
     elif _("Violations") in button_text:
         await update.message.reply_text(

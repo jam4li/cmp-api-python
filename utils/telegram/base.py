@@ -9,6 +9,8 @@ from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     ReplyKeyboardRemove,
+    Bot,
+    Location,
 )
 
 from telegram.ext import (
@@ -16,7 +18,9 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-HOME_MENU, EDUCATE, EDUCATE_CONTENT, START_OVER = range(4)
+HOME_MENU, EDUCATE, EDUCATE_CONTENT, COMPANY, COMPANY_BRANCH, START_OVER = range(
+    6,
+)
 
 # Enable logging
 logging.basicConfig(

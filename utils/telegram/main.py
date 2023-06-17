@@ -5,6 +5,7 @@ from .base import *
 from .start import start
 from .home import home_menu
 from .educate import educate_callback, educate_content_callback
+from .company import company_callback, company_branch_callback
 from .cancel import cancel
 
 try:
@@ -61,6 +62,16 @@ def main() -> None:
             EDUCATE_CONTENT: [
                 CallbackQueryHandler(
                     educate_content_callback,
+                ),
+            ],
+            COMPANY: [
+                CallbackQueryHandler(
+                    company_callback,
+                ),
+            ],
+            COMPANY_BRANCH: [
+                CallbackQueryHandler(
+                    company_branch_callback,
                 ),
             ],
         },
