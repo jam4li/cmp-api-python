@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.utils.translation import gettext as _
+from asgiref.sync import sync_to_async
 
 import logging
 
 from telegram import __version__ as TG_VER
+
+from apps.telegram.models import Educate, EducateContent
 
 try:
     from telegram import __version_info__
@@ -16,7 +19,7 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
         f"{TG_VER} version of this example, "
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -24,6 +27,7 @@ from telegram.ext import (
     ConversationHandler,
     MessageHandler,
     filters,
+    CallbackQueryHandler,
 )
 
 # Enable logging
@@ -32,27 +36,18 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-GENDER, PHOTO, LOCATION, BIO = range(4)
+HOME_MENU, EDUCATE, EDUCATE_CONTENT = range(3)
+
+START_OVER = range(3, 4)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context.
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Starts the conversation and asks the user to choose the language."""
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Start command handler."""
 
-    reply_keyboard = [
-        [
-            "\U0001F1EC\U0001F1E7" + " " + _("English"),
-            "\U0001F1EE\U0001F1F7" + " " + _("Persian"),
-        ],
-        [
-            "\U0001F1F8\U0001F1E6" + " " + _("Arabic"),
-            "\U0001F1F9\U0001F1F7" + " " + _("Turkish"),
-        ],
-    ]
-
-    await update.message.reply_text(
+    text = str(
         "\U0001F44B" + " Welcome to our Financial Service Bot! " + "\U0001F44B" + "\n"
         "We're delighted to have you here." + "\n"
         "Our mission is to assist you in making smarter financial decisions with confidence." + "\n" + "\n"
@@ -63,77 +58,145 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         "To get started, please choose your preferred language and follow the prompts." + "\n"
         "If you need any help, simply type '/help' at any time." + "\n"
         "You can also type '/cancel'.",
-        reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard,
-            one_time_keyboard=True,
-            input_field_placeholder="Choose your language",
-        ),
     )
 
-    return GENDER
+    buttons = [
+        [
+            "\U0001F4D6" + " " + _("Educate"),
+            "\U0001F310" + " " + _("Company"),
+        ],
+        # [
+        # "\U0001F3A4" + " " + _("Seminars"),
+        # "\U00002139" + " " + _("About Us"),
+        # "\U0001F3E2" + " " + _("Offices"),
+        # ],
+        [
+            "\U0001F6AB" + " " + _("Violations"),
+            "\U0001F4E3" + " " + _("News"),
+        ],
+        [
+            "\U0001F4AC" + " " + _("Support"),
+            "\U00002728" + " " + _("Motivational"),
+        ],
+        [
+            "\u2699\ufe0f" + " " + _("Settings"),
+        ],
+    ]
+
+    reply_markup = ReplyKeyboardMarkup(buttons)
+
+    # If we're starting over we don't need to send a new message
+    if context.user_data.get(START_OVER):
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text(text=text, reply_markup=reply_markup)
+    else:
+        await update.message.reply_text(text=text, reply_markup=reply_markup)
+
+    context.user_data[START_OVER] = False
+    return HOME_MENU
 
 
-async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the selected gender and asks for a photo."""
-    user = update.message.from_user
-    logger.info(
-        "Gender of %s: %s",
-        user.first_name,
-        update.message.text,
-    )
+async def home_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    button_text = update.message.text
 
     await update.message.reply_text(
-        "To proceed, please choose the action you're interested in." + "\n"
-        "If you need any help, simply type '/help' at any time.",
-        reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
-            input_field_placeholder="Select",
-        ),
+        button_text,
     )
 
-    return PHOTO
+    if _("Educate") in button_text:
+        buttons = []
+        educate_list = Educate.objects.all()
+
+        async for educate in educate_list:
+            buttons.append(
+                [
+                    InlineKeyboardButton(
+                        educate.name,
+                        callback_data=str(educate.id),
+                    ),
+                ],
+            )
+
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        await update.message.reply_text("Please choose:", reply_markup=reply_markup)
+
+        return EDUCATE
+
+    elif _("Company") in button_text:
+        await update.message.reply_text(
+            "Company Company",
+        )
+
+    elif _("Violations") in button_text:
+        await update.message.reply_text(
+            "Violations Violations",
+        )
+
+    elif _("News") in button_text:
+        await update.message.reply_text(
+            "News News",
+        )
+
+    elif _("Support") in button_text:
+        await update.message.reply_text(
+            "Support Support",
+        )
+
+    elif _("Motivational") in button_text:
+        await update.message.reply_text(
+            "Motivational Motivational",
+        )
+
+    elif _("Settings") in button_text:
+        await update.message.reply_text(
+            "Settings Settings",
+        )
+
+    # return HOME_MENU
 
 
-async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the location and asks for some info about the user."""
-    user = update.message.from_user
-    user_location = update.message.location
-    logger.info(
-        "Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude
+async def educate_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    buttons = []
+    educate = update.callback_query.data
+
+    educate_obj = await Educate.objects.aget(id=educate)
+    educate_content_list = EducateContent.objects.filter(
+        educate=educate_obj,
     )
-    await update.message.reply_text(
-        "Maybe I can visit you sometime! At last, tell me something about yourself."
+
+    async for content in educate_content_list:
+        buttons.append(
+            [
+                InlineKeyboardButton(
+                    content.title,
+                    callback_data=str(content.id),
+                ),
+            ],
+        )
+
+    reply_markup = InlineKeyboardMarkup(buttons)
+
+    await update.callback_query.answer()
+    await update.effective_message.edit_text(
+        "Please choose:",
+        reply_markup=reply_markup,
     )
 
-    return BIO
+    return EDUCATE_CONTENT
 
 
-async def skip_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Skips the location and asks for info about the user."""
-    user = update.message.from_user
-    logger.info(
-        "User %s did not send a location.",
-        user.first_name,
-    )
-    await update.message.reply_text(
-        "You seem a bit paranoid! At last, tell me something about yourself."
-    )
+async def educate_content_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    educate_content = update.callback_query.data
 
-    return BIO
+    educate_obj = await EducateContent.objects.aget(id=educate_content)
 
-
-async def bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the info about the user and ends the conversation."""
-    user = update.message.from_user
-    logger.info(
-        "Bio of %s: %s", user.first_name,
-        update.message.text,
-    )
-    await update.message.reply_text(
-        "Thank you! I hope we can talk again some day.",
+    await update.callback_query.answer()
+    await update.effective_message.edit_text(
+        educate_obj.description,
     )
 
-    return ConversationHandler.END
+    return EDUCATE_CONTENT
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -153,13 +216,16 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 def main() -> None:
     """Run the bot."""
+    logger.info(
+        "Start the bot",
+    )
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(
         settings.TELEGRAM_BOT_TOKEN
     ).build()
 
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-    conv_handler = ConversationHandler(
+    conversation_handler = ConversationHandler(
         entry_points=[
             CommandHandler(
                 "start",
@@ -167,20 +233,20 @@ def main() -> None:
             ),
         ],
         states={
-            GENDER: [
+            HOME_MENU: [
                 MessageHandler(
-                    filters.Regex("^(Boy|Girl|Other)$"),
-                    gender,
+                    filters.TEXT,
+                    home_menu,
                 ),
             ],
-            LOCATION: [
-                MessageHandler(
-                    filters.LOCATION,
-                    location,
+            EDUCATE: [
+                CallbackQueryHandler(
+                    educate_callback,
                 ),
-                CommandHandler(
-                    "skip",
-                    skip_location,
+            ],
+            EDUCATE_CONTENT: [
+                CallbackQueryHandler(
+                    educate_content_callback,
                 ),
             ],
         },
@@ -192,7 +258,7 @@ def main() -> None:
         ],
     )
 
-    application.add_handler(conv_handler)
+    application.add_handler(conversation_handler)
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling()
