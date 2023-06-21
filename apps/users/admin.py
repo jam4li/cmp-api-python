@@ -25,6 +25,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     ]
 
     fields = (
+        'user_id',
         'user',
         'username',
         'package',
@@ -39,10 +40,17 @@ class UserProfileAdmin(admin.ModelAdmin):
         'weekly_withdraw_date',
     )
 
+    readonly_fields = (
+        'user_id',
+    )
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('user')
         return qs
+
+    def user_id(self, obj):
+        return obj.user.id
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

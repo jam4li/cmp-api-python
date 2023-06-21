@@ -85,6 +85,55 @@ class Network(BaseModel):
         return str(self.user)
 
 
+class NetworkTransfer(BaseModel):
+    SUCCESS = "success"
+    PENDING = "pending"
+    FAILED = "failed"
+    STATUS_CHOICES = (
+        (SUCCESS, _("Success")),
+        (PENDING, _("Pending")),
+        (FAILED, _("Failed")),
+    )
+
+    LEFT = "left"
+    RIGHT = "right"
+    SIDE_CHOICES = (
+        (LEFT, _("Left")),
+        (RIGHT, _("Right")),
+    )
+
+    origin_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('Origin user'),
+        related_name='origin_transfers',
+    )
+    endpoint_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('Endpoint user'),
+        related_name='endpoint_transfers',
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default="pending",
+        verbose_name=_('Status'),
+    )
+    side = models.CharField(
+        max_length=10,
+        choices=SIDE_CHOICES,
+        verbose_name=_("Side"),
+    )
+
+    class Meta:
+        verbose_name = _('Network transfer')
+        verbose_name_plural = _('Network transfers')
+
+    def __str__(self):
+        return str(self.id)
+
+
 class NetworkTransaction(BaseModel):
     BINARY = "binary"
     DIRECT = "direct"
