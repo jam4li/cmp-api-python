@@ -14,7 +14,19 @@ from sentry_sdk.integrations.django import DjangoIntegration
 DEBUG = False
 
 # Update this to match your domain(s)
-ALLOWED_HOSTS = ['api.cloudminepro.com']
+ALLOWED_HOSTS = [
+    'cmeprice.net',
+    'www.cmeprice.net',
+    'backend.cmeprice.net',
+    'staging.cloudminepro.com',
+    'backend.cloudminepro.com',
+]
+
+INSTALLED_APPS += [
+    'corsheaders',
+]
+
+MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware',)
 
 # Use a more secure secret key in production
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
@@ -26,7 +38,12 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '0'
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'https://staging.cloudminepro.com',
+)
 
 # Sentry config
 
