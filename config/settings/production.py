@@ -15,12 +15,9 @@ DEBUG = False
 
 # Update this to match your domain(s)
 ALLOWED_HOSTS = [
-    'cmeprice.net',
-    'www.cmeprice.net',
-    'backend.cmeprice.net',
-    'staging.cloudminepro.com',
-    'backend.cloudminepro.com',
-]
+    'cm-enterprise.net',
+    'www.cm-enterprise.net',
+    'backend.cm-enterprise.net',
 
 INSTALLED_APPS += [
     'corsheaders',
@@ -42,7 +39,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
-    'https://staging.cloudminepro.com',
+    'https://cm-enterprise.net',
 )
 
 # Sentry config
