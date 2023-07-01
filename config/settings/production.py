@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     'cm-enterprise.net',
     'www.cm-enterprise.net',
     'backend.cm-enterprise.net',
+]
 
 INSTALLED_APPS += [
     'corsheaders',
