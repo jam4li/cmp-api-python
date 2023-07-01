@@ -96,7 +96,6 @@ while True:
 
     if len(new_objects) > 5000:
         Network.objects.bulk_create(new_objects)
-        print(new_objects)
         new_objects = []
 
     if len(existing_objects) > 5000:
@@ -118,11 +117,8 @@ while True:
                 'updated_at',
             ],
         )
-        print(existing_objects)
         existing_objects = []
 
-    print(new_objects)
-    print(existing_objects)
 
 if new_objects:
     Network.objects.bulk_create(new_objects)

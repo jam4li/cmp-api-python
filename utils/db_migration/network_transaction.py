@@ -52,11 +52,8 @@ while True:
             user = User.objects.get(id=user_id)
             invest = Invest.objects.get(id=invest_id)
         except User.DoesNotExist:
-            print('User not found')
             continue
         except Invest.DoesNotExist:
-            print('Invest not found')
-            print(user.email)
             continue
 
         if updated_at is None:
@@ -86,7 +83,6 @@ while True:
 
     if len(new_objects) > 5000:
         NetworkTransaction.objects.bulk_create(new_objects)
-        print(new_objects)
         new_objects = []
 
     if len(existing_objects) > 5000:
@@ -103,11 +99,8 @@ while True:
                 'deleted_at',
             ],
         )
-        print(existing_objects)
         existing_objects = []
 
-    print(new_objects)
-    print(existing_objects)
 
 if new_objects:
     NetworkTransaction.objects.bulk_create(new_objects)

@@ -55,16 +55,8 @@ for row in records:
         referrer_user = User.objects.get(id=referrer_id)
         referrer = UserProfile.objects.get(user=referrer_user)
     except User.DoesNotExist:
-        print('******************************')
-        print('Referrer User Does Not Exist. Referrer id:', end=' ')
-        print(str(referrer_id))
-        print('******************************')
         referrer = None
     except UserProfile.DoesNotExist:
-        print('******************************')
-        print('User Profile For Referrer Does Not Exist. Referrer id:', end=' ')
-        print(str(referrer_id))
-        print('******************************')
         referrer = None
 
     # Check status to set True or False
@@ -74,10 +66,6 @@ for row in records:
         status = True
 
     if email == '':
-        print('******************************')
-        print('User Email Is Null. User id:', end=' ')
-        print(str(id))
-        print('******************************')
         continue
 
     # Check enable_google_2fa_verification to set True or False
