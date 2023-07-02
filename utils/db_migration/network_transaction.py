@@ -27,7 +27,6 @@ cmd = "select id, user_id, invest_id, type, amount, day, description, created_at
 
 cursor.execute(cmd)
 
-existing_objects = []
 new_objects = []
 
 while True:
@@ -38,6 +37,14 @@ while True:
 
     for row in records:
         id = row[0]
+
+        try:
+            network_transaction_obj = NetworkTransaction.objects.get(id=id)
+            continue
+
+        except NetworkTransaction.DoesNotExist:
+            network_transaction_obj = NetworkTransaction(id=id)
+
         user_id = row[1]
         invest_id = row[2]
         type = row[3]
@@ -59,16 +66,6 @@ while True:
         if updated_at is None:
             updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
-        try:
-            network_transaction_obj = NetworkTransaction.objects.select_related(
-                'user',
-                'invest',
-            ).get(id=id)
-
-        except NetworkTransaction.DoesNotExist:
-            network_transaction_obj = NetworkTransaction(id=id)
-            new_objects.append(network_transaction_obj)
-
         network_transaction_obj.user = user
         network_transaction_obj.invest = invest
         network_transaction_obj.type = type
@@ -79,44 +76,11 @@ while True:
         network_transaction_obj.updated_at = updated_at
         network_transaction_obj.deleted_at = deleted_at
 
-        existing_objects.append(network_transaction_obj)
+        new_objects.append(network_transaction_obj)
 
     if len(new_objects) > 5000:
         NetworkTransaction.objects.bulk_create(new_objects)
         new_objects = []
 
-    if len(existing_objects) > 5000:
-        NetworkTransaction.objects.bulk_update(
-            existing_objects, [
-                'user',
-                'invest',
-                'type',
-                'amount',
-                'day',
-                'description',
-                'created_at',
-                'updated_at',
-                'deleted_at',
-            ],
-        )
-        existing_objects = []
-
-
 if new_objects:
     NetworkTransaction.objects.bulk_create(new_objects)
-
-if existing_objects:
-    NetworkTransaction.objects.bulk_update(
-        existing_objects,
-        [
-            'user',
-            'invest',
-            'type',
-            'amount',
-            'day',
-            'description',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ],
-    )
