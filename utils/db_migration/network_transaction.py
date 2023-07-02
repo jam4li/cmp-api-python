@@ -29,8 +29,14 @@ cursor.execute(cmd)
 
 new_objects = []
 
+batch_size = 2500
+fetch_counter = 0
+
 while True:
-    records = cursor.fetchmany(1000)
+    records = cursor.fetchmany(batch_size)
+
+    fetch_counter += batch_size
+    print(fetch_counter)
 
     if not records:
         break
@@ -55,19 +61,9 @@ while True:
         updated_at = row[8]
         deleted_at = row[9]
 
-        try:
-            user = User.objects.get(id=user_id)
-            invest = Invest.objects.get(id=invest_id)
-        except User.DoesNotExist:
-            continue
-        except Invest.DoesNotExist:
-            continue
+        user_ids.add(user_id)
+        invest_ids.add(invest_id)
 
-        if updated_at is None:
-            updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-
-        network_transaction_obj.user = user
-        network_transaction_obj.invest = invest
         network_transaction_obj.type = type
         network_transaction_obj.amount = amount
         network_transaction_obj.day = day
@@ -79,8 +75,56 @@ while True:
         new_objects.append(network_transaction_obj)
 
     if len(new_objects) > 5000:
+        users = User.objects.filter(
+            id__in=user_ids
+        ).prefetch_related('user')
+
+        invests = Invest.objects.filter(
+            id__in=invest_ids
+        ).prefetch_related('invest')
+
+        # Create dictionaries for efficient lookup
+        user_dict = {user.id: user for user in users}
+        invest_dict = {invest.id: invest for invest in invests}
+
+        for i in range(len(new_objects) - 1, -1, -1):
+            obj = new_objects[i]
+            user_id = obj.user_id
+            invest_id = obj.invest_id
+
+            if user_id in user_dict and invest_id in invest_dict:
+                obj.user = user_dict[user_id]
+                obj.invest = invest_dict[invest_id]
+
+            else:
+                del new_objects[i]
+
         NetworkTransaction.objects.bulk_create(new_objects)
+
         new_objects = []
+        user_ids = set()
+        invest_ids = set()
+
 
 if new_objects:
+    # Fetch related objects for the remaining new_objects
+    users = User.objects.filter(
+        id__in=user_ids
+    ).prefetch_related('user')
+    invests = Invest.objects.filter(
+        id__in=invest_ids
+    ).prefetch_related('invest')
+
+    # Create dictionaries for efficient lookup
+    user_dict = {user.id: user for user in users}
+    invest_dict = {invest.id: invest for invest in invests}
+
+    # Update the user and invest fields of the new_objects
+    for obj in new_objects:
+        user_id = obj.user_id
+        invest_id = obj.invest_id
+        obj.user = user_dict.get(user_id)
+        obj.invest = invest_dict.get(invest_id)
+
+    # Perform bulk create for the remaining new_objects
     NetworkTransaction.objects.bulk_create(new_objects)
