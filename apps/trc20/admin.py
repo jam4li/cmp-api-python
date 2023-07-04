@@ -28,6 +28,8 @@ class Trc20Admin(admin.ModelAdmin):
         'status',
         'payment_txid',
         'payment_confirmation',
+        'created_at',
+        'updated_at',
     )
 
     list_display = [
@@ -35,6 +37,11 @@ class Trc20Admin(admin.ModelAdmin):
         'address',
         'payment_txid',
     ]
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

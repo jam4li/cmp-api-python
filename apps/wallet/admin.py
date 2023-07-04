@@ -17,11 +17,26 @@ class WalletAdmin(admin.ModelAdmin):
 
     fields = (
         'user',
-        'title',
-        'type',
         'access_type',
         'balance',
         'blocked_amount',
+        'title',
+        'type',
+        'created_at',
+        'updated_at',
+    )
+
+    list_display = [
+        'user',
+        'type',
+        'balance',
+    ]
+
+    readonly_fields = (
+        'title',
+        'type',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

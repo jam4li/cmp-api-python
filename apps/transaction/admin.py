@@ -27,6 +27,13 @@ class TransactionAdmin(admin.ModelAdmin):
         'type',
         'status',
         'description',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

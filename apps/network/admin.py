@@ -1,8 +1,15 @@
 from django.contrib import admin
+from django.core.paginator import Paginator
 
 from .models import Network, NetworkTransaction, NetworkTransfer
 
 # Register your models here.
+
+
+class NoCountPaginator(Paginator):
+    @property
+    def count(self):
+        return 999999
 
 
 class NetworkAdmin(admin.ModelAdmin):
@@ -30,6 +37,14 @@ class NetworkAdmin(admin.ModelAdmin):
         'network_profit',
         'referrer',
         'network_calculate_date',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'network_calculate_date',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):
@@ -59,10 +74,14 @@ class NetworkTransferAdmin(admin.ModelAdmin):
         'endpoint_user',
         'status',
         'side',
+        'created_at',
+        'updated_at',
     )
 
     readonly_fields = (
         'status',
+        'created_at',
+        'updated_at',
     )
 
 
@@ -70,6 +89,9 @@ admin.site.register(NetworkTransfer, NetworkTransferAdmin)
 
 
 class NetworkTransactionAdmin(admin.ModelAdmin):
+    paginator = NoCountPaginator
+    show_full_result_count = False
+
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -91,6 +113,14 @@ class NetworkTransactionAdmin(admin.ModelAdmin):
         'day',
         'description',
         'deleted_at',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'deleted_at',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

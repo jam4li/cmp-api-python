@@ -25,6 +25,13 @@ class PaymentAdmin(admin.ModelAdmin):
         'status',
         'symbol',
         'charge',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

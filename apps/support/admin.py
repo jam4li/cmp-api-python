@@ -34,6 +34,8 @@ class SupportTicketAdmin(admin.ModelAdmin):
         'status',
         'admin_respondent',
         'is_admin_replied',
+        'created_at',
+        'updated_at',
     )
 
     inlines = [
@@ -51,6 +53,8 @@ class SupportTicketAdmin(admin.ModelAdmin):
     readonly_fields = (
         'admin_respondent',
         'is_admin_replied',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

@@ -23,6 +23,8 @@ class ExchangeParentAdmin(admin.ModelAdmin):
         'user',
         'parent',
         'status',
+        'created_at',
+        'updated_at',
     )
 
     list_display = [
@@ -30,6 +32,11 @@ class ExchangeParentAdmin(admin.ModelAdmin):
         'parent',
         'status',
     ]
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

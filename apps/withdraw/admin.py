@@ -25,6 +25,13 @@ class WithdrawAdmin(admin.ModelAdmin):
         'transaction_hash',
         'status',
         'wallet_type',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

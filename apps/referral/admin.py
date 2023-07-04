@@ -26,6 +26,16 @@ class ReferralAdmin(admin.ModelAdmin):
         'referrer',
         'recruited',
         'binary_place',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'user',
+        'network',
+        'binary_place',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):

@@ -30,6 +30,15 @@ class InvestAdmin(admin.ModelAdmin):
         'finished',
         'calculated_at',
         'deleted_at',
+        'created_at',
+        'updated_at',
+    )
+
+    readonly_fields = (
+        'calculated_at',
+        'deleted_at',
+        'created_at',
+        'updated_at',
     )
 
     def get_queryset(self, request):
