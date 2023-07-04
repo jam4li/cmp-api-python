@@ -16,7 +16,7 @@ mydb = mysql.connector.connect(
     database=os.getenv('DATABASE_NAME'),
 )
 
-cursor = mydb.cursor()
+cursor = mydb.cursor(buffered=True)
 
 cursor.execute("SET GLOBAL wait_timeout = 28800")
 cursor.execute("SET GLOBAL interactive_timeout = 28800")
@@ -30,8 +30,14 @@ cursor.execute(cmd)
 existing_objects = []
 new_objects = []
 
+batch_size = 10000
+fetch_counter = 0
+
 while True:
-    records = cursor.fetchmany(1000)
+    records = cursor.fetchmany(batch_size)
+
+    fetch_counter += batch_size
+    print(fetch_counter)
 
     if not records:
         break
@@ -48,10 +54,12 @@ while True:
             continue
 
         # Find wallet and retrieve data
+        wallet_cursor = mydb.cursor(buffered=True)
         cmd = "select id, title, type, access_type, balance, blocked_amount, created_at, updated_at from wallets where id=" + \
             str(wallet_id)
-        cursor.execute(cmd)
-        wallet = cursor.fetchone()
+        wallet_cursor.execute(cmd)
+        wallet = wallet_cursor.fetchone()
+        wallet_cursor.close()
 
         wallet_id = wallet[0]
         wallet_title = wallet[1]
