@@ -29,15 +29,6 @@ for row in records:
     created_at = row[5]
     updated_at = row[6]
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
-
-    if created_at:
-        created_at = datetime.datetime.strptime(str(created_at), date_format)
-
-    if updated_at:
-        updated_at = datetime.datetime.strptime(str(updated_at), date_format)
-
     banner_obj = Banner.objects.create(
         id=id,
         big_title=big_title,

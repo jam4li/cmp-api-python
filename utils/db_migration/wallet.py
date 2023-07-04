@@ -70,12 +70,6 @@ while True:
         wallet_created_at = wallet[6]
         wallet_updated_at = wallet[7]
 
-        if wallet_created_at is None:
-            wallet_created_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-
-        if wallet_updated_at is None:
-            wallet_updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-
         try:
             wallet_obj = Wallet.objects.get(id=wallet_id)
         except Wallet.DoesNotExist:

@@ -32,8 +32,14 @@ cursor.execute(cmd)
 existing_objects = []
 new_objects = []
 
+batch_size = 10000
+fetch_counter = 0
+
 while True:
-    records = cursor.fetchmany(1000)
+    records = cursor.fetchmany(batch_size)
+
+    fetch_counter += batch_size
+    print(fetch_counter)
 
     if not records:
         break

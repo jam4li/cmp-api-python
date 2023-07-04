@@ -31,8 +31,14 @@ cursor.execute(cmd)
 existing_objects = []
 new_objects = []
 
+batch_size = 10000
+fetch_counter = 0
+
 while True:
-    records = cursor.fetchmany(1000)
+    records = cursor.fetchmany(batch_size)
+
+    fetch_counter += batch_size
+    print(fetch_counter)
 
     if not records:
         break
@@ -60,12 +66,6 @@ while True:
             referrer = User.objects.get(id=referrer_id)
         except User.DoesNotExist:
             referrer = None
-
-        if created_at is None:
-            created_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-
-        if updated_at is None:
-            updated_at = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
         try:
             referral_obj = Referral.objects.get(id=id)

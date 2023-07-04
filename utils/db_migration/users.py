@@ -74,24 +74,6 @@ for row in records:
     else:
         enable_google_2fa_verification = True
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
-
-    if weekly_withdraw_date:
-        weekly_withdraw_date = datetime.datetime.strptime(
-            str(weekly_withdraw_date),
-            date_format,
-        )
-        weekly_withdraw_date = weekly_withdraw_date.replace(tzinfo=pytz.UTC)
-
-    if created_at:
-        created_at = datetime.datetime.strptime(str(created_at), date_format)
-        created_at = created_at.replace(tzinfo=pytz.UTC)
-
-    if updated_at:
-        updated_at = datetime.datetime.strptime(str(updated_at), date_format)
-        updated_at = updated_at.replace(tzinfo=pytz.UTC)
-
     try:
         user_obj = User.objects.get(id=id)
         user_obj.email = email

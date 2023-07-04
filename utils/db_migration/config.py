@@ -27,15 +27,6 @@ for row in records:
     created_at = row[3]
     updated_at = row[4]
 
-    # Change mysql's date to python's date
-    date_format = '%Y-%m-%d %H:%M:%S'
-
-    if created_at:
-        created_at = datetime.datetime.strptime(str(created_at), date_format)
-
-    if updated_at:
-        updated_at = datetime.datetime.strptime(str(updated_at), date_format)
-
     config_obj = Config.objects.create(
         id=id,
         key=key,
