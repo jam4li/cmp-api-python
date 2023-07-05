@@ -82,7 +82,7 @@ class NetworkTransferAdmin(admin.ModelAdmin):
 admin.site.register(NetworkTransfer, NetworkTransferAdmin)
 
 
-class NetworkTransactionAdmin(admin.ModelAdmin):
+class NetworkTransactionAdmin(BaseAdmin):
     paginator = NoCountPaginator
     show_full_result_count = False
 

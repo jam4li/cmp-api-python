@@ -14,7 +14,7 @@ class NetworkTransactionListAPIView(views.APIView):
         network_transaction_list = NetworkTransaction.objects.filter(
             user=user,
         ).order_by(
-            'created_at',
+            '-id',
         )
 
         serializer = NetworkTransactionListSerializer(
