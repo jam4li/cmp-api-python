@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.base.models import models, BaseModel
 
 from apps.users.models import User
+from apps.wallet.models import Wallet
 
 # Create your models here.
 
@@ -66,3 +67,24 @@ class Withdraw(BaseModel):
 
     def __str__(self):
         return self.wallet_address
+
+    def save(self, *args, **kwargs):
+        # Check if the status has changed from pending to rejected
+        if self.pk and self.status == self.REJECTED and self._state.adding is False:
+            original_status = Withdraw.objects.get(pk=self.pk).status
+
+            if original_status == self.PENDING:
+
+                try:
+                    wallet = Wallet.objects.get(
+                        user=self.user,
+                        type=self.wallet_type,
+                    )
+
+                except Wallet.DoesNotExist:
+                    return False
+
+                wallet.balance += self.amount + self.fee
+                wallet.save()
+
+        super().save(*args, **kwargs)
