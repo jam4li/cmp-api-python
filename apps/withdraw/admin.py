@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Withdraw
 
 # Register your models here.
 
 
-class WithdrawAdmin(admin.ModelAdmin):
+class WithdrawAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -25,9 +27,7 @@ class WithdrawAdmin(admin.ModelAdmin):
         'transaction_hash',
         'status',
         'wallet_type',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     list_display = [
         'user',
@@ -36,10 +36,7 @@ class WithdrawAdmin(admin.ModelAdmin):
         'status',
     ]
 
-    readonly_fields = (
-        'created_at',
-        'updated_at',
-    )
+    readonly_fields = BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

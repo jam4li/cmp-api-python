@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.core.paginator import Paginator
 
+from apps.base.admin import BaseAdmin
+
 from .models import Network, NetworkTransaction, NetworkTransfer
 
 # Register your models here.
@@ -12,7 +14,7 @@ class NoCountPaginator(Paginator):
         return 999999
 
 
-class NetworkAdmin(admin.ModelAdmin):
+class NetworkAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -37,15 +39,11 @@ class NetworkAdmin(admin.ModelAdmin):
         'network_profit',
         'referrer',
         'network_calculate_date',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'network_calculate_date',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -74,15 +72,11 @@ class NetworkTransferAdmin(admin.ModelAdmin):
         'endpoint_user',
         'status',
         'side',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'status',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
 
 admin.site.register(NetworkTransfer, NetworkTransferAdmin)
@@ -113,15 +107,11 @@ class NetworkTransactionAdmin(admin.ModelAdmin):
         'day',
         'description',
         'deleted_at',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'deleted_at',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

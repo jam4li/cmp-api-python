@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Referral
 
 # Register your models here.
 
 
-class ReferralAdmin(admin.ModelAdmin):
+class ReferralAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -26,17 +28,13 @@ class ReferralAdmin(admin.ModelAdmin):
         'referrer',
         'recruited',
         'binary_place',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'user',
         'network',
         'binary_place',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Invest
 
 # Register your models here.
 
 
-class InvestAdmin(admin.ModelAdmin):
+class InvestAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -30,16 +32,12 @@ class InvestAdmin(admin.ModelAdmin):
         'finished',
         'calculated_at',
         'deleted_at',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'calculated_at',
         'deleted_at',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

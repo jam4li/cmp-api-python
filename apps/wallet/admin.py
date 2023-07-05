@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Wallet
 
 # Register your models here.
 
 
-class WalletAdmin(admin.ModelAdmin):
+class WalletAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -22,9 +24,7 @@ class WalletAdmin(admin.ModelAdmin):
         'blocked_amount',
         'title',
         'type',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     list_display = [
         'user',
@@ -35,9 +35,7 @@ class WalletAdmin(admin.ModelAdmin):
     readonly_fields = (
         'title',
         'type',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

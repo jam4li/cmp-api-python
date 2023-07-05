@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Package
 
 # Register your models here.
 
 
-class PackageAdmin(admin.ModelAdmin):
+class PackageAdmin(BaseAdmin):
     search_fields = [
         'name',
     ]

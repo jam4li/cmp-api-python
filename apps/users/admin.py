@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
+from apps.base.admin import BaseAdmin
+
 from .models import User, UserProfile, AdminProfile
 from apps.package.models import Package
 
 # Register your models here.
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -38,11 +40,11 @@ class UserProfileAdmin(admin.ModelAdmin):
         'trc20_withdraw_wallet',
         'weekly_withdraw_amount',
         'weekly_withdraw_date',
-    )
+    ) + BaseAdmin.fields
 
     readonly_fields = (
         'user_id',
-    )
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

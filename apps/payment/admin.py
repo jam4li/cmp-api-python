@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Payment
 
 # Register your models here.
 
 
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -25,14 +27,9 @@ class PaymentAdmin(admin.ModelAdmin):
         'status',
         'symbol',
         'charge',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
-    readonly_fields = (
-        'created_at',
-        'updated_at',
-    )
+    readonly_fields = BaseAdmin.fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

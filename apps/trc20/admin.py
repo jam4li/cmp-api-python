@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Trc20
 
 # Register your models here.
@@ -28,9 +30,7 @@ class Trc20Admin(admin.ModelAdmin):
         'status',
         'payment_txid',
         'payment_confirmation',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     list_display = [
         'user',
@@ -38,10 +38,7 @@ class Trc20Admin(admin.ModelAdmin):
         'payment_txid',
     ]
 
-    readonly_fields = (
-        'created_at',
-        'updated_at',
-    )
+    readonly_fields = BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

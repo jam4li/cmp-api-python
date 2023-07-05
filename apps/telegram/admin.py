@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Educate, EducateContent
 
 # Register your models here.
@@ -10,7 +12,7 @@ class EducateContentInline(admin.TabularInline):
     extra = 1
 
 
-class EducateAdmin(admin.ModelAdmin):
+class EducateAdmin(BaseAdmin):
     fields = (
         'name',
     )

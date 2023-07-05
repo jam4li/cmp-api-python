@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import SupportTicket, SupportDepartment, SupportTicketReply
 
 # Register your models here.
@@ -10,7 +12,7 @@ class SupportTicketReplyInline(admin.TabularInline):
     extra = 1
 
 
-class SupportTicketAdmin(admin.ModelAdmin):
+class SupportTicketAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -34,9 +36,7 @@ class SupportTicketAdmin(admin.ModelAdmin):
         'status',
         'admin_respondent',
         'is_admin_replied',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     inlines = [
         SupportTicketReplyInline,
@@ -53,9 +53,7 @@ class SupportTicketAdmin(admin.ModelAdmin):
     readonly_fields = (
         'admin_respondent',
         'is_admin_replied',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -72,14 +70,16 @@ class SupportTicketAdmin(admin.ModelAdmin):
 admin.site.register(SupportTicket, SupportTicketAdmin)
 
 
-class SupportDepartmentAdmin(admin.ModelAdmin):
+class SupportDepartmentAdmin(BaseAdmin):
     search_fields = ['name']
 
     fields = (
         'name',
         'icon',
         'is_active',
-    )
+    ) + BaseAdmin.fields
+
+    readonly_fields = BaseAdmin.readonly_fields
 
 
 admin.site.register(SupportDepartment, SupportDepartmentAdmin)

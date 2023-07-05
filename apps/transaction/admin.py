@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from apps.base.admin import BaseAdmin
+
 from .models import Transaction
 
 # Register your models here.
 
 
-class TransactionAdmin(admin.ModelAdmin):
+class TransactionAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -27,14 +29,9 @@ class TransactionAdmin(admin.ModelAdmin):
         'type',
         'status',
         'description',
-        'created_at',
-        'updated_at',
-    )
+    ) + BaseAdmin.fields
 
-    readonly_fields = (
-        'created_at',
-        'updated_at',
-    )
+    readonly_fields = BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
