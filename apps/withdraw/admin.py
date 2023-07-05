@@ -29,6 +29,13 @@ class WithdrawAdmin(admin.ModelAdmin):
         'updated_at',
     )
 
+    list_display = [
+        'user',
+        'amount',
+        'fee',
+        'status',
+    ]
+
     readonly_fields = (
         'created_at',
         'updated_at',
