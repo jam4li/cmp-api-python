@@ -39,6 +39,10 @@ urlpatterns = [
         include('apps.invest.urls'),
     ),
     path(
+        'api/v1/network/',
+        include('apps.network.urls'),
+    ),
+    path(
         'api/v1/package/',
         include('apps.package.urls'),
     ),
