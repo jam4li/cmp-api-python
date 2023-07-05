@@ -16,7 +16,10 @@ class UserDashboardAPIView(views.APIView):
         user = self.request.user
 
         # Calculate active packages
-        active_packages = Invest.objects.filter(user=user).count()
+        active_packages = Invest.objects.filter(
+            user=user,
+            finished=False,
+        ).count()
 
         # Calculate balance
         balance = 0
