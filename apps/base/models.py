@@ -18,3 +18,19 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class BaseAsyncSingletonModelManager(models.Manager):
+    async def get_or_create_singleton(self):
+        try:
+            instance = await self.aget(pk=1)
+        except self.model.DoesNotExist:
+            instance = await self.acreate(pk=1)
+        return instance
+
+
+class BaseAsyncSingletonModel(BaseModel):
+    objects = BaseAsyncSingletonModelManager()
+
+    class Meta:
+        abstract = True
