@@ -18,5 +18,20 @@ class PackageAdmin(BaseAdmin):
         'sort'
     ]
 
+    fields = (
+        'name',
+        'price',
+        'image',
+        'sort',
+        'summary',
+        'status',
+        'fee',
+        'daily_profit',
+        'daily_profit_percent',
+        'profit_limit',
+    ) + BaseAdmin.fields
+
+    readonly_fields = BaseAdmin.readonly_fields
+
 
 admin.site.register(Package, PackageAdmin)
