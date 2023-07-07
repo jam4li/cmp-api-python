@@ -18,10 +18,10 @@ class Withdraw(BaseModel):
         (PENDING, _("Pending")),
     )
 
-    COMMISION = "commision"
+    COMMISSION = "commission"
     PROFIT = "profit"
     WALLET_TYPE_CHOICES = (
-        (COMMISION, _("Commision")),
+        (COMMISSION, _("Commission")),
         (PROFIT, _("Profit")),
     )
 
