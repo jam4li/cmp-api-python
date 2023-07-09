@@ -248,3 +248,8 @@ CELERY_BEAT_SCHEDULE = {
 CELERY_BEAT_SCHEDULE_FILENAME = 'celery_beat_schedule'
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+
+# Amazon S3 Configuration
+AWS_ENDPOINT_URL = os.environ.get('AWS_ENDPOINT_URL')
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
