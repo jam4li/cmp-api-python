@@ -54,7 +54,7 @@ class NetworkAdmin(BaseAdmin):
 admin.site.register(Network, NetworkAdmin)
 
 
-class NetworkTransferAdmin(admin.ModelAdmin):
+class NetworkTransferAdmin(BaseAdmin):
     raw_id_fields = (
         'origin_user',
         'endpoint_user',

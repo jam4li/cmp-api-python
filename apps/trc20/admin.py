@@ -7,7 +7,7 @@ from .models import Trc20
 # Register your models here.
 
 
-class Trc20Admin(admin.ModelAdmin):
+class Trc20Admin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
     raw_id_fields = (
@@ -21,15 +21,19 @@ class Trc20Admin(admin.ModelAdmin):
 
     fields = (
         'user',
+        'purchase',
         'message',
         'invoice_id',
+        'merchant_id',
         'total_amount',
         'paid_amount',
         'address',
+        'url',
         'symbol',
         'status',
         'payment_txid',
         'payment_confirmation',
+        'expired_at',
     ) + BaseAdmin.fields
 
     list_display = [
@@ -38,7 +42,9 @@ class Trc20Admin(admin.ModelAdmin):
         'payment_txid',
     ]
 
-    readonly_fields = BaseAdmin.readonly_fields
+    readonly_fields = (
+        'expired_at',
+    ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
