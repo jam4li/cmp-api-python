@@ -1,9 +1,13 @@
 from django.urls import path
 
-from apps.trc20.views.user_views import Trc20CreateGatewayAPIView, Trc20NotifyGatewayAPIView
+from apps.purchase.views.user_views import PurchaseCalculateAPIView
 
 app_name = 'purchase_user'
 
 urlpatterns = [
-
+    path(
+        'calculate/',
+        PurchaseCalculateAPIView.as_view(),
+        name='calculate',
+    ),
 ]
