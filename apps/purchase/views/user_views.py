@@ -16,18 +16,18 @@ class PurchaseCalculateAPIView(views.APIView):
         percent = self.request.data['percent']
 
         package = Package.objects.get(id=package_id)
+        package_price = round(float(package.price), 2)
+        package_fee = round(float(package.fee), 2)
 
-        token_in_usdt = (int(percent) * package.price) / 100
-        token_in_usdt = round(float(token_amount), 2)
+        token_in_usdt = (int(percent) * package_price) / 100
+        token_in_usdt = round(float(token_in_usdt), 2)
         token_percent = int(percent)
 
         token_amount = int(token_in_usdt * 4)
 
-        tether_amount = int(package.price - token_in_usdt)
+        tether_amount = int(package_price - token_in_usdt)
+        tether_amount += package_fee
         tether_percent = int(100 - token_percent)
-
-        fee = package.fee
-        fee = round(float(fee), 2)
 
         token_wallet = Wallet.objects.get(
             user=user,
@@ -48,6 +48,7 @@ class PurchaseCalculateAPIView(views.APIView):
             return Response(response)
 
         data = {
+            "package_price": package_price,
             "token_amount": token_amount,
             "token_percent": token_percent,
             "tether_amount": tether_amount,
