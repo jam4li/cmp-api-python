@@ -25,7 +25,10 @@ class UserDashboardAPIView(views.APIView):
         balance = 0
         wallet_list = Wallet.objects.filter(user=user)
         for wallet in wallet_list:
-            balance += wallet.balance
+            if wallet.type == 'cmp':
+                balance += (wallet.balance // 4)
+            else:
+                balance += wallet.balance
 
         direct_invited = Referral.objects.filter(
             referrer=user,

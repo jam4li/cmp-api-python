@@ -17,11 +17,11 @@ class PurchaseCalculateAPIView(views.APIView):
 
         package = Package.objects.get(id=package_id)
 
-        token_amount = (int(percent) * package.price) / 100
-        token_amount = round(float(token_amount), 2)
+        token_in_usdt = (int(percent) * package.price) / 100
+        token_in_usdt = round(float(token_amount), 2)
         token_percent = int(percent)
 
-        token_in_usdt = int(token_amount / 4)
+        token_amount = int(token_in_usdt * 4)
 
         tether_amount = int(package.price - token_in_usdt)
         tether_percent = int(100 - token_percent)
