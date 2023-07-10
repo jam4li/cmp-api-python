@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.base.models import models, BaseModel
 
 from apps.users.models import User
+from apps.purchase.models import Purchase
 
 # Create your models here.
 
@@ -28,6 +29,11 @@ class Trc20(BaseModel):
         on_delete=models.CASCADE,
         verbose_name=_('User'),
     )
+    purchase = models.ForeignKey(
+        Purchase,
+        on_delete=models.CASCADE,
+        verbose_name=_('Purchase'),
+    )
     message = invoice_id = models.CharField(
         max_length=50,
         verbose_name=_('Message'),
@@ -35,6 +41,10 @@ class Trc20(BaseModel):
     invoice_id = models.CharField(
         max_length=20,
         verbose_name=_('Invoice id'),
+    )
+    merchant_id = models.CharField(
+        max_length=20,
+        verbose_name=_('Merchant id'),
     )
     total_amount = models.FloatField(
         verbose_name=_('Total amount'),
@@ -46,6 +56,10 @@ class Trc20(BaseModel):
     address = models.CharField(
         max_length=40,
         verbose_name=_('Address'),
+    )
+    url = models.CharField(
+        max_length=40,
+        verbose_name=_('Url'),
     )
     symbol = models.CharField(
         max_length=20,
@@ -66,6 +80,11 @@ class Trc20(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Payment confirmation'),
+    )
+    expired_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_('Expired at'),
     )
 
     class Meta:
