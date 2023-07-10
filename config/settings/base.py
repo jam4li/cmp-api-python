@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.network',
     'apps.package',
     'apps.payment',
+    'apps.purchase',
     'apps.referral',
     'apps.support',
     'apps.telegram',
