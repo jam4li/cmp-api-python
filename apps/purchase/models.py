@@ -27,6 +27,8 @@ class Purchase(BaseModel):
         Package,
         on_delete=models.SET_NULL,
         verbose_name=_('Package'),
+        blank=True,
+        null=True,
     )
     tether_amount = models.FloatField(
         blank=True,
