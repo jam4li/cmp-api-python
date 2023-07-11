@@ -53,7 +53,7 @@ class PurchaseCalculateAPIView(views.APIView):
             "token_percent": token_percent,
             "tether_amount": tether_amount,
             "tether_percent": tether_percent,
-            "fee": fee,
+            "fee": package_fee,
         }
 
         success_response = ApiResponse(
