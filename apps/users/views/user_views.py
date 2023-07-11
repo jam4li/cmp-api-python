@@ -1,9 +1,11 @@
 from rest_framework import views
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from utils.response import ApiResponse
+from utils.authentication import create_google_url
 
-from apps.users.models import User
+from apps.users.models import User, UserProfile
 from apps.invest.models import Invest
 from apps.wallet.models import Wallet
 from apps.referral.models import Referral
@@ -70,3 +72,37 @@ class UserDetailAPIView(views.APIView):
         )
 
         return Response(success_response)
+
+
+class UserCreateAPIView(views.APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request, format=None):
+        referrer_referrer_code = self.request.data['referrer']
+        side = self.request.data['side']
+
+        try:
+            referrer_profile = UserProfile.objects.get(
+                referrer_code=referrer_referrer_code,
+            )
+        except UserProfile.DoesNotExist:
+            response = ApiResponse(
+                success=False,
+                code=404,
+                error={
+                    'code': 'referrer_not_found',
+                    'detail': 'Referral user not found in the database',
+                }
+            )
+            return Response(response)
+
+        # Create gmail login link
+
+        url = create_google_url(
+            side=side,
+            referrer_code=referrer_referrer_code,
+        )
+
+        # Create new user's profile
+
+        return Response({'url': url})

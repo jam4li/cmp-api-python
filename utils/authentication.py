@@ -16,7 +16,7 @@ def read_client_config(file_path):
     return config_data
 
 
-def create_google_url():
+def create_google_url(side=None, referrer_code=None):
     google_auth_file_path = os.path.join(settings.BASE_DIR, 'google-auth.json')
 
     flow = Flow.from_client_config(
@@ -29,7 +29,13 @@ def create_google_url():
         redirect_uri=settings.GOOGLE_OAUTH_REDIRECT_URI,
     )
 
-    authorization_url, state = flow.authorization_url()
+    if side and referrer_code:
+        authorization_url, state = flow.authorization_url(
+            state=f"side={side}&referrer_code={referrer_code}"
+        )
+
+    else:
+        authorization_url, state = flow.authorization_url()
 
     return authorization_url
 
@@ -52,6 +58,21 @@ def callback_google(request):
     authorization_response = request.build_absolute_uri()
     flow.fetch_token(authorization_response=authorization_response)
 
+    # Get the state parameter value from the callback URL
+    state_data = request.GET.get('state')
+
+    side = None
+    referrer_code = None
+
+    if state_data:
+        state_parts = state_data.split('&')
+        for part in state_parts:
+            key, value = part.split('=')
+            if key == 'side':
+                side = value
+            elif key == 'referrer_code':
+                referrer_code = value
+
     # Development mode
     if os.environ.get('OAUTHLIB_INSECURE_TRANSPORT') == '1':
         # Get the user's credentials (access token and refresh token)
@@ -73,6 +94,9 @@ def callback_google(request):
             id_token_bytes,
             options={"verify_signature": False},
         )
+
+        id_info['side'] = side
+        id_info['referrer_code'] = referrer_code
 
         return id_info
 

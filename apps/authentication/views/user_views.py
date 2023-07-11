@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
 from utils.authentication import create_google_url, callback_google
+from utils.register import create_user
 
 from apps.users.models import User
 
@@ -26,6 +27,16 @@ class GoogleCallback(views.APIView):
 
         user_email = id_info['email']
         user_name = id_info['name']
+
+        user_side = id_info['side']
+        user_referrer_code = id_info['referrer_code']
+
+        if user_side and user_referrer_code:
+            create_user(
+                email=user_email,
+                side=user_side,
+                referrer_code=user_referrer_code,
+            )
 
         user = User.objects.get(email=user_email)
         token, created = Token.objects.get_or_create(user=user)
