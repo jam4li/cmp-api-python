@@ -106,3 +106,22 @@ class UserCreateAPIView(views.APIView):
         # Create new user's profile
 
         return Response({'url': url})
+
+
+class UserReferralDetailAPIView(views.APIView):
+    def get(self, request, format=None):
+        user = self.request.user
+        user_profile = UserProfile.objects.get(user=user)
+
+        data = {
+            "referrer_code": user_profile.referrer_code,
+        }
+
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
