@@ -67,11 +67,13 @@ def callback_google(request):
     if state_data:
         state_parts = state_data.split('&')
         for part in state_parts:
-            key, value = part.split('=')
-            if key == 'side':
-                side = value
-            elif key == 'referrer_code':
-                referrer_code = value
+            key_value = part.split('=')
+            if len(key_value) == 2:
+                key, value = key_value
+                if key == 'side':
+                    side = value
+                elif key == 'referrer_code':
+                    referrer_code = value
 
     # Development mode
     if os.environ.get('OAUTHLIB_INSECURE_TRANSPORT') == '1':
