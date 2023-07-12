@@ -109,3 +109,27 @@ def create_user(email, side, referrer_code):
         recruited=side,
         binary_place=new_binary_place,
     )
+
+    # Calculate left_count or right_count in binary
+    while len(new_binary_place) > 0:
+        user_side = new_binary_place[-1]
+        new_binary_place = new_binary_place[:-1]
+
+        try:
+            user_referral = Referral.objects.get(binary_place=new_binary_place)
+            user = user_referral.user
+            user_network = Network.objects.get(user=user)
+
+            if user_side == '0':
+                user_network.left_count = user_network.left_count + 1
+                user_network.save()
+
+            elif user_side == '1':
+                user_network.right_count = user_network.right_count + 1
+                user_network.save()
+
+        except Referral.DoesNotExist:
+            continue
+
+        except Network.DoesNotExist:
+            continue
