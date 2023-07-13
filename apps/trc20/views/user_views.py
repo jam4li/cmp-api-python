@@ -1,6 +1,7 @@
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.status import HTTP_200_OK
 from django.utils.translation import gettext
 
 from utils.response import ApiResponse
