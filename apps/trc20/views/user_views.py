@@ -9,6 +9,7 @@ from utils.response import ApiResponse
 from apps.trc20.serializers.user_serializers import Trc20CreateGatewaySerializer
 from apps.trc20.models import Trc20
 from apps.purchase.models import Purchase
+from apps.package.models import Package
 from apps.invest.models import Invest
 from apps.users.models import UserProfile
 from apps.wallet.models import Wallet
@@ -31,8 +32,8 @@ class Trc20CreateGatewayAPIView(views.APIView):
         payment_gateway_invoice_id = payment_gateway_data['invoice_id']
         payment_gateway_merchant_id = payment_gateway_data['merchant_id']
         payment_gateway_total_amount = float(
-            payment_gateway_data['total_amount']['USDTTRC20'],
-        ),
+            payment_gateway_data['total_amount']['USDTTRC20']
+        )
         payment_gateway_address = payment_gateway_data['address']
         payment_gateway_url = payment_gateway_data['url']
         payment_gateway_symbol = payment_gateway_data['coin']
