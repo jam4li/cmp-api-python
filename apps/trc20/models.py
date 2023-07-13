@@ -43,7 +43,7 @@ class Trc20(BaseModel):
         verbose_name=_('Invoice id'),
     )
     merchant_id = models.CharField(
-        max_length=20,
+        max_length=255,
         verbose_name=_('Merchant id'),
     )
     total_amount = models.FloatField(
@@ -58,7 +58,7 @@ class Trc20(BaseModel):
         verbose_name=_('Address'),
     )
     url = models.CharField(
-        max_length=40,
+        max_length=255,
         verbose_name=_('Url'),
     )
     symbol = models.CharField(
