@@ -221,7 +221,7 @@ LOGGING = {
 
 # TODO: Because of Django's problem in env variables
 TETHER_API_KEY = os.environ.get('TETHER_FIRST_API_KEY') + \
-    '$YdPoyS2KOy8YFVV' + os.environ.get('TETHER_SECOND_API_KEY')
+    '$XGj8Mbog.Cjd' + os.environ.get('TETHER_SECOND_API_KEY')
 
 TETHER_GATEWAY_URL = os.environ.get('TETHER_GATEWAY_URL')
 TETHER_EXPIRE_TIME = os.environ.get('TETHER_EXPIRE_TIME')

@@ -1,70 +1,87 @@
 from rest_framework import views
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from django.utils.translation import gettext
 
 from utils.response import ApiResponse
 
 from apps.trc20.serializers.user_serializers import Trc20CreateGatewaySerializer
 from apps.trc20.models import Trc20
+from apps.purchase.models import Purchase
+from apps.invest.models import Invest
+from apps.users.models import UserProfile
+from apps.wallet.models import Wallet
 
 from utils.coinremitter import create_invoice
 
 
 class Trc20CreateGatewayAPIView(views.APIView):
     def post(self, request, format=None):
-        serializer = Trc20CreateGatewaySerializer(data=request.data)
+        user = self.request.user
+        package_id = self.request.data['package']
+        tether_amount = self.request.data['tether_amount']
+        token_amount = self.request.data['token_amount']
 
-        if serializer.is_valid():
-            total_amount = self.request.data.get('total_amount')
-            invoice = create_invoice(total_amount)
+        payment_gateway = create_invoice(tether_amount)
 
-            invoice_message = invoice['msg']
-            invoice_data = invoice['data']
+        payment_gateway_message = payment_gateway['msg']
+        payment_gateway_data = payment_gateway['data']
 
-            serializer.save(
-                user=self.request.user,
-                message=invoice_message,
-                invoice_id=invoice_data['invoice_id'],
-                total_amount=float(
-                    invoice_data['total_amount']['USDTTRC20'],
-                ),
-                address=invoice_data['address'],
-                symbol=invoice_data['coin'],
-                status=invoice_data['status_code'],
-            )
+        payment_gateway_invoice_id = payment_gateway_data['invoice_id']
+        payment_gateway_merchant_id = payment_gateway_data['merchant_id']
+        payment_gateway_total_amount = float(
+            payment_gateway_data['total_amount']['USDTTRC20'],
+        ),
+        payment_gateway_address = payment_gateway_data['address']
+        payment_gateway_url = payment_gateway_data['url']
+        payment_gateway_symbol = payment_gateway_data['coin']
+        payment_gateway_status = payment_gateway_data['status_code']
 
-            data = {
-                'gateway_address': invoice['data']['url'],
-            }
+        package = Package.objects.get(id=package_id)
 
-            success_response = ApiResponse(
-                success=True,
-                code=200,
-                data=data,
-                message='Data retrieved successfully'
-            )
+        purchase = Purchase.objects.create(
+            user=user,
+            package=package,
+            tether_amount=tether_amount,
+            token_amount=token_amount,
+        )
 
-            return Response(success_response)
+        trc20 = Trc20.objects.create(
+            user=user,
+            purchase=purchase,
+            message=payment_gateway_message,
+            invoice_id=payment_gateway_invoice_id,
+            merchant_id=payment_gateway_merchant_id,
+            total_amount=payment_gateway_total_amount,
+            address=payment_gateway_address,
+            url=payment_gateway_url,
+            symbol=payment_gateway_symbol,
+            status=payment_gateway_status,
+        )
 
-        else:
-            response = ApiResponse(
-                success=False,
-                code=400,
-                error={
-                    'code': 'not_valid',
-                    'detail': 'Not valid',
-                }
-            )
+        data = {
+            'gateway_url': payment_gateway_url,
+        }
 
-            return Response(response)
+        success_response = ApiResponse(
+            success=True,
+            code=200,
+            data=data,
+            message='Data retrieved successfully'
+        )
+
+        return Response(success_response)
 
 
 class Trc20NotifyGatewayAPIView(views.APIView):
+    permission_classes = [AllowAny, ]
+
     def post(self, request, format=None):
         try:
             status = self.request.data['status_code']
 
-            if status == "1" or status == "2" or status == "3":
+            # Paid or Overpaid
+            if status == "1" or status == "3":
                 invoice_id = self.request.data['invoice_id']
                 amount = self.request.data['payment_history[0][amount]']
                 payment_txid = self.request.data['payment_history[0][txid]']
@@ -77,7 +94,67 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 trc20_obj.payment_confirmation = payment_confirmation
                 trc20_obj.save()
 
+                purchase_obj = trc20_obj.purchase
+                purchase_obj.status = 'success'
+                purchase_obj.save()
+
+                user_obj = purchase_obj.user
+                user_obj_profile = UserProfile.objects.get(
+                    user=user_obj,
+                )
+                package_obj = purchase_obj.package
+                package_obj_price = package_obj.price
+
+                # Calculate total_invest
+                total_invest = 0
+                invest_list = Invest.objects.filter(user=user)
+                for invest in invest_list:
+                    total_invest += invest.invest
+
+                total_invest += package_obj_price
+
+                invest_obj = Invest.objects.create(
+                    user=user,
+                    package=package_obj,
+                    invest=package_obj_price,
+                    total_invest=total_invest,
+                )
+
+                # Update package in User model
+                if package_obj_price > user_obj_profile.package.price:
+                    user_obj_profile.package = package_obj
+                    user_obj_profile.save()
+
                 return Response({}, status=HTTP_200_OK)
+
+            # Under paid
+            elif status == "2":
+                invoice_id = self.request.data['invoice_id']
+                amount = self.request.data['payment_history[0][amount]']
+                payment_txid = self.request.data['payment_history[0][txid]']
+                payment_confirmation = self.request.data['payment_history[0][confirmation]']
+
+                trc20_obj = Trc20.objects.get(invoice_id=invoice_id)
+                trc20_obj.purchase.status = 'success'
+                trc20_obj.status = status
+                trc20_obj.paid_amount = amount
+                trc20_obj.payment_txid = payment_txid
+                trc20_obj.payment_confirmation = payment_confirmation
+                trc20_obj.save()
+
+                purchase_obj = trc20_obj.purchase
+                purchase_obj.status = 'success'
+                purchase_obj.save()
+
+                user_obj = purchase_obj.user
+
+                # Charge deposit wallet's balance
+                wallet_obj = Wallet.objects.get(
+                    user=user_obj,
+                    type='deposit',
+                )
+                wallet_obj.balance = wallet_obj.balance + amount
+                wallet_obj.save()
 
             else:
                 return Response({}, status=HTTP_200_OK)
