@@ -13,6 +13,7 @@ from apps.package.models import Package
 from apps.invest.models import Invest
 from apps.users.models import UserProfile
 from apps.wallet.models import Wallet
+from apps.network.models import Network
 
 from utils.coinremitter import create_invoice
 
@@ -104,6 +105,9 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 user_obj_profile = UserProfile.objects.get(
                     user=user_obj,
                 )
+                user_obj_network = Network.objects.get(
+                    user=user,
+                )
                 package_obj = purchase_obj.package
                 package_obj_price = package_obj.price
 
@@ -114,6 +118,10 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                     total_invest += invest.invest
 
                 total_invest += package_obj_price
+
+                user_obj_network.invest = total_invest
+                user_obj_network.last_invest = package_obj_price
+                user_obj_network.save()
 
                 invest_obj = Invest.objects.create(
                     user=user,
