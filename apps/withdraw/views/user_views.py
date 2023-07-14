@@ -88,6 +88,18 @@ class WithdrawCreateAPIView(views.APIView):
 
         wallet_balance = float(wallet.balance)
 
+        if fee > amount:
+            response = ApiResponse(
+                success=False,
+                code=402,
+                error={
+                    'code': 'fee greater than_amount',
+                    'detail': 'Fee cannot be greater than the amount.',
+                }
+            )
+
+            return Response(response)
+
         if wallet_balance < amount:
             response = ApiResponse(
                 success=False,
