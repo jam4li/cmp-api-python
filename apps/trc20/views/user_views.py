@@ -123,6 +123,18 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 user_obj_network.last_invest = package_obj_price
                 user_obj_network.save()
 
+                # Get token amount and minus from wallet
+                token_amount = purchase_obj.token_amount
+                if token_amount > 0.0:
+                    token_wallet = Wallet.objects.get(
+                        user=user_obj,
+                        type='cmp',
+                    )
+                    token_wallet.balance = float(
+                        token_wallet.balance
+                    ) - token_amount
+                    token_wallet.save()
+
                 invest_obj = Invest.objects.create(
                     user=user_obj,
                     package=package_obj,
