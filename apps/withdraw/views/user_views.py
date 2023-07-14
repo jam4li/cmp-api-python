@@ -88,7 +88,7 @@ class WithdrawCreateAPIView(views.APIView):
 
         wallet_balance = float(wallet.balance)
 
-        if wallet_balance < amount + fee:
+        if wallet_balance < amount:
             response = ApiResponse(
                 success=False,
                 code=402,
@@ -102,7 +102,7 @@ class WithdrawCreateAPIView(views.APIView):
 
         Withdraw.objects.create(
             user=user,
-            amount=amount,
+            amount=amount - fee,
             fee=fee,
             wallet_address=wallet_address,
             wallet_type=wallet_type,
@@ -110,7 +110,7 @@ class WithdrawCreateAPIView(views.APIView):
             created_at=timezone.now(),
         )
 
-        wallet.balance = wallet_balance - (amount + fee)
+        wallet.balance = wallet_balance - (amount)
         wallet.updated_at = timezone.now()
         wallet.save()
 
