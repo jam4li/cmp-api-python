@@ -12,5 +12,6 @@ class WithdrawListSerializer(serializers.ModelSerializer):
             'transaction_hash',
             'status',
             'wallet_type',
+            'created_at',
             'updated_at',
         ]
