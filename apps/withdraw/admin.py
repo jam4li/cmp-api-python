@@ -10,6 +10,10 @@ from .models import Withdraw
 class WithdrawAdmin(BaseAdmin):
     list_select_related = True
     list_per_page = 50
+
+    custom_created_at = BaseAdmin.custom_created_at
+    custom_updated_at = BaseAdmin.custom_updated_at
+
     raw_id_fields = (
         'user',
     )
@@ -33,7 +37,11 @@ class WithdrawAdmin(BaseAdmin):
         'user',
         'amount',
         'fee',
+        'wallet_type',
+        'wallet_address',
         'status',
+        'custom_created_at',
+        'custom_updated_at',
     ]
 
     readonly_fields = BaseAdmin.readonly_fields
