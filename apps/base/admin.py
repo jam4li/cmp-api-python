@@ -12,6 +12,9 @@ class BaseAdmin(admin.ModelAdmin):
     def custom_updated_at(self, obj):
         return admin_dateformat(obj.updated_at, 'Y-m-d H:i:s')
 
+    custom_created_at.short_description = 'Created At'  # Change field name
+    custom_updated_at.short_description = 'Updated At'
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.created_at = timezone.now()
