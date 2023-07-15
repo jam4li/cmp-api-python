@@ -25,6 +25,7 @@ class SupportTicketAdmin(BaseAdmin):
         'user__email',
         'department__name',
         'content',
+        'supportticketreply__content'
     ]
 
     fields = (
