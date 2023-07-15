@@ -24,6 +24,7 @@ class SupportTicketAdmin(BaseAdmin):
     search_fields = [
         'user__email',
         'department__name',
+        'content',
     ]
 
     fields = (
