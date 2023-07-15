@@ -2,6 +2,7 @@ from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.status import HTTP_200_OK
+from django.utils import timezone
 from django.utils.translation import gettext
 
 from utils.response import ApiResponse
@@ -140,6 +141,7 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                     package=package_obj,
                     invest=package_obj_price,
                     total_invest=total_invest,
+                    created_at=timezone.now(),
                 )
 
                 # Update package in User model
