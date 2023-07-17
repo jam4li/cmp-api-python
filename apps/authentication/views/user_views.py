@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
 from utils.authentication import create_google_url, callback_google
-from utils.register import create_user
+from apps.users.utils.register import create_user
 
 from apps.users.models import User
 
