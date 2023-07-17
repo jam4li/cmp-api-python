@@ -16,7 +16,7 @@ from apps.users.models import UserProfile
 from apps.wallet.models import Wallet
 from apps.network.models import Network
 
-from utils.coinremitter import create_invoice
+from apps.trc20.utils.coinremitter import create_invoice
 
 
 class Trc20CreateGatewayAPIView(views.APIView):
