@@ -60,8 +60,10 @@ class UserDashboardAPIView(views.APIView):
 
 class UserDetailAPIView(views.APIView):
     def get(self, request, format=None):
+        user = self.request.user
+        email = user.email.split('@')[0]
         data = {
-            "name": "User",
+            "email": email,
         }
 
         success_response = ApiResponse(
