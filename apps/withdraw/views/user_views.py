@@ -18,7 +18,7 @@ class WithdrawListAPIView(views.APIView):
         withdraw_list = Withdraw.objects.filter(
             user=user,
         ).order_by(
-            'created_at',
+            '-created_at',
         )
 
         serializer = WithdrawListSerializer(
