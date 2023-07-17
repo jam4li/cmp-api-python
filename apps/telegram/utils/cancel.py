@@ -1,5 +1,5 @@
 from django.utils.translation import gettext as _
-from utils.telegram.base import *
+from apps.telegram.utils.base import *
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

@@ -4,8 +4,9 @@ from django.conf import settings
 from .base import *
 from .start import start
 from .home import home_menu
-from .educate import educate_callback, educate_content_callback
-from .company import company_callback, company_branch_callback
+from .educate import educate_handler, educate_content_callback
+from .company import company_callback, company_office_callback, company_seminar_callback
+from .settings import settings_handler
 from .cancel import cancel
 
 try:
@@ -55,25 +56,41 @@ def main() -> None:
                 ),
             ],
             EDUCATE: [
-                CallbackQueryHandler(
-                    educate_callback,
+                MessageHandler(
+                    filters.TEXT,
+                    educate_handler,
                 ),
             ],
             EDUCATE_CONTENT: [
-                CallbackQueryHandler(
-                    educate_content_callback,
+                MessageHandler(
+                    filters.TEXT,
+                    home_menu,
                 ),
             ],
             COMPANY: [
-                CallbackQueryHandler(
-                    company_callback,
+                MessageHandler(
+                    filters.TEXT,
+                    home_menu,
                 ),
             ],
-            COMPANY_BRANCH: [
-                CallbackQueryHandler(
-                    company_branch_callback,
+            COMPANY_OFFICE: [
+                MessageHandler(
+                    filters.TEXT,
+                    home_menu,
                 ),
             ],
+            COMPANY_SEMINAR: [
+                MessageHandler(
+                    filters.TEXT,
+                    home_menu,
+                ),
+            ],
+            SETTINGS: [
+                MessageHandler(
+                    filters.TEXT,
+                    settings_handler,
+                ),
+            ]
         },
         fallbacks=[
             CommandHandler(

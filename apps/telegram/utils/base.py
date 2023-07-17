@@ -18,9 +18,16 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-HOME_MENU, EDUCATE, EDUCATE_CONTENT, COMPANY, COMPANY_BRANCH, START_OVER = range(
-    6,
-)
+(
+    HOME_MENU,
+    EDUCATE,
+    EDUCATE_CONTENT,
+    COMPANY,
+    COMPANY_OFFICE,
+    COMPANY_SEMINAR,
+    SETTINGS,
+    START_OVER,
+) = range(8)
 
 # Enable logging
 logging.basicConfig(
