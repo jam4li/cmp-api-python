@@ -129,7 +129,7 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 if token_amount > 0.0:
                     token_wallet = Wallet.objects.get(
                         user=user_obj,
-                        type='cmp',
+                        type='eit',
                     )
                     token_wallet.balance = float(
                         token_wallet.balance

@@ -31,7 +31,7 @@ class PurchaseCalculateAPIView(views.APIView):
 
         token_wallet = Wallet.objects.get(
             user=user,
-            type='cmp',
+            type='eit',
         )
         token_wallet_balance = token_wallet.balance
 

@@ -27,7 +27,7 @@ class UserDashboardAPIView(views.APIView):
         balance = 0
         wallet_list = Wallet.objects.filter(user=user)
         for wallet in wallet_list:
-            if wallet.type == 'cmp':
+            if wallet.type == 'eit':
                 balance += (wallet.balance // 4)
             else:
                 balance += wallet.balance
