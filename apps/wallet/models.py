@@ -11,13 +11,13 @@ class Wallet(BaseModel):
     DEPOSIT = "deposit"
     COMMISSION = "commission"
     PROFIT = "profit"
-    CMP = "cmp"
+    EIT = "eit"
     VOUCHER = "voucher"
     TYPE_CHOICES = (
         (DEPOSIT, _("Deposit")),
         (COMMISSION, _("Commission")),
         (PROFIT, _("Profit")),
-        (CMP, _("Cmp")),
+        (EIT, _("Eit")),
         (VOUCHER, _("Voucher")),
     )
 
