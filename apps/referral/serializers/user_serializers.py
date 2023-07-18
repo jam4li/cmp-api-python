@@ -20,6 +20,7 @@ class ReferralDirectListSerializer(serializers.ModelSerializer):
         model = Referral
         fields = [
             'user',
+            'recruited',
         ]
 
 
