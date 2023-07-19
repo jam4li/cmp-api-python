@@ -17,7 +17,7 @@ class Network(BaseModel):
         verbose_name=_('User'),
     )
     status = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name=_('Status'),
     )
     left_count = models.BigIntegerField(
