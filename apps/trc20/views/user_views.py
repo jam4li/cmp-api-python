@@ -114,13 +114,16 @@ class Trc20NotifyGatewayAPIView(views.APIView):
 
                 # Calculate total_invest
                 total_invest = 0
-                invest_list = Invest.objects.filter(user=user_obj)
+                invest_list = Invest.objects.filter(
+                    user=user_obj,
+                    finished=False,
+                )
                 for invest in invest_list:
                     total_invest += invest.invest
 
                 total_invest += package_obj_price
 
-                user_obj_network.invest = total_invest
+                user_obj_network.total_invest = total_invest
                 user_obj_network.last_invest = package_obj_price
                 user_obj_network.save()
 
@@ -140,14 +143,8 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                     user=user_obj,
                     package=package_obj,
                     invest=package_obj_price,
-                    total_invest=total_invest,
                     created_at=timezone.now(),
                 )
-
-                # Update package in User model
-                if package_obj_price > user_obj_profile.package.price:
-                    user_obj_profile.package = package_obj
-                    user_obj_profile.save()
 
                 return Response({}, status=HTTP_200_OK)
 
