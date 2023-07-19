@@ -24,11 +24,6 @@ class Invest(BaseModel):
         decimal_places=3,
         verbose_name=_('Invest'),
     )
-    total_invest = models.DecimalField(
-        max_digits=20,
-        decimal_places=3,
-        verbose_name=_('Total invest'),
-    )
     profit = models.DecimalField(
         max_digits=20,
         decimal_places=3,
