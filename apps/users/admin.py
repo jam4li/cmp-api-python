@@ -9,7 +9,6 @@ from django.contrib.auth.admin import UserAdmin
 from apps.base.admin import BaseAdmin
 
 from .models import User, UserProfile, AdminProfile
-from apps.package.models import Package
 
 # Register your models here.
 
@@ -35,13 +34,11 @@ class UserProfileAdmin(BaseAdmin):
         'user',
     )
     autocomplete_fields = [
-        'package',
         'referrer',
     ]
     search_fields = [
         'user__email',
         'username',
-        'package__name',
         'referrer__username',
     ]
 
@@ -50,7 +47,6 @@ class UserProfileAdmin(BaseAdmin):
         'user',
         'username',
         'user_email',
-        'package',
         'referrer',
         'ex_email',
         'referrer_code',

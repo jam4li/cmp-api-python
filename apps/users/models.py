@@ -87,13 +87,6 @@ class UserProfile(models.Model):
         max_length=255,
         verbose_name=_('Username'),
     )
-    package = models.ForeignKey(
-        Package,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        verbose_name=_('Package'),
-    )
     referrer = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
