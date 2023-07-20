@@ -28,8 +28,13 @@ class ReferralBinaryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Network
         fields = [
+            'status',
             'left_count',
             'right_count',
             'left_amount',
             'right_amount',
+            'total_invest',
+            'last_invest',
+            'network_profit_daily_limit',
+            'network_profit',
         ]
