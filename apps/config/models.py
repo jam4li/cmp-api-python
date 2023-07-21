@@ -5,28 +5,24 @@ from apps.base.models import models, BaseModel
 # Create your models here.
 
 
-class Config(BaseModel):
-    key = models.CharField(max_length=255, verbose_name=_('Key'))
-    value = models.CharField(max_length=500, verbose_name=_('Value'))
-
-    class Meta:
-        verbose_name = _('Config')
-        verbose_name_plural = _('Configs')
-
-    def __str__(self):
-        return self.key
+class ConfigManager(models.Manager):
+    def get_instance(self):
+        if self.count() == 0:
+            return self.create()
+        return self.first()
 
 
-class DailyProfit(BaseModel):
-    daily_profit = models.DecimalField(
-        max_digits=11,
-        decimal_places=4,
-        verbose_name=_('Daily profit'),
+class ConfigWithdraw(BaseModel):
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Is active'),
     )
 
+    objects = ConfigManager()
+
     class Meta:
-        verbose_name = _('Daily profit')
-        verbose_name_plural = _('Daily profits')
+        verbose_name = _('Withdraw config')
+        verbose_name_plural = _('Withdraw configs')
 
     def __str__(self):
-        return str(self.id)
+        return 'Config'
