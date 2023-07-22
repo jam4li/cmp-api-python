@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'apps.package',
     'apps.payment',
     'apps.purchase',
-    'apps.referral',
     'apps.support',
     'apps.telegram',
     'apps.transaction',
@@ -240,12 +239,12 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
 # Run the task daily at 00:00 (midnight)
-CELERY_BEAT_SCHEDULE = {
-    'run_my_task': {
-        'task': 'apps.referral.tasks.my_example_task',
-        'schedule': crontab(hour=0, minute=0),
-    },
-}
+# CELERY_BEAT_SCHEDULE = {
+#     'run_my_task': {
+#         'task': 'apps.referral.tasks.my_example_task',
+#         'schedule': crontab(hour=0, minute=0),
+#     },
+# }
 
 CELERY_BEAT_SCHEDULE_FILENAME = 'celery_beat_schedule'
 
