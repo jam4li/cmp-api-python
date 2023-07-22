@@ -10,6 +10,13 @@ from apps.invest.models import Invest
 
 
 class Network(BaseModel):
+    RIGHT = "right"
+    LEFT = "left"
+    SIDE_CHOICES = (
+        (RIGHT, _("Right")),
+        (LEFT, _("Left")),
+    )
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -71,6 +78,15 @@ class Network(BaseModel):
         null=True,
         related_name='network_referrer',
         verbose_name=_('Referrer'),
+    )
+    side = models.CharField(
+        max_length=10,
+        choices=SIDE_CHOICES,
+        verbose_name=_('Side')
+    )
+    binary_place = models.CharField(
+        max_length=500,
+        verbose_name=_('Binary place'),
     )
     network_calculate_date = models.DateTimeField(
         blank=True,
