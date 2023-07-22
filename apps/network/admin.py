@@ -39,10 +39,14 @@ class NetworkAdmin(BaseAdmin):
         'network_profit',
         'referrer',
         'network_calculate_date',
+        'side',
+        'binary_place',
     ) + BaseAdmin.fields
 
     readonly_fields = (
         'network_calculate_date',
+        'side',
+        'binary_place',
     ) + BaseAdmin.readonly_fields
 
     def get_queryset(self, request):
