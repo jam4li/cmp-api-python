@@ -8,7 +8,6 @@ from apps.authentication.utils.google_auth import create_google_url
 from apps.users.models import User, UserProfile
 from apps.invest.models import Invest
 from apps.wallet.models import Wallet
-from apps.referral.models import Referral
 from apps.network.models import Network
 # from .serializers import BannerListSerializer
 
@@ -32,7 +31,7 @@ class UserDashboardAPIView(views.APIView):
             else:
                 balance += wallet.balance
 
-        direct_invited = Referral.objects.filter(
+        direct_invited = Network.objects.filter(
             referrer=user,
         ).count()
 
@@ -93,7 +92,7 @@ class UserCreateAPIView(views.APIView):
                 code=404,
                 error={
                     'code': 'referrer_not_found',
-                    'detail': 'Referral user not found in the database',
+                    'detail': 'Referrer user not found in the database',
                 }
             )
             return Response(response)

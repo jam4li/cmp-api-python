@@ -4,9 +4,8 @@ import string
 from django.db import IntegrityError
 
 from apps.users.models import User, UserProfile
-from apps.referral.models import Referral
-from apps.wallet.models import Wallet
 from apps.network.models import Network
+from apps.wallet.models import Wallet
 
 
 def generate_random_username(length=8):
@@ -24,10 +23,10 @@ def create_user(email, side, referrer_code):
         referrer_code=referrer_code,
     )
     referrer_user = referrer_profile.user
-    referrer_referral = Referral.objects.get(
+    referrer_network = Network.objects.get(
         user=referrer_user,
     )
-    referrer_binary_place = referrer_referral.binary_place
+    referrer_binary_place = referrer_network.binary_place
 
     new_binary_place = referrer_binary_place
     new_username = ""
@@ -38,16 +37,16 @@ def create_user(email, side, referrer_code):
         while True:
             new_binary_place += "0"
             try:
-                Referral.objects.get(binary_place=new_binary_place)
-            except Referral.DoesNotExist:
+                Network.objects.get(binary_place=new_binary_place)
+            except Network.DoesNotExist:
                 break
 
     elif side == 'right':
         while True:
             new_binary_place += "1"
             try:
-                Referral.objects.get(binary_place=new_binary_place)
-            except Referral.DoesNotExist:
+                Network.objects.get(binary_place=new_binary_place)
+            except Network.DoesNotExist:
                 break
 
     # Generate username and check if username hasn't been taken before
@@ -99,14 +98,7 @@ def create_user(email, side, referrer_code):
     new_network = Network.objects.create(
         user=new_user,
         referrer=referrer_user,
-    )
-
-    # Create referral
-    new_referral = Referral.objects.create(
-        user=new_user,
-        network=new_network,
-        referrer=referrer_user,
-        recruited=side,
+        side=side,
         binary_place=new_binary_place,
     )
 
@@ -116,9 +108,8 @@ def create_user(email, side, referrer_code):
         new_binary_place = new_binary_place[:-1]
 
         try:
-            user_referral = Referral.objects.get(binary_place=new_binary_place)
-            user = user_referral.user
-            user_network = Network.objects.get(user=user)
+            user_network = Network.objects.get(binary_place=new_binary_place)
+            user = user_network.user
 
             if user_side == '0':
                 user_network.left_count = user_network.left_count + 1
@@ -127,9 +118,6 @@ def create_user(email, side, referrer_code):
             elif user_side == '1':
                 user_network.right_count = user_network.right_count + 1
                 user_network.save()
-
-        except Referral.DoesNotExist:
-            continue
 
         except Network.DoesNotExist:
             continue
