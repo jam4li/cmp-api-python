@@ -29,11 +29,6 @@ class BannerListAPIView(views.APIView):
           publish date, and status.
         - Banners are filtered by the 'publish' status and sorted by their 'publish_date' in ascending order.
 
-    Example Request:
-    ```
-    GET /api/banners/
-    ```
-
     Example Response:
     ```
     HTTP 200 OK

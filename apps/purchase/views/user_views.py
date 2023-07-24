@@ -40,15 +40,6 @@ class PurchaseCalculateAPIView(views.APIView):
         - The API verifies if the user has sufficient balance in their EIT wallet to complete the purchase.
         - If the user's EIT wallet balance is insufficient, the API returns a 'insufficient balance' response.
 
-    Example Request:
-    ```
-    POST /api/purchase/calculate/
-    {
-        "package": 1,
-        "percent": 50,
-    }
-    ```
-
     Example Response:
     ```
     HTTP 200 OK
