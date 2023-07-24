@@ -10,6 +10,59 @@ from apps.wallet.models import Wallet
 
 
 class PurchaseCalculateAPIView(views.APIView):
+    """
+    API view to calculate the details of a package purchase based on the selected percentage.
+
+    This view handles a POST request to calculate the details of a package purchase based on the provided
+    package ID and percentage. It calculates the EIT amount and Tether amount based on the selected percentage,
+    and verifies if the user has sufficient balance in their EIT wallet to complete the purchase.
+
+    Parameters:
+        - "package" (int): The ID of the selected package for purchase.
+        - "percent" (int): The percentage of the package price to be paid in tokens.
+
+    Returns:
+        - A JSON response containing the calculated purchase details:
+            - "package_price" (double): The price of the selected package in USDT.
+            - "token_amount" (double): The calculated amount of tokens to be paid based on the selected percentage.
+            - "token_percent" (int): The percentage of the package price paid in tokens.
+            - "tether_amount" (double): The calculated amount of USDT to be paid based on the selected percentage.
+            - "tether_percent" (int): The percentage of the package price paid in USDT.
+            - "fee" (double): The fee associated with the selected package in USDT.
+
+    Note:
+        - The API expects a POST request containing the package ID and the percentage of the package price
+          to be paid in tokens.
+        - The package ID is used to fetch the corresponding package details from the 'Package' model.
+        - The 'percent' parameter is used to calculate the EIT amount and Tether amount based on the selected
+          percentage of the package price.
+        - The calculated EIT amount is four times the calculated token value in USDT (Each EIT is 0.25 Tether).
+        - The API verifies if the user has sufficient balance in their EIT wallet to complete the purchase.
+        - If the user's EIT wallet balance is insufficient, the API returns a 'insufficient balance' response.
+
+    Example Request:
+    ```
+    POST /api/purchase/calculate/
+    {
+        "package": 1,
+        "percent": 50,
+    }
+    ```
+
+    Example Response:
+    ```
+    HTTP 200 OK
+    {
+        "package_price": 100.0,
+        "token_amount": 200.000,
+        "token_percent": 50,
+        "tether_amount": 50.000,
+        "tether_percent": 50,
+        "fee": 5.0
+    }
+    ```
+    """
+
     def post(self, request, format=None):
         user = self.request.user
         package_id = self.request.data['package']
