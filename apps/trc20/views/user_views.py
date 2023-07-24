@@ -20,6 +20,22 @@ from apps.trc20.utils.coinremitter import create_invoice
 
 
 class Trc20CreateGatewayAPIView(views.APIView):
+    '''
+    API view for creating a payment gateway for TRC20 token purchases.
+
+    Parameters:
+        - 'package' (int): ID of the package being purchased.
+        - 'tether_amount' (str): Amount of Tether (USDT) to be paid for the package.
+        - 'token_amount' (str): Amount of EIT tokens to be received for the purchase.
+
+    Returns:
+        A JSON response containing the payment gateway URL and success message.
+
+    Utility Functions:
+        - create_invoice(tether_amount) - A utility function to create a payment gateway invoice in Coinremitter.
+          It takes the 'tether_amount' as a parameter and returns the payment gateway response, which includes the gateway url.
+    '''
+
     def post(self, request, format=None):
         user = self.request.user
         package_id = self.request.data['package']
@@ -78,6 +94,42 @@ class Trc20CreateGatewayAPIView(views.APIView):
 
 
 class Trc20NotifyGatewayAPIView(views.APIView):
+    """
+    API view for handling notifications from Coinremitter.
+
+    This API view processes a POST request with the payment gateway's notification data to update the transaction status and user balances.
+
+    Note:
+        - This API handles different status codes received from the payment gateway and updates the relevant records accordingly.
+
+    Parameters:
+        - status_code (str): The status code received from the payment gateway indicating the transaction status.
+
+    Returns:
+        - HTTP_200_OK response with an empty JSON object because of payment gateway's docs.
+
+    Raises:
+        - HTTP_200_OK response with error details in JSON format if an exception occurs during processing.
+
+    Flow:
+        - For a status code of "1" or "3" (Paid or Overpaid), the view performs the following actions:
+            1. Updates the TRC20 transaction details with the received payment information.
+            2. Updates the purchase status to 'success'.
+            3. Calculates the user's total investment and invest then updates the user network data accordingly.
+            4. If there is a token amount associated with the purchase, it deducts the tokens from the user's wallet balance.
+            5. Creates a new Invest record for the user and the corresponding package.
+
+        - For a status code of "2" (Underpaid), the view performs the following actions:
+            1. Updates the TRC20 transaction details with the received payment information.
+            2. Updates the purchase status to 'success'.
+            3. Charges the deposit wallet's balance by adding the received amount.
+
+        - For any other status code, the view returns a successful HTTP_200_OK response with an empty JSON object.
+
+    Utility Functions:
+        - N/A (No additional utility functions are explicitly mentioned in the provided code snippet).
+
+    """
     permission_classes = [AllowAny, ]
 
     def post(self, request, format=None):
@@ -112,7 +164,7 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 package_obj = purchase_obj.package
                 package_obj_price = package_obj.price
 
-                # Calculate total_invest
+                # Calculate total_invest and last_invest
                 total_invest = 0
                 invest_list = Invest.objects.filter(
                     user=user_obj,
