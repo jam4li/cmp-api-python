@@ -17,9 +17,3 @@ class PackageListSerializer(serializers.ModelSerializer):
             'daily_profit_percent',
             'profit_limit',
         ]
-
-
-class PackageBuySerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    symbol = serializers.CharField(max_length=10)
-    voucher_amount = serializers.IntegerField(allow_null=True)
