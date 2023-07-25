@@ -7,7 +7,7 @@ FROM python:3.10.5-alpine3.16
 # gettext django internationalization
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps build-base mariadb-dev \
-    && apk add python3-dev musl-dev libffi-dev libxml2-dev libxslt-dev jpeg-dev zlib-dev gettext
+    && apk add python3-dev musl-dev libffi-dev libxml2-dev libxslt-dev jpeg-dev zlib-dev gettext mariadb-client
 
 ADD ./requirements.txt /cmp_api_python/requirements.txt
 
