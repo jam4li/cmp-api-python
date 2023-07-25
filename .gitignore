@@ -15,4 +15,5 @@ htmlcov
 .vscode
 data/certs/
 logs/
+backup/
 google-auth.json
