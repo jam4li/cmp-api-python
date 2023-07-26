@@ -40,11 +40,11 @@ def execute_mysqldump():
 
         with gzip.open(file_abs_path, "wb") as backup_file:
             backup_file.write(backup_data)
-        print("Backup created successfully.")
+        return ("Backup created successfully.", True)
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}")
+        return (f"Error occurred: {e}", False)
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        return (f"An unexpected error occurred: {e}", False)
 
 
 if __name__ == "__main__":
