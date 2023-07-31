@@ -53,6 +53,12 @@ class Network(BaseModel):
         default=0.000,
         verbose_name=_('Total active invest'),
     )
+    total_all_invest = models.DecimalField(
+        max_digits=20,
+        decimal_places=3,
+        default=0.000,
+        verbose_name=_('Total all invest'),
+    )
     last_invest = models.DecimalField(
         max_digits=20,
         decimal_places=3,

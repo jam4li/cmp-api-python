@@ -34,6 +34,7 @@ class NetworkAdmin(BaseAdmin):
         'left_amount',
         'right_amount',
         'total_active_invest',
+        'total_all_invest',
         'last_invest',
         'network_profit_daily_limit',
         'network_profit',
