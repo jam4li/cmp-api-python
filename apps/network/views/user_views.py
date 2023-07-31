@@ -164,7 +164,7 @@ class NetworkBinaryDetailAPIView(views.APIView):
                 - "right_count" (int): Number of members in user's right side
                 - "left_amount" (double): Amount of all invests in the user's left side
                 - "right_amount" (double): Amount of all invests in the user's right side
-                - "total_invest" (double): Amount of user's total active invest
+                - "total_active_invest" (double): Amount of user's total active invest
                 - "last_invest" (double): Amount of user's last active invest
                 - "network_profit_daily_limit" (double): How much the user's profit wallet has been charged today
                 - "network_profit" (double): How much the user has got from network, including direct and binary
@@ -188,7 +188,7 @@ class NetworkBinaryDetailAPIView(views.APIView):
             "right_count": 217,
             "left_amount": 1900.000,
             "right_amount": 2750.000,
-            "total_invest": 750.000,
+            "total_active_invest": 750.000,
             "last_invest": 250.000,
             "network_profit_daily_limit": 0.000,
             "network_profit": 17500.000,

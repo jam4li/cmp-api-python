@@ -47,11 +47,11 @@ class Network(BaseModel):
         default=0.000,
         verbose_name=_('Right amount'),
     )
-    total_invest = models.DecimalField(
+    total_active_invest = models.DecimalField(
         max_digits=20,
         decimal_places=3,
         default=0.000,
-        verbose_name=_('Total invest'),
+        verbose_name=_('Total active invest'),
     )
     last_invest = models.DecimalField(
         max_digits=20,

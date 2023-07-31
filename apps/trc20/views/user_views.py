@@ -164,18 +164,18 @@ class Trc20NotifyGatewayAPIView(views.APIView):
                 package_obj = purchase_obj.package
                 package_obj_price = package_obj.price
 
-                # Calculate total_invest and last_invest
-                total_invest = 0
+                # Calculate total_active_invest and last_invest
+                total_active_invest = 0
                 invest_list = Invest.objects.filter(
                     user=user_obj,
                     finished=False,
                 )
                 for invest in invest_list:
-                    total_invest += invest.invest
+                    total_active_invest += invest.invest
 
-                total_invest += package_obj_price
+                total_active_invest += package_obj_price
 
-                user_obj_network.total_invest = total_invest
+                user_obj_network.total_active_invest = total_active_invest
                 user_obj_network.last_invest = package_obj_price
                 user_obj_network.save()
 

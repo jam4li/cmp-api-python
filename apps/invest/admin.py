@@ -58,15 +58,15 @@ class InvestAdmin(BaseAdmin):
 
             network = Network.objects.get(user=user)
 
-            # Calculate and update total_invest
-            total_invest = 0
-            total_invest += package.price
+            # Calculate and update total_active_invest
+            total_active_invest = 0
+            total_active_invest += package.price
             invest_list = Invest.objects.filter(user=user, finished=False)
 
             for invest in invest_list:
-                total_invest += invest.invest
+                total_active_invest += invest.invest
 
-            network.total_invest = total_invest
+            network.total_active_invest = total_active_invest
             network.last_invest = package.price
             network.save()
 
