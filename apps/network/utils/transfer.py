@@ -25,6 +25,9 @@ def transfer(origin_user_email, end_point_user_email, side):
     origin_network = Network.objects.get(user=origin_user)
     end_point_network = Network.objects.get(user=end_point_user)
 
+    origin_amount = origin_network.left_amount + origin_network.right_amount + origin_network.total_all_invest
+    origin_count = origin_network.left_count + origin_network.right_count + 1
+
     origin_binary_place = origin_network.binary_place
     end_point_binary_place = end_point_network.binary_place
 
@@ -89,12 +92,12 @@ def transfer(origin_user_email, end_point_user_email, side):
             continue
 
         if origin_last_character == '0':
-            origin_network_parent.left_count -= origin_network.left_count
-            origin_network_parent.left_amount -= origin_network.left_amount
+            origin_network_parent.left_count = origin_network_parent.left_count - origin_count
+            origin_network_parent.left_amount = origin_network_parent.left_amount - origin_amount
 
         elif origin_last_character == '1':
-            origin_network_parent.right_count -= origin_network.right_count
-            origin_network_parent.right_amount -= origin_network.right_amount
+            origin_network_parent.right_count = origin_network_parent.right_count - origin_count
+            origin_network_parent.right_amount = origin_network_parent.right_amount - origin_amount
 
         print('Origin network parent:', end=' ')
         print(origin_network_parent.binary_place)
@@ -111,7 +114,7 @@ def transfer(origin_user_email, end_point_user_email, side):
         print(network.binary_place)
         network.save()
 
-        # Plus origin_network.left_amount and right_amount to the new above nodes
+    # Plus origin_network.left_amount and right_amount to the new above nodes
     while True:
         if origin_binary_place_new == '':
             break
@@ -132,12 +135,12 @@ def transfer(origin_user_email, end_point_user_email, side):
             continue
 
         if origin_last_character_new == '0':
-            origin_network_parent_new.left_count += origin_network.left_count
-            origin_network_parent_new.left_amount += origin_network.left_amount
+            origin_network_parent_new.left_count = origin_network_parent_new.left_count + origin_count
+            origin_network_parent_new.left_amount = origin_network_parent_new.left_amount + origin_amount
 
         elif origin_last_character_new == '1':
-            origin_network_parent_new.right_count += origin_network.right_count
-            origin_network_parent_new.right_amount += origin_network.right_amount
+            origin_network_parent_new.right_count = origin_network_parent_new.right_count + origin_count
+            origin_network_parent_new.right_amount = origin_network_parent_new.right_amount + origin_amount
 
         print('Origin network parent new:', end=' ')
         print(origin_network_parent_new.binary_place)
