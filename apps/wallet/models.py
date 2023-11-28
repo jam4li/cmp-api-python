@@ -8,12 +8,14 @@ from apps.users.models import User
 
 
 class Wallet(BaseModel):
+    STAKING = "staking"
     DEPOSIT = "deposit"
     COMMISSION = "commission"
     PROFIT = "profit"
     EIT = "eit"
     VOUCHER = "voucher"
     TYPE_CHOICES = (
+        (STAKING, _("Staking")),
         (DEPOSIT, _("Deposit")),
         (COMMISSION, _("Commission")),
         (PROFIT, _("Profit")),
