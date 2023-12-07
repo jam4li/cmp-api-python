@@ -41,37 +41,8 @@ services:
       - static_volume:/cmp_api_python/static
       - media_volume:/cmp_api_python/media
 
-  redis:
-    container_name: django_redis
-    image: "redis:latest"
-    ports:
-      - "6379:6379"
-
-  celery_worker:
-    container_name: django_celery_worker
-    build: .
-    command: celery -A config worker --loglevel=info
-    volumes:
-      - ./:/cmp_api_python/
-    depends_on:
-      - redis
-    env_file:
-      - ./.env
-
-  celery_beat:
-    container_name: django_celery_beat
-    build: .
-    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ./:/cmp_api_python/
-    depends_on:
-      - redis
-    env_file:
-      - ./.env
-
 volumes:
   db_data:
-  backup_db_data:
   static_volume:
     external: true
   media_volume:
