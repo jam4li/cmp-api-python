@@ -59,6 +59,7 @@ class WalletListAPIView(views.APIView):
 
         wallet = Wallet.objects.filter(
             user=user,
+            type='staking',
         )
 
         serializer = WalletListSerializer(

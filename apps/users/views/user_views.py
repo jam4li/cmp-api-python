@@ -25,16 +25,13 @@ class UserDashboardAPIView(views.APIView):
     Returns:
         - A JSON response containing the user's dashboard data:
             - "active_packages" (int): The number of active investment packages the user has.
-            - "balance" (float): The total balance across all wallets, considering different wallet types:
-                - The 'eit' wallet balance is divided by 4.
-                - The other wallet types (e.g., 'deposit') are considered as is.
+            - "balance" (float): The balance of staking wallet.
             - "direct_invited" (int): The count of users directly invited by the user (referrals).
             - "team" (int): The total size of the user's team in the binary tree structure.
 
     Note:
         - The "active_packages" count is calculated based on the Invest model, where 'finished' is False.
-        - The "balance" is calculated by summing up the balances of all wallets belonging to the user.
-        - For 'eit' wallets, the balance is divided by 4, while other wallet types remain as is.
+        - The "balance" is calculated by getting the balances of staking wallet belonging to the user.
         - The "direct_invited" count is based on the number of users in the Network model with the user as the referrer.
         - The "team" size is determined by summing up the counts of left and right children nodes in the binary tree.
     """
@@ -49,13 +46,12 @@ class UserDashboardAPIView(views.APIView):
         ).count()
 
         # Calculate balance
-        balance = 0
-        wallet_list = Wallet.objects.filter(user=user)
-        for wallet in wallet_list:
-            if wallet.type == 'eit':
-                balance += (wallet.balance // 4)
-            else:
-                balance += wallet.balance
+        try:
+            wallet = Wallet.objects.get(user=user, type='staking')
+            balance = wallet.balance
+
+        except Wallet.DoesNotExist:
+            balance = 0
 
         direct_invited = Network.objects.filter(
             referrer=user,
