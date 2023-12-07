@@ -13,6 +13,7 @@ env
 .env
 htmlcov
 .vscode
+locale/
 data/certs/
 logs/
 backup/
