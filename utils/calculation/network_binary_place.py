@@ -1,3 +1,25 @@
+# This script is designed to convert the old binary place values of users to a new format.
+# The conversion involves changing the representation from a power-of-2-based system to a binary system.
+# Additionally, the script handles updating related objects in the Referral model.
+
+# The old calculation method involves representing binary places using a power-of-2-based system.
+# Specifically, if a user's binary place is given as n,
+# the calculation for determining the positions of their left and right children is as follows:
+# Left Child: 2 ^ n
+# Right Child: (2 ^ n) + 1
+
+# The new calculation method involves representing binary places using a binary system based on 0 and 1.
+# The conversion from the old to the new binary place involves breaking down
+# the old binary place value into its binary representation.
+# The steps for conversion are as follows:
+# 1. Initialize an empty string for the new binary place.
+# 2. While the old binary place is greater than 1:
+#   . Append the remainder of the old binary place divided by 2 to the beginning of the new binary place string.
+#   . Update the old binary place to the result of the floor division of the old binary place by 2.
+# 3. The resulting string is the new binary place value.
+
+# NOTE: Referral model has been merged with Network model
+
 from apps.users.models import User
 from apps.referral.models import Referral
 

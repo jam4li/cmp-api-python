@@ -1,3 +1,9 @@
+# This script appears to be focused on updating the updated_at field in the "invests" table for certain records.
+# The primary goal is to ensure that records with an updated_at value falling on a Saturday or Sunday are modified
+# to have an updated_at value corresponding to the previous Friday.
+# This adjustment is made to facilitate the accurate calculation of profits added to the "invests" table
+# on Mondays for each user.
+
 import os
 import decimal
 import mysql.connector
