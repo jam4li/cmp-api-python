@@ -1,3 +1,8 @@
+# This script uploads files to an Amazon S3 (Simple Storage Service) bucket.
+# It utilizes the boto3 library, which is the Amazon Web Services (AWS) SDK for Python.
+
+# Read more at upload_file function docstring
+
 import json
 import logging
 import os
