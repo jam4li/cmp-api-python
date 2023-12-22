@@ -18,6 +18,7 @@ class WalletAdmin(BaseAdmin):
     ]
 
     fields = (
+        'is_checked',
         'user',
         'access_type',
         'balance',
@@ -30,6 +31,7 @@ class WalletAdmin(BaseAdmin):
         'user',
         'type',
         'balance',
+        'is_checked',
     ]
 
     readonly_fields = (

@@ -63,6 +63,10 @@ class Wallet(BaseModel):
         decimal_places=3,
         verbose_name=_('Blocked amount'),
     )
+    is_checked = models.BooleanField(
+        default=False,
+        verbose_name=_('Checked'),
+    )
 
     class Meta:
         verbose_name = _('Wallet')
